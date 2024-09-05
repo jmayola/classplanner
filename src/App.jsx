@@ -1,9 +1,12 @@
-import React from 'react'
+import React from 'react';
+import Home from './pages/Home';
 
 function App() {
   return (
-    <div className='grid place-content-center'>App</div>
-  )
+    <div className="min-h-screen bg-gray-100">
+      <Home />
+    </div>
+  );
 }
 
-export default App
+export default App;
