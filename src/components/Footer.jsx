@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 function Footer() {
   return (
-    <footer className="bg-[#F5F5F3] p-6 sm:p-10 text-gray-700 border-t border-gray-300">
+    <footer className="bg-[#F5F5F3] p-6 sm:p-10 text-gray-700 border-t border-gray-300 mt-20">
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row justify-between items-start">
         {/* Sección del logo y descripción */}
         <div className="lg:w-[300px] mb-6 lg:mb-0">
