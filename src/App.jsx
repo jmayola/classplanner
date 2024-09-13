@@ -10,7 +10,7 @@ import Header from './components/Header/Header';
 import TermsAndConditions from './routes/Termsandconditions';
 import PrivacyPolicy from './routes/Privacypolc';
 import InicioAlumno from './pages/InicioAlumno';
-import ClassCarousel from './components/Classcarousel';
+import InicioDocente from './pages/InicioDocente';
 
 function App() {
   return (
@@ -26,6 +26,7 @@ function App() {
         <Route path="/registrodocente" element={<RegistroDocente />} />
         <Route path="/registroalumno" element={<RegistroAlumno />} />
         <Route path="/inicioalumno" element={<InicioAlumno />}/>
+        <Route path="/iniciodocente" element={<InicioDocente />}/>
       </Routes>
     </Router>
   );

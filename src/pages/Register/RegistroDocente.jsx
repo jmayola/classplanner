@@ -126,12 +126,14 @@ const RegistroDocente = () => {
             </div>
 
             <div>
-              <button
-                type="submit"
-                className="w-full px-6 py-3 text-sm font-medium text-white bg-blue-500 border border-transparent rounded-[30px] hover:bg-[#002746] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black mt-3"
-              >
-                Regístrate
-              </button>
+              <Link to="/iniciodocente">
+                <button
+                  type="submit"
+                  className="w-full px-6 py-3 text-sm font-medium text-white bg-blue-500 border border-transparent rounded-[30px] hover:bg-[#002746] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black mt-3"
+                >
+                  Regístrate
+                </button>
+              </Link>
             </div>
           </form>
         </div>

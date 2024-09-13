@@ -13,12 +13,6 @@ function Footer() {
               alt="logo"
             />
           </div>
-          <p className="text-sm text-[#252525] mt-4 lg:mt-0">
-            ClassPlanner es una herramienta diseñada para ayudar en la organización y planificación de clases, 
-            es el resultado de un proyecto personal. La información y los recursos disponibles en la plataforma 
-            están destinados a demostrar sus capacidades. Aunque los datos y ejemplos mostrados son ficticios, 
-            las funcionalidades ofrecidas son reales y están orientadas a facilitar la gestión educativa.
-          </p>
         </div>
 
         {/* Secciones de links */}
@@ -57,6 +51,16 @@ function Footer() {
       </div>
 
       {/* Línea divisora */}
+
+
+      <div>
+        <p className="text-sm text-[#252525] mt-10 text-center">
+          ClassPlanner es una herramienta diseñada para ayudar en la organización y planificación de clases, 
+          es el resultado de un proyecto personal. La información y los recursos disponibles en la plataforma 
+          están destinados a demostrar sus capacidades. Aunque los datos y ejemplos mostrados son ficticios, 
+          las funcionalidades ofrecidas son reales y están orientadas a facilitar la gestión educativa.
+        </p>
+      </div>
       <div className="border-t border-gray-300 mt-6 pt-6 text-center text-xs text-gray-800">
         <p>© 2024 ClassPlanner. Todos los derechos reservados.</p>
       </div>

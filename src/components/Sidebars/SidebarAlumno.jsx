@@ -34,11 +34,11 @@ const SidebarAlumno = () => {
           <h3 className="text-sm font-semibold text-gray-500">Favoritos</h3>
           <Link to="/favoritos/pi2swd" className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
             <FaStar className="text-yellow-500" />
-            <span>PI 2 SWD</span>
+            <span>PISWD</span>
           </Link>
           <Link to="/favoritos/modelos" className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
             <FaStar className="text-yellow-500" />
-            <span>Modelos y Siste.</span>
+            <span>Modelos y Sistemas</span>
           </Link>
         </div>
 
