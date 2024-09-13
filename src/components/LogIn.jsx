@@ -1,11 +1,51 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Footer from './Footer';  // Asegúrate de que la ruta sea correcta
+import Footer from './Footer';  
+import Header from './Header/Header';
+import { useAuth } from '../context/AuthContext';
+
 
 const LoginScreen = () => {
+
+  const auth = useAuth();
+
+  const handleGoogle = async (e) => {
+    e.preventDefault();
+  
+    await auth.loginWithGoogle();
+  
+    const generateRandomToken = () => {
+      return Math.random().toString(36).slice(2, 18);
+    };
+
+    const userData = {
+      email: auth.user.email,
+      username: auth.user.displayName,
+      password: generateRandomToken(),
+    };
+
+    try {
+      const response = await axios.post("http://localhost:3000/google-login", userData, { withCredentials: true });
+      
+      if (response.status === 200) {
+        alert("Login exitoso con Google");
+        window.location = response.headers.location;
+      } else {
+        alert("Error en el login con Google");
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 500) {
+        alert("Error del servidor al procesar la solicitud");
+      } else {
+        alert("Error en la solicitud de login con Google");
+      }
+    }
+  };
+
   return (
     <div className="flex flex-col min-h-screen justify-between bg-gray-50">
-      <div className="flex items-center justify-center flex-grow">
+      <Header/>
+      <div className="flex items-center justify-center flex-grow mt-[5%]">
         <div className="w-full max-w-md p-10 space-y-8 bg-white shadow-lg rounded-[20px]">
           <div className="flex flex-col items-center mb-6">
             <h2 className="text-4xl font-semibold text-black">Iniciar Sesión</h2>

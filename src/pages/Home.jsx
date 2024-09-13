@@ -1,7 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import Sidebar from '../components/Sidebars/SidebarAlumno';
-import Form from '../components/form';
+import Header from '../components/Header/Header';
 import Footer from '../components/Footer';
 
 function Home() {
@@ -12,18 +11,29 @@ function Home() {
   };
 
   return (
-    <div className="flex bg-gray-100 h-screen">
-      <Sidebar />
-      <div className="flex-grow p-12 bg-white shadow-md rounded-lg">
-        <h1 className="text-3xl font-medium text-gray-800 mb-8">Página de Inicio</h1>
-        <Form />
-        <button
-          onClick={handleLoginRedirect}
-          className="mt-8 px-6 py-3 text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition duration-200 ease-in-out"
-        >
-          Ir a Iniciar Sesión
-        </button>
+    <div className="flex flex-col min-h-screen">
+      <Header />
+      <div className="w-full flex-grow p-10 flex items-center justify-between">
+        <div className="hero-content text-left w-[50%] mr-10 mt-10 ml-10">
+          <div className="max-w-md">
+            <h1 className="text-5xl font-bold text-[#252525]">¡Bienvenido!</h1>
+            <h1 className="text-5xl font-bold text-[#252525]">Planifica y organizá tus clases</h1>
+            <p className="py-6 text-lg text-gray-900">
+              Explora las posibilidades y descubre nuevas oportunidades. ¡Estamos aquí para ayudarte a crecer!
+            </p>
+            <button 
+              className="bg-blue-500 hover:bg-[#002746] text-white font-medium py-3 px-6 rounded-[30px]"
+              onClick={handleLoginRedirect}
+            >
+              Empezar
+            </button>
+          </div>
+        </div>
+        <div>
+          <img src="/public/ilustration.jpg" alt="Ilustración de bienvenida" className="max-w-full h-auto rounded-[30px]" />
+        </div>
       </div>
+      <Footer />
     </div>
   );
 }
