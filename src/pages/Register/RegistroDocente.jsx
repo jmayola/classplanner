@@ -1,39 +1,69 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Footer from '../components/Footer';
-import Header from '../components/Header/Header'; // Asegúrate de importar el Header si aún no lo has hecho
+import Footer from '../../components/Footer';
+import Header from '../../components/Header/Header';
 
-const RegisterScreen = () => {
+const RegistroDocente = () => {
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
       
       {/* Header */}
       <Header />
 
-      {/* Formulario de Registro */}
+      {/* Formulario de Registro de Docentes */}
       <div className="flex flex-grow items-center justify-center mt-20">
         <div className="w-full max-w-md p-10 space-y-8 bg-white shadow-lg rounded-[20px]">
           <div className="flex flex-col items-center mb-6">
-            <h2 className="text-4xl font-semibold text-black">Regístrate</h2>
+            <h2 className="text-4xl font-semibold text-black text-center">Regístrate como Docente</h2>
             <p className="text-gray-400 text-2x1 text-center w-[300px] mt-5">
-              Crea una nueva cuenta completando los siguientes campos o regístrate con tu cuenta de Google
+              Crea una cuenta para docentes completando los siguientes campos o registrando tu cuenta de Google.
             </p>
           </div>
+
+         {/* Botón de inicio de sesión con Google */}
+         <div className="flex justify-center">
+            <button
+              className="flex items-center justify-center w-full px-6 py-3 mb-4 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-[30px] shadow hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400"
+            >
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg"
+                alt="Google Logo"
+                className="w-5 h-5 mr-3"
+              />
+              <span className="flex-grow text-center">Registrarse con Google</span>
+            </button>
+          </div>
+
+          <hr className="border-t border-gray-300 mt-0" />  {/* Línea divisora */}
 
           <form className="space-y-4">
             <div className="space-y-3">
               <div>
-                <label htmlFor="full-name" className="sr-only">
-                  Nombre Completo
+                <label htmlFor="teacher-name" className="sr-only">
+                  Nombre
                 </label>
                 <input
-                  id="full-name"
-                  name="name"
+                  id="teacher-name"
+                  name="user_name"
                   type="text"
                   autoComplete="name"
                   required
                   className="block w-full px-4 py-3 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-[30px] focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                  placeholder="Nombre Completo"
+                  placeholder="Nombre"
+                />
+              </div>
+              <div>
+                <label htmlFor="teacher-lastname" className="sr-only">
+                  Apellido
+                </label>
+                <input
+                  id="teacher-lastname"
+                  name="user_lastname"
+                  type="text"
+                  autoComplete="name"
+                  required
+                  className="block w-full px-4 py-3 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-[30px] focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  placeholder="Apellido"
                 />
               </div>
               <div>
@@ -42,7 +72,7 @@ const RegisterScreen = () => {
                 </label>
                 <input
                   id="email-address"
-                  name="email"
+                  name="user_email"
                   type="email"
                   autoComplete="email"
                   required
@@ -56,7 +86,7 @@ const RegisterScreen = () => {
                 </label>
                 <input
                   id="password"
-                  name="password"
+                  name="user_password"
                   type="password"
                   autoComplete="new-password"
                   required
@@ -70,7 +100,7 @@ const RegisterScreen = () => {
                 </label>
                 <input
                   id="confirm-password"
-                  name="confirm-password"
+                  name="user_password"
                   type="password"
                   autoComplete="new-password"
                   required
@@ -81,9 +111,16 @@ const RegisterScreen = () => {
             </div>
 
             <div className="text-sm text-center mt-6">
-              <p>¿Ya tienes una cuenta? 
+              <p>¿Ya tenes una cuenta? 
                 <Link to="/login" className="font-medium text-[#005da6] hover:text-[#002746] ml-1">
                   Inicia sesión
+                </Link>
+              </p>
+            </div>
+            <div className="text-sm text-center mt-6">
+              <p>Registrarse como
+                <Link to="/registroalumno" className="font-medium text-[#005da6] hover:text-[#002746] ml-1">
+                  alumno.
                 </Link>
               </p>
             </div>
@@ -106,4 +143,4 @@ const RegisterScreen = () => {
   );
 };
 
-export default RegisterScreen;
+export default RegistroDocente;

@@ -1,101 +1,72 @@
 import React from 'react';
-import { FaHome, FaFolder, FaCalendarAlt, FaArchive } from 'react-icons/fa';
-import HomeIcon from '@mui/icons-material/HomeRounded';
-import Calendar from '@mui/icons-material/CalendarToday';
-import Assignment from '@mui/icons-material/Assignment';
-import Archive from '@mui/icons-material/Archive'
-import Folder from '@mui/icons-material/Folder'
-import Settings from '@mui/icons-material/Settings'
+import { Link } from 'react-router-dom';
+import { FaHome, FaFileAlt, FaStickyNote, FaCalendarAlt, FaStar, FaBook } from 'react-icons/fa';
 
-
-
-const Sidebar = () => {
+const SidebarAlumno = () => {
   return (
-      <div className="w-64 h-full bg-[#F5F5F3] border-r border-gray-300 flex flex-col">
-        {/* Perfil de usuario */}
-        <div className="flex items-center p-4 mb-3">
-          <img
-            src="https://via.placeholder.com/40"
-            alt="User Profile"
-            className="w-10 h-10 rounded-full mr-3"
-          />
+    <div className="w-64 bg-white shadow-md">
+      <div className="p-6">
+        <div className="flex items-center space-x-4">
+          <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center">
+            <FaHome className="text-gray-600 text-2xl" />
+          </div>
           <div>
-            <p className="text-sm font-medium">Usuaria 123456</p>
+            <p className="text-gray-900 font-semibold">Usuario_123456</p>
           </div>
         </div>
-
-        {/* Categorías */}
-        <ul className="px-4">
-          <li className="flex items-center mb-4 text-sm text-gray-600">
-            <HomeIcon className="text-gray-400 w-4 h-4 mr-3" />
-            Inicio
-          </li>
-          <li className="flex items-center mb-4 text-sm text-gray-600">
-            <Folder className="text-gray-400 w-4 h-4 mr-3" />
-            Mis trabajos
-          </li>
-          <li className="flex items-center mb-4 text-sm text-gray-600">
-            <Assignment className="text-gray-400 w-4 h-4 mr-3" />
-            Mis notas
-          </li>
-        </ul>
-
-        <hr className="border-t border-gray-200 my-2 mt-2 mb-2" />  {/* Línea divisora */}
-        
-        <div className="overflow-y-auto max-h-64">
-  <div className="px-4 mb-2 text-[14px] text-gray-500 mt-5">
-    Favoritos
-  </div>
-  <ul className="px-4">
-    <li className="flex items-center mb-4 text-sm text-gray-600">
-      <Assignment className="text-gray-400 w-4 h-4 mr-3" />
-      P.I.S.W.D
-    </li>
-    <li className="flex items-center mb-4 text-sm text-gray-600">
-      <Assignment className="text-gray-400 w-4 h-4 mr-3" />
-      Modelos y Siste.
-    </li>
-  </ul>
-
-  {/* Clases */}
-  <div className="px-4 mb-2 text-[14px] text-gray-500 mt-5">
-    Clases
-  </div>
-  <ul className="px-4">
-    <li className="flex items-center mb-4 text-sm text-gray-600">
-      <Assignment className="text-gray-400 w-4 h-4 mr-3" />
-      Clase 1
-    </li>
-    <li className="flex items-center mb-4 text-sm text-gray-600">
-      <Assignment className="text-gray-400 w-4 h-4 mr-3" />
-      Clase 2
-    </li>
-    <li className="flex items-center mb-4 text-sm text-gray-600">
-      <Assignment className="text-gray-400 w-4 h-4 mr-3" />
-      Clase 3
-    </li>
-  </ul>
-</div>
-
-
-        <hr className="border-t border-gray-200 mt-2 mb-5" />  {/* Línea divisora */}
-        
-        <ul className="px-4">
-          <li className="flex items-center mb-4 text-sm font-semibold text-gray-700">
-            <Calendar className="text-gray-400 w-4 h-4 mr-3" />
-            Calendario
-          </li>
-          <li className="flex items-center mb-4 text-sm font-semibold text-gray-700">
-            <Archive className="text-gray-400 w-4 h-4 mr-3" />
-            Clases archivadas
-          </li>
-          <li className="flex items-center mb-4 text-sm font-semibold text-gray-700">
-            <Settings className="text-gray-400 w-4 h-4 mr-3" />
-            Ajustes
-          </li>
-        </ul>
       </div>
+
+      <nav className="px-6">
+        <Link to="/" className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+          <FaHome className="text-gray-600" />
+          <span>Inicio</span>
+        </Link>
+        <Link to="/mis-trabajos" className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+          <FaFileAlt className="text-gray-600" />
+          <span>Mis trabajos</span>
+        </Link>
+        <Link to="/mis-notas" className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+          <FaStickyNote className="text-gray-600" />
+          <span>Mis notas</span>
+        </Link>
+        
+        <div className="mt-6">
+          <h3 className="text-sm font-semibold text-gray-500">Favoritos</h3>
+          <Link to="/favoritos/pi2swd" className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+            <FaStar className="text-yellow-500" />
+            <span>PI 2 SWD</span>
+          </Link>
+          <Link to="/favoritos/modelos" className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+            <FaStar className="text-yellow-500" />
+            <span>Modelos y Siste.</span>
+          </Link>
+        </div>
+
+        <div className="mt-6">
+          <h3 className="text-sm font-semibold text-gray-500">Clases</h3>
+          <Link to="/clases/clase1" className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+            <FaBook className="text-gray-600" />
+            <span>Clase 1</span>
+          </Link>
+          <Link to="/clases/clase2" className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+            <FaBook className="text-gray-600" />
+            <span>Clase 2</span>
+          </Link>
+          <Link to="/clases/clase3" className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+            <FaBook className="text-gray-600" />
+            <span>Clase 3</span>
+          </Link>
+        </div>
+
+        <div className="mt-6">
+          <Link to="/calendario" className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+            <FaCalendarAlt className="text-gray-600" />
+            <span>Calendario</span>
+          </Link>
+        </div>
+      </nav>
+    </div>
   );
 };
 
-export default Sidebar;
+export default SidebarAlumno;

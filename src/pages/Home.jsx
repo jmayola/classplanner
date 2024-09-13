@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import Header from '../components/Header/Header';
 import Footer from '../components/Footer';
 
@@ -27,6 +27,14 @@ function Home() {
             >
               Empezar
             </button>
+
+            <Link to="/inicioalumno">
+              <button
+                className="w-full px-6 py-3 text-sm font-medium text-white bg-blue-500 border border-transparent rounded-[30px] hover:bg-[#002746] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black mt-3"
+              >
+                Inicio Alumno
+              </button>
+            </Link>
           </div>
         </div>
         <div>
