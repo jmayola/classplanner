@@ -1,8 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link,Form } from 'react-router-dom';
 import Footer from '../../components/Footer';
 import Header from '../../components/Header/Header';
-
+import { useAuth } from "../../context/AuthContext";
+import axios from "axios";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+const Alerts = withReactContent(Swal);
 const RegistroAlumno = () => {
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
@@ -36,7 +40,7 @@ const RegistroAlumno = () => {
 
           <hr className="border-t border-gray-300 mt-0" />  {/* Línea divisora */}
 
-          <form className="space-y-4">
+          <Form action="/registroalumno" method="POST" className="space-y-4">
             <div className="space-y-3">
               <div>
                 <label htmlFor="student-name" className="sr-only">
@@ -72,7 +76,7 @@ const RegistroAlumno = () => {
                 </label>
                 <input
                   id="email-address"
-                  name="user_email"
+                  name="user_mail"
                   type="email"
                   autoComplete="email"
                   required
@@ -126,16 +130,14 @@ const RegistroAlumno = () => {
             </div>
 
             <div>
-              <Link to="/inicioalumno">
                 <button
                   type="submit"
                   className="w-full px-6 py-3 text-sm font-medium text-white bg-blue-500 border border-transparent rounded-[30px] hover:bg-[#002746] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black mt-3"
                 >
                   Regístrate
                 </button>
-              </Link>
             </div>
-          </form>
+          </Form>
         </div>
       </div>
       
@@ -146,3 +148,54 @@ const RegistroAlumno = () => {
 };
 
 export default RegistroAlumno;
+export const registroAlumno = async ({ request }) => {
+  const data = await request.formData();
+  const submission = {
+    user_mail: data.get("user_mail"),
+    user_password: data.get("user_password"),
+    user_name: data.get("user_name"),
+    user_lastname: data.get("user_lastname"),
+    user_password_confirmation: data.get("student_password_confirmation"),
+    user_password: data.get("user_password"),
+    user_type: "alumno"
+  };
+  console.log(submission);
+  try {
+    Alerts.fire({
+      title: "Registro",
+      didOpen: () => {
+        Alerts.showLoading(
+          axios
+            .post("http://localhost:3000/register", submission)
+            .then((res) => {
+              console.log(res);
+              if (res.status == 200 || res.status == 202) {
+                return Alerts.fire({
+                  title: <p>Registro</p>,
+                  text: "redirigiendo...",
+                  icon: "success",
+                });
+              }
+            }).then(()=>{window.location = "/"})
+            .catch((err) => {
+              if (err.request.status == 403 || err.request.status == 505) {
+                console.log(err)
+                return Alerts.fire({
+                  title: <p>Registro Fallido</p>,
+                  text: err.request.body,
+                  icon: "error",
+                });
+              }
+            })
+        );
+      },
+    })
+  } catch (err) {
+              return Alerts.fire({
+                  title: <p>Registro Fallido</p>,
+                  text: "Error en el Sistema, Intentelo mas tarde.",
+                  icon: "error",
+                });
+  }
+  return null;
+};
