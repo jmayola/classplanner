@@ -154,7 +154,7 @@ export const loginUserAction = async ({ request }) => {
       didOpen: () => {
         Alerts.showLoading(
           axios
-            .post("http://localhost:3000/login", submission)
+            .post("http://localhost:3000/login", submission, {withCredentials: true})
             .then((res) => {
               console.log(res);
               if (res.status == 200 || res.status == 202) {
