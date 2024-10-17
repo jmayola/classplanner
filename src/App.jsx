@@ -9,8 +9,12 @@ import Footer from './components/Footer';
 import Header from './components/Header/Header';
 import TermsAndConditions from './routes/Termsandconditions';
 import PrivacyPolicy from './routes/Privacypolc';
-import InicioAlumno from './pages/InicioAlumno';
-import InicioDocente from './pages/InicioDocente';
+import InicioAlumno from './pages/Estudiante/InicioAlumno';
+import InicioDocente from './pages/Docente/InicioDocente';
+import Misnotas from './pages/Estudiante/Misnotas';
+import Vistaclase from './pages/Vistaclase';
+import Listaclases from './pages/Docente/Listaclases';
+
 
 function App() {
   return (
@@ -27,6 +31,9 @@ function App() {
         <Route path="/registroalumno" element={<RegistroAlumno />} />
         <Route path="/inicioalumno" element={<InicioAlumno />}/>
         <Route path="/iniciodocente" element={<InicioDocente />}/>
+        <Route path="/misnotas" element={<Misnotas />}/>
+        <Route path="/vistaclase" element={<Vistaclase />}/>
+        <Route path="/listaclases" element={<Listaclases />}/>
       </Routes>
     </Router>
   );

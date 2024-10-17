@@ -11,11 +11,11 @@ const RegistroDocente = () => {
       <Header />
 
       {/* Formulario de Registro de Docentes */}
-      <div className="flex flex-grow items-center justify-center mt-20">
-        <div className="w-full max-w-md p-10 space-y-8 bg-white shadow-lg rounded-[20px]">
+      <div className="flex flex-grow items-center justify-center p-4 md:p-10">
+        <div className="w-full max-w-md p-8 space-y-8 bg-white shadow-lg rounded-[20px]">
           <div className="flex flex-col items-center mb-6">
-            <h2 className="text-4xl font-semibold text-black text-center">Regístrate como Docente</h2>
-            <p className="text-gray-400 text-2x1 text-center w-[300px] mt-5">
+            <h2 className="text-3xl md:text-4xl font-semibold text-black text-center p-5">Regístrate como Docente</h2>
+            <p className="text-gray-500 text-base md:text-lg text-center mt-4">
               Crea una cuenta para docentes completando los siguientes campos o registrando tu cuenta de Google.
             </p>
           </div>
@@ -23,7 +23,7 @@ const RegistroDocente = () => {
          {/* Botón de inicio de sesión con Google */}
          <div className="flex justify-center">
             <button
-              className="flex items-center justify-center w-full px-6 py-3 mb-4 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-[30px] shadow hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400"
+              className="flex items-center justify-center w-full px-6 py-3 mb-4 text-sm md:text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-[30px] shadow hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400"
             >
               <img
                 src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg"
@@ -37,7 +37,7 @@ const RegistroDocente = () => {
           <hr className="border-t border-gray-300 mt-0" />  {/* Línea divisora */}
 
           <form className="space-y-4">
-            <div className="space-y-3">
+            <div className="space-y-4">
               <div>
                 <label htmlFor="teacher-name" className="sr-only">
                   Nombre
@@ -111,7 +111,7 @@ const RegistroDocente = () => {
             </div>
 
             <div className="text-sm text-center mt-6">
-              <p>¿Ya tenes una cuenta? 
+              <p>¿Ya tenés una cuenta? 
                 <Link to="/login" className="font-medium text-[#005da6] hover:text-[#002746] ml-1">
                   Inicia sesión
                 </Link>
@@ -129,7 +129,7 @@ const RegistroDocente = () => {
               <Link to="/iniciodocente">
                 <button
                   type="submit"
-                  className="w-full px-6 py-3 text-sm font-medium text-white bg-blue-500 border border-transparent rounded-[30px] hover:bg-[#002746] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black mt-3"
+                  className="w-full px-6 py-3 text-sm md:text-base font-medium text-white bg-blue-500 border border-transparent rounded-[30px] hover:bg-[#002746] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black mt-3"
                 >
                   Regístrate
                 </button>
