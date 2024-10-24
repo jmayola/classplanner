@@ -1,32 +1,21 @@
 import React from "react";
-import {createBrowserRouter, RouterProvider} from "react-router-dom"
+import {createBrowserRouter, RouterProvider, BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import Header from "./components/Header/Header";
 import Home from "./pages/Home";
 import LoginScreen,{ loginUserAction } from "./pages/Login/LogIn";
 import RegisterScreen from "./pages/Register/RegisterScreen";
 import RegistroDocente, { registroDocente } from "./pages/Register/RegistroDocente";
 import RegistroAlumno, { registroAlumno } from "./pages/Register/RegistroAlumno";
 import Footer from "./components/Footer";
-import Header from "./components/Header/Header";
 import TermsAndConditions from "./routes/Termsandconditions";
-import PrivacyPolicy from "./routes/Privacypolc";
-import InicioAlumno from "./pages/InicioAlumno";
-import InicioDocente from "./pages/InicioDocente";
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from './pages/Home';
-import LoginScreen from './pages/Login/LogIn';
-import RegisterScreen from './pages/Register/RegisterScreen';
-import RegistroDocente from './pages/Register/RegistroDocente';
-import RegistroAlumno from './pages/Register/RegistroAlumno';
-import Footer from './components/Footer';
-import Header from './components/Header/Header';
-import TermsAndConditions from './routes/Termsandconditions';
 import PrivacyPolicy from './routes/Privacypolc';
 import InicioAlumno from './pages/Estudiante/InicioAlumno';
 import InicioDocente from './pages/Docente/InicioDocente';
 import Misnotas from './pages/Estudiante/Misnotas';
-import Vistaclase from './pages/Vistaclase';
+import Vistaclase from './pages/Estudiante/Vistaclase';
+import VistaclaseDocente from './pages/Docente/VistaclaseDocente';
 import Listaclases from './pages/Docente/Listaclases';
+import Calificaciones from "./routes/Calificaciones";
 
 
 function App() {
@@ -42,6 +31,10 @@ function App() {
     { path: "/registroalumno", element: <RegistroAlumno />, action: registroAlumno },
     { path: "/inicioalumno", element: <InicioAlumno /> },
     { path: "/iniciodocente", element: <InicioDocente /> },
+    { path: "/calificaciones", element: <Calificaciones /> },
+    { path: "/vistaclase", element: <Vistaclase /> },
+    { path: "/listaclases", element: <Listaclases /> },
+    { path: "/vistaclasedocente", element: <VistaclaseDocente /> },
   ]);
   return <RouterProvider router={router} />;
   return (
@@ -61,6 +54,7 @@ function App() {
         <Route path="/misnotas" element={<Misnotas />}/>
         <Route path="/vistaclase" element={<Vistaclase />}/>
         <Route path="/listaclases" element={<Listaclases />}/>
+        <Route path="/calificiaciones" element={<Calificaciones />}/>
       </Routes>
     </Router>
   );

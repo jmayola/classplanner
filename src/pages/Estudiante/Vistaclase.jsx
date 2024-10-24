@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FaBook, FaClipboardList, FaBullhorn, FaChalkboardTeacher } from 'react-icons/fa';
-import Sidebar from '../components/Sidebars/SidebarProfesor';
+import Sidebar from '../../components/Sidebars/SidebarAlumno';
 
 const Vistaclase = () => {
   const [activeTab, setActiveTab] = useState('Tareas');
@@ -67,8 +67,8 @@ const Vistaclase = () => {
                     className="w-12 h-12 rounded-full mr-4"
                   />
                   <div>
-                    <h3 className="text-xl font-semibold">Tarea 1: Investigación</h3>
-                    <p className="text-gray-600">Fecha de entrega: 20 de septiembre, 2024</p>
+                    <h3 className="text-[16px]">Usuario publicó una nueva tarea: Tarea 1 - Investigación</h3>
+                    <p className="text-gray-600 text-[14px]">Fecha de entrega: 20 de septiembre, 2024</p>
                     <a href="#tarea1" className="text-blue-500 hover:underline mt-2 block">Ver detalles</a>
                   </div>
                 </div>
@@ -114,11 +114,21 @@ const Vistaclase = () => {
           )}
 
           {activeTab === 'Anuncios' && (
-            <div>
+           <div>
               <h2 className="text-3xl font-bold mb-6">Anuncios</h2>
-              <div className="bg-white p-4 shadow-md rounded-lg">
-                <p className="text-gray-600">¡No olviden revisar el material para la próxima clase!</p>
-                <p className="text-gray-500 mt-2">Publicado: 15 de septiembre, 2024</p>
+              <div className="bg-white p-4 shadow-md rounded-lg flex flex-col space-y-4">
+                <div className='flex flex-row items-center space-x-2'>
+                  <img src="https://via.placeholder.com/50" alt="Imagen de perfil" className="w-12 h-12 rounded-full" />
+                  <div className='flex flex-col text-left'>
+                    <p>Usuario</p>
+                    <p className="text-gray-700 text-[14px]">15 sept</p>
+                  </div>
+                </div>
+                <div>
+                  <p className="text-gray-600 text-left items-center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Et, non nihil. Dolorem distinctio nostrum 
+                    similique esse recusandae hic reprehenderit, 
+                    iure, at voluptatem deserunt, consequuntur voluptatum earum cumque sapiente eos eaque!</p>
+                </div>
               </div>
             </div>
           )}

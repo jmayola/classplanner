@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import Sidebar from '../../components/Sidebars/SidebarProfesor';
+import { Link } from 'react-router-dom';
 
 const Listaclases = () => {
   const [isFormVisible, setFormVisible] = useState(false);
   const [className, setClassName] = useState('');
-  const [classCourse, setClassCourse] = useState(''); // Nuevo estado para el curso
+  const [classCourse, setClassCourse] = useState('');
   const [classProfessor, setClassProfessor] = useState('');
   const [classDate, setClassDate] = useState('');
   const [classes, setClasses] = useState([
@@ -14,19 +15,43 @@ const Listaclases = () => {
       materia: 'Matemática',
       curso: '7° 2°',
       description: 'Curso de matemáticas para nivel avanzado.',
-      profesor: 'Juan Pérez'
+      profesor: 'Juan Pérez',
+      image: 'https://www.windowslatest.com/wp-content/uploads/2024/05/Bloom-wallpaper-OLED-scaled.jpg'  
     },
     {
       id: 2,
       materia: 'Literatura',
       curso: '7° 2°',
-      profesor: 'Ana López'
+      profesor: 'Ana López',
+      image: 'https://www.windowslatest.com/wp-content/uploads/2024/05/Bloom-wallpaper-OLED-scaled.jpg'
     },
     {
       id: 3,
       materia: 'Historia del Arte',
       curso: '7° 2°',
-      profesor: 'Carlos Martínez'
+      profesor: 'Carlos Martínez',
+      image: 'https://www.windowslatest.com/wp-content/uploads/2024/05/Bloom-wallpaper-OLED-scaled.jpg' 
+    },{
+      id: 1,
+      materia: 'Matemática',
+      curso: '7° 2°',
+      description: 'Curso de matemáticas para nivel avanzado.',
+      profesor: 'Juan Pérez',
+      image: 'https://www.windowslatest.com/wp-content/uploads/2024/05/Bloom-wallpaper-OLED-scaled.jpg'  
+    },
+    {
+      id: 2,
+      materia: 'Literatura',
+      curso: '7° 2°',
+      profesor: 'Ana López',
+      image: 'https://www.windowslatest.com/wp-content/uploads/2024/05/Bloom-wallpaper-OLED-scaled.jpg'
+    },
+    {
+      id: 3,
+      materia: 'Historia del Arte',
+      curso: '7° 2°',
+      profesor: 'Carlos Martínez',
+      image: 'https://www.windowslatest.com/wp-content/uploads/2024/05/Bloom-wallpaper-OLED-scaled.jpg' 
     },
   ]);
 
@@ -40,13 +65,14 @@ const Listaclases = () => {
       ...classes,
       {
         id: classes.length + 1,
-        materia: className,  // Guardando el valor de materia
-        curso: classCourse,  // Guardando el valor de curso
+        materia: className,
+        curso: classCourse,
         profesor: classProfessor,
-        date: classDate
+        date: classDate,
+        image: 'https://example.com/default.jpg'  // Default image URL
       }
     ]);
-    // Limpiar los campos
+    // Clear form fields
     setClassName('');
     setClassCourse('');
     setClassProfessor('');
@@ -55,44 +81,36 @@ const Listaclases = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100">
-      {/* Sidebar */}
+    <div className="flex h-screen bg-white">
       <Sidebar />
 
-      {/* Main content */}
       <div className="flex flex-col w-full">
-        {/* Header */}
-        <div className="relative h-16 bg-blue-600 flex items-center justify-between px-4">
-          <h1 className="text-3xl text-white font-bold">Mis Clases</h1>
-        </div>
-
         {/* Class list */}
         <div className="flex-1 p-8 overflow-y-auto">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {classes.map((classItem) => (
               <div
                 key={classItem.id}
-                className="bg-white shadow-md rounded-lg flex flex-col items-start transition duration-200 hover:shadow-lg overflow-hidden"
+                className="bg-white rounded-[10px] transition duration-200 hover:shadow-lg overflow-hidden"
               >
-                {/* Imagen como encabezado */}
+                {/* Class cover image */}
                 <img
                   src={classItem.image}
                   alt={classItem.materia}
                   className="w-full h-32 object-cover"
                 />
 
-                {/* Contenido de la clase */}
-                <div className="p-4">
-                  <h2 className="text-2xl font-bold mb-2">{classItem.materia}</h2>
-                  <p className="text-gray-800 mb-2">{classItem.curso}</p>
-                  <p className="text-gray-800 mb-2">Profesor: {classItem.profesor}</p>
-                  <a
-                    href={`#class-${classItem.id}`}
-                    className="text-blue-500 hover:underline mt-4"
-                  >
-                    Ver detalles
-                  </a>
-                </div>
+                {/* Class content */}
+                <Link to="/vistaclase"> 
+                  <div className="p-4">
+                    <h2 className="text-2xl font-bold mb-2">{classItem.materia}</h2>
+                    <p className="text-gray-800 mb-2">{classItem.curso}</p>
+                    <p className="text-gray-800 mb-2">Profesor: {classItem.profesor}</p>
+                  </div>
+                </Link>
+
+                {/* Separator (similar to Google Classroom) */}
+                <div className="border-t border-gray-200"></div>
               </div>
             ))}
           </div>
@@ -131,7 +149,7 @@ const Listaclases = () => {
                   id="classCourse"
                   value={classCourse}
                   onChange={(e) => setClassCourse(e.target.value)}
-                  className="mt-1 block w-full rounded-[25px] bg-[#efebeb] py-5 shadow-sm py-10"
+                  className="mt-1 block w-full rounded-[25px] bg-[#efebeb] py-5 shadow-sm"
                   required
                 />
               </div>
@@ -142,7 +160,7 @@ const Listaclases = () => {
                   id="classProfessor"
                   value={classProfessor}
                   onChange={(e) => setClassProfessor(e.target.value)}
-                  className="mt-1 block w-full border bg-[#efebeb] rounded-[25px] shadow-sm py-10"
+                  className="mt-1 block w-full border bg-[#efebeb] rounded-[25px] shadow-sm"
                   required
                 />
               </div>

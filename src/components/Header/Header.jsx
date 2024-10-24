@@ -11,7 +11,7 @@ const Header = () => {
         <div className="flex items-left">
           <Link to="/">
             <img
-              src="/ClassPlanner1.png" // Reemplaza con la ruta de tu logo
+              src="/ClassPlanner1.png" 
               alt="Logo"
               className="w-[130px] h-auto"
             />

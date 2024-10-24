@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 const InicioAlumno = () => {
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-white text-[#37352f]">
       {/* Sidebar */}
       <Sidebar />
 
