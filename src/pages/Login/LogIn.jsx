@@ -153,15 +153,24 @@ export const loginUserAction = async ({ request }) => {
         Alerts.showLoading(
           axios
             .post("http://localhost:3000/login", submission, {withCredentials: true})
-            .then((res) => {
+            .then(async(res) => {
               if (res.status == 200 || res.status == 202) {
-                return Alerts.fire({
+                await Alerts.fire({
                   title: <p>Ingreso</p>,
                   text: "redirigiendo...",
                   icon: "success",
                 });
+                if(res.data == "docente"){
+                  window.location = "/iniciodocente"
+                }
+                else if (res.data == "alumno"){
+                  window.location = "/inicioalumno"
+                }
+                else{
+                  window.location = "/"
+                }
               }
-            }).then(()=>{window.location = "/"})
+            })
             .catch((err) => {
               if (err.request.status == 403 || err.request.status == 505) {
                 return Alerts.fire({
