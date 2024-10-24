@@ -17,7 +17,7 @@ const SidebarAlumno = () => {
       </div>
 
       <nav className="px-6">
-        <Link to="/" className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+        <Link to="/inicioalumno" className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
           <FaHome className="text-gray-600" />
           <span>Inicio</span>
         </Link>

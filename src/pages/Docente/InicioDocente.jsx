@@ -18,7 +18,7 @@ const InicioDocente = () => {
   ]);
 
   const [currentIndex, setCurrentIndex] = useState(0);
-  const itemsPerPage = 3; // Número de ítems visibles al mismo tiempo
+  const itemsPerPage = 3; 
 
   const handleNext = () => {
     setCurrentIndex((prevIndex) =>

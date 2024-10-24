@@ -2,13 +2,12 @@ import React from "react";
 import { Link, redirect, Form } from "react-router-dom";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header/Header";
-import { useAuth } from "../../context/AuthContext";
 import axios from "axios";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 const Alerts = withReactContent(Swal);
 const LoginScreen = () => {
-  const auth = useAuth();
+  // const auth = useAuth();
 
   const handleGoogle = async (e) => {
     e.preventDefault();
@@ -147,7 +146,6 @@ export const loginUserAction = async ({ request }) => {
     user_mail: data.get("email"),
     user_password: data.get("password"),
   };
-  console.log(submission);
   try {
     Alerts.fire({
       title: <p>Ingreso</p>,
@@ -155,21 +153,29 @@ export const loginUserAction = async ({ request }) => {
         Alerts.showLoading(
           axios
             .post("http://localhost:3000/login", submission, {withCredentials: true})
-            .then((res) => {
-              console.log(res);
+            .then(async(res) => {
               if (res.status == 200 || res.status == 202) {
-                return Alerts.fire({
+                await Alerts.fire({
                   title: <p>Ingreso</p>,
                   text: "redirigiendo...",
                   icon: "success",
                 });
+                if(res.data == "docente"){
+                  window.location = "/iniciodocente"
+                }
+                else if (res.data == "alumno"){
+                  window.location = "/inicioalumno"
+                }
+                else{
+                  window.location = "/"
+                }
               }
-            }).then(()=>{window.location = "/"})
+            })
             .catch((err) => {
               if (err.request.status == 403 || err.request.status == 505) {
                 return Alerts.fire({
                   title: <p>Ingreso Fallido</p>,
-                  text: "Contraseña mal Ingresada",
+                  text: err.request.response,
                   icon: "error",
                 });
               }

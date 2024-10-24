@@ -82,16 +82,16 @@ const Listaclases = () => {
 
   return (
     <div className="flex h-screen bg-white">
-      <Sidebar />
+      <SidebarProfesor />
 
       <div className="flex flex-col w-full">
         {/* Class list */}
-        <div className="flex-1 p-8 overflow-y-auto">
+        <div className="flex-1 px-20 py-10 overflow-y-auto">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {classes.map((classItem) => (
               <div
                 key={classItem.id}
-                className="bg-white rounded-[10px] transition duration-200 hover:shadow-lg overflow-hidden"
+                className="bg-white border border-gray-100 rounded-[10px] transition duration-200 hover:shadow-lg overflow-hidden"
               >
                 {/* Class cover image */}
                 <img
@@ -105,7 +105,7 @@ const Listaclases = () => {
                   <div className="p-4">
                     <h2 className="text-2xl font-bold mb-2">{classItem.materia}</h2>
                     <p className="text-gray-800 mb-2">{classItem.curso}</p>
-                    <p className="text-gray-800 mb-2">Profesor: {classItem.profesor}</p>
+                    <p className="text-gray-800 mb-2">{classItem.profesor}</p>
                   </div>
                 </Link>
 

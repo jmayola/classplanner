@@ -35,6 +35,7 @@ function App() {
     { path: "/vistaclase", element: <Vistaclase /> },
     { path: "/listaclases", element: <Listaclases /> },
     { path: "/vistaclasedocente", element: <VistaclaseDocente /> },
+    { path: "/misnotas", element: <Misnotas /> },
   ]);
   return <RouterProvider router={router} />;
   return (
