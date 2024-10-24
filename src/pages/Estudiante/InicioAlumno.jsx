@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react';
+<<<<<<< HEAD
 import SidebarAlumno from '../../components/Sidebars/SidebarAlumno';
+=======
+import Sidebar from '../components/Sidebars/SidebarAlumno'; 
+>>>>>>> 8ef69eb0 (cambios sin marcar)
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
