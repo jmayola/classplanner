@@ -8,6 +8,8 @@ const InicioDocente = () => {
   const [classCourse, setClassCourse] = useState('');
   const [classProfessor, setClassProfessor] = useState('');
   const [classDate, setClassDate] = useState('');
+  const userName = localStorage.getItem("user_name");
+  const userLastname = localStorage.getItem("user_lastname");
   const [classes, setClasses] = useState([
     { id: 1, materia: 'Matemática', curso: '7° 2°', profesor: 'Juan Pérez' },
     { id: 2, materia: 'Literatura', curso: '7° 2°', profesor: 'Ana López' },
@@ -62,7 +64,7 @@ const InicioDocente = () => {
 
       {/* Contenido Principal */}
       <div className="flex-grow p-6 bg-white">
-        <h1 className="text-3xl font-semibold">Bienvenido, Profesor</h1>
+        <h1 className="text-3xl font-semibold">Bienvenido, {userName} {userLastname}!</h1>
         <p className="mt-4 text-gray-600">Acá podes administrar tus clases</p>
 
         {/* Carrusel de Clases */}

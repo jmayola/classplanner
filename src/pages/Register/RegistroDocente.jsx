@@ -156,10 +156,10 @@ export const registroDocente = async ({ request }) => {
     user_name: data.get("user_name"),
     user_lastname: data.get("user_lastname"),
     user_password_confirmation: data.get("user_repassword"),
-    user_password: data.get("user_password"),
     user_type: "docente"
   };
-  console.log(submission);
+  localStorage.setItem("user_name", submission.user_name);
+  localStorage.setItem("user_lastname", submission.user_lastname);
   try {
     Alerts.fire({
       title: <p>Ingreso</p>,
@@ -169,16 +169,16 @@ export const registroDocente = async ({ request }) => {
             .post("http://localhost:3000/register", submission)
             .then((res) => {
               console.log(res);
-              if (res.status == 200 || res.status == 202) {
+              if (res.status === 200 || res.status === 202) {
                 return Alerts.fire({
                   title: <p>Ingreso</p>,
                   text: "redirigiendo...",
                   icon: "success",
                 });
               }
-            }).then(()=>{window.location = "/iniciodocente"})
+            }).then(() => { window.location = "/iniciodocente"; })
             .catch((err) => {
-              if (err.request.status == 403 || err.request.status == 505) {
+              if (err.request.status === 403 || err.request.status === 505) {
                 return Alerts.fire({
                   title: <p>Ingreso Fallido</p>,
                   text: "Contraseña mal Ingresada",
@@ -188,13 +188,13 @@ export const registroDocente = async ({ request }) => {
             })
         );
       },
-    })
+    });
   } catch (err) {
-              return Alerts.fire({
-                  title: <p>Ingreso Fallido</p>,
-                  text: "Error en el Sistema, Intentelo mas tarde.",
-                  icon: "error",
-                });
+    return Alerts.fire({
+      title: <p>Ingreso Fallido</p>,
+      text: "Error en el Sistema, Intentelo más tarde.",
+      icon: "error",
+    });
   }
   return null;
 };

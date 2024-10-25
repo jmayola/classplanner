@@ -7,6 +7,8 @@ import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 const InicioAlumno = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const itemsPerPage = 6; 
+  const useralumno = localStorage.getItem("user_name");
+  const useralumnopassword = localStorage.getItem("user_lastname");
   const [Classes, setClasses] = useState([])
   useEffect(() => {
     setClasses(getData())
@@ -37,7 +39,7 @@ const InicioAlumno = () => {
       <SidebarAlumno />
       {/* Contenido Principal */}
       <div className="flex-grow p-6">
-        <h1 className="text-3xl font-semibold text-gray-900">Bienvenido, Alumno</h1>
+        <h1 className="text-3xl font-semibold text-gray-900">Bienvenido, {useralumno} {useralumnopassword}!</h1>
         <p className="mt-4 text-gray-600">
           Aquí puedes acceder a tus clases, revisar tu progreso y mucho más.
         </p>
