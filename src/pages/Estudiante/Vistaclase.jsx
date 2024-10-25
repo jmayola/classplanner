@@ -106,7 +106,7 @@ const Vistaclase = () => {
             <div>
               <h2 className="text-3xl font-bold mb-6">Tareas</h2>
               <div className="grid grid-cols-1 gap-4">
-                {/* Aquí puedes mapear los datos de 'data' que has obtenido */}
+                {/*  mapear los datos de 'data' que se ha obtenido */}
                 {data && data.tareas.map((tarea, index) => (
                   <div key={index} className="bg-white p-4 shadow-md rounded-lg flex items-center">
                     <img 
