@@ -2,7 +2,6 @@ import React from 'react';
 import { Link,Form } from 'react-router-dom';
 import Footer from '../../components/Footer';
 import Header from '../../components/Header/Header';
-// import { useAuth } from "../../context/AuthContext";
 import axios from "axios";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";

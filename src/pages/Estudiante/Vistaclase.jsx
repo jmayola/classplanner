@@ -4,7 +4,8 @@ import Sidebar from '../../components/Sidebars/SidebarAlumno';
 
 const Vistaclase = () => {
   const [activeTab, setActiveTab] = useState('Tareas');
-
+  const useralumno = localStorage.getItem("user_name");
+  const useralumnopassword = localStorage.getItem("user_lastname");
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
@@ -21,7 +22,7 @@ const Vistaclase = () => {
           <div className="absolute bottom-4 left-4 text-white">
             <h1 className="text-4xl font-bold">Clase 1</h1>
             <h3 className="text-2x1 font-semibold">7mo 2da</h3>
-            <p className="text-lg">Juan Pérez</p>
+            <p className="text-lg">{useralumno} {useralumnopassword}</p>
           </div>
         </div>
 
