@@ -10,8 +10,7 @@ const Alerts = withReactContent(Swal);
 const Vistaclase = () => {
   const [activeTab, setActiveTab] = useState('Tareas');
   const [data, setData] = useState(null);
-  const useralumno = localStorage.getItem("user_name");
-  const useralumnopassword = localStorage.getItem("user_lastname");
+
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);

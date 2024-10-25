@@ -158,8 +158,6 @@ export const registroDocente = async ({ request }) => {
     user_password_confirmation: data.get("user_repassword"),
     user_type: "docente"
   };
-  localStorage.setItem("user_name", submission.user_name);
-  localStorage.setItem("user_lastname", submission.user_lastname);
   try {
     Alerts.fire({
       title: <p>Ingreso</p>,

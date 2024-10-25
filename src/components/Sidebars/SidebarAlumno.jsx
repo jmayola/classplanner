@@ -3,8 +3,6 @@ import { Link } from 'react-router-dom';
 import { FaHome, FaUser, FaFileAlt, FaStickyNote, FaCalendarAlt, FaStar, FaBook } from 'react-icons/fa';
 
 const SidebarAlumno = () => {
-  const useralumno = localStorage.getItem("user_name");
-  const useralumnopassword = localStorage.getItem("user_lastname");
   return (
     <div className="w-64 bg-[#F7F7FF] shadow-md">
       <div className="p-6">

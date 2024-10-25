@@ -158,8 +158,6 @@ export const registroAlumno = async ({ request }) => {
     user_password: data.get("user_password"),
     user_type: "alumno"
   };
-  localStorage.setItem("user_name", submission.user_name);
-  localStorage.setItem("user_lastname", submission.user_lastname);  
   try {
     Alerts.fire({
       title: "Registro",
