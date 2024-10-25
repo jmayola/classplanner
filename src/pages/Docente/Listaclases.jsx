@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import { FaPlus } from 'react-icons/fa';
 import Sidebar from '../../components/Sidebars/SidebarProfesor';
 import { Link } from 'react-router-dom';
+import withReactContent from 'sweetalert2-react-content';
+import Swal from 'sweetalert2';
+
 
 const Listaclases = () => {
   const [isFormVisible, setFormVisible] = useState(false);
@@ -9,51 +13,47 @@ const Listaclases = () => {
   const [classCourse, setClassCourse] = useState('');
   const [classProfessor, setClassProfessor] = useState('');
   const [classDate, setClassDate] = useState('');
-  const [classes, setClasses] = useState([
-    {
-      id: 1,
-      materia: 'Matemática',
-      curso: '7° 2°',
-      description: 'Curso de matemáticas para nivel avanzado.',
-      profesor: 'Juan Pérez',
-      image: 'https://www.windowslatest.com/wp-content/uploads/2024/05/Bloom-wallpaper-OLED-scaled.jpg'  
-    },
-    {
-      id: 2,
-      materia: 'Literatura',
-      curso: '7° 2°',
-      profesor: 'Ana López',
-      image: 'https://www.windowslatest.com/wp-content/uploads/2024/05/Bloom-wallpaper-OLED-scaled.jpg'
-    },
-    {
-      id: 3,
-      materia: 'Historia del Arte',
-      curso: '7° 2°',
-      profesor: 'Carlos Martínez',
-      image: 'https://www.windowslatest.com/wp-content/uploads/2024/05/Bloom-wallpaper-OLED-scaled.jpg' 
-    },{
-      id: 1,
-      materia: 'Matemática',
-      curso: '7° 2°',
-      description: 'Curso de matemáticas para nivel avanzado.',
-      profesor: 'Juan Pérez',
-      image: 'https://www.windowslatest.com/wp-content/uploads/2024/05/Bloom-wallpaper-OLED-scaled.jpg'  
-    },
-    {
-      id: 2,
-      materia: 'Literatura',
-      curso: '7° 2°',
-      profesor: 'Ana López',
-      image: 'https://www.windowslatest.com/wp-content/uploads/2024/05/Bloom-wallpaper-OLED-scaled.jpg'
-    },
-    {
-      id: 3,
-      materia: 'Historia del Arte',
-      curso: '7° 2°',
-      profesor: 'Carlos Martínez',
-      image: 'https://www.windowslatest.com/wp-content/uploads/2024/05/Bloom-wallpaper-OLED-scaled.jpg' 
-    },
-  ]);
+  const [classes, setClasses] = useState([]);
+  const Alerts = withReactContent(Swal);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get('http://localhost:3000/listaclases');
+      if (response.status === 200) {
+        setClasses(response.data);
+      } else {
+        Alerts.fire({
+          title: <p>Error al cargar los datos</p>,
+          text: "No se pudieron obtener los datos correctamente. Código: " + response.status,
+          icon: "error",
+        });
+      }
+    } catch (error) {
+      if (error.response) {
+        Alerts.fire({
+          title: <p>Error del servidor</p>,
+          text: "Código de error: " + error.response.status + ". " + error.response.data.message,
+          icon: "error",
+        });
+      } else if (error.request) {
+        Alerts.fire({
+          title: <p>Error de conexión</p>,
+          text: "No se recibió respuesta del servidor. Inténtelo más tarde.",
+          icon: "error",
+        });
+      } else {
+        Alerts.fire({
+          title: <p>Error inesperado</p>,
+          text: "Se produjo un error: " + error.message,
+          icon: "error",
+        });
+      }
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const handleAddClass = () => {
     setFormVisible(true);
@@ -64,15 +64,14 @@ const Listaclases = () => {
     setClasses([
       ...classes,
       {
-        id: classes.length + 1,
+        id: classes.length + 1, // mayo no se si el id lo manejas del backend, cualquier cosa sacalo
         materia: className,
         curso: classCourse,
         profesor: classProfessor,
         date: classDate,
-        image: 'https://example.com/default.jpg'  // Default image URL
+        image: 'https://example.com/default.jpg'  
       }
     ]);
-    // Clear form fields
     setClassName('');
     setClassCourse('');
     setClassProfessor('');
