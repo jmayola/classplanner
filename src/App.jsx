@@ -38,27 +38,6 @@ function App() {
     { path: "/misnotas", element: <Misnotas /> },
   ]);
   return <RouterProvider router={router} />;
-  return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<LoginScreen />} />
-        <Route path="/registerscreen" element={<RegisterScreen />} />
-        <Route path="/footer" element={<Footer />} />
-        <Route path="/header" element={<Header />} />
-        <Route path="/termsandconditions" element={<TermsAndConditions />} />
-        <Route path="/privacypolicy" element={<PrivacyPolicy />} />
-        <Route path="/registrodocente" element={<RegistroDocente />} />
-        <Route path="/registroalumno" element={<RegistroAlumno />} />
-        <Route path="/inicioalumno" element={<InicioAlumno />}/>
-        <Route path="/iniciodocente" element={<InicioDocente />}/>
-        <Route path="/misnotas" element={<Misnotas />}/>
-        <Route path="/vistaclase" element={<Vistaclase />}/>
-        <Route path="/listaclases" element={<Listaclases />}/>
-        <Route path="/calificiaciones" element={<Calificaciones />}/>
-      </Routes>
-    </Router>
-  );
 }
 
 export default App;

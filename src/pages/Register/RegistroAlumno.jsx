@@ -176,7 +176,7 @@ export const registroAlumno = async ({ request }) => {
                   icon: "success",
                 });
               }
-            }).then(()=>{window.location = "/"})
+            }).then(()=>{window.location = "/inicioalumno"})
             .catch((err) => {
               if (err.request.status == 403 || err.request.status == 505) {
                 console.log(err)
