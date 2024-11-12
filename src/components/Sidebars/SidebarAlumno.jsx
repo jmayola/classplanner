@@ -1,8 +1,22 @@
-import React from 'react';
+import React, {useState,useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import { FaHome, FaUser, FaFileAlt, FaStickyNote, FaCalendarAlt, FaStar, FaBook } from 'react-icons/fa';
+import axios from 'axios';
 
 const SidebarAlumno = () => {
+  const [userData, setUserData] = useState([])
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/user', {withCredentials: true});
+        setUserData(response.data); 
+      } catch (error) {
+        console.error('Error al obtener los datos del usuario:', error);
+      }
+    };
+    fetchUser();
+  }, []);
+
   return (
     <div className="w-64 bg-[#F7F7FF] shadow-md">
       <div className="p-6">
@@ -11,7 +25,7 @@ const SidebarAlumno = () => {
             <FaUser className="text-gray-600 text-2xl" />
           </div>
           <div>
-            <p className="text-gray-900 font-semibold">{useralumno} {useralumnopassword}</p>
+            <p className="text-gray-900 font-semibold">{userData.username} {userData.lastname}</p>
           </div>
         </div>
       </div>

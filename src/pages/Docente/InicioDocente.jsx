@@ -94,7 +94,7 @@ const InicioDocente = () => {
                   width: `${(classes.length / itemsPerPage) * 100}%`,
                 }}
               >
-                {classes.map((classItem) => (
+                {classes != [] && classes.map((classItem) => (
                   <div
                     key={classItem.id}
                     className="min-w-[30%] p-4 bg-white shadow-md rounded-lg"

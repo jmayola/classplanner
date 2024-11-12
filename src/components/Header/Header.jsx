@@ -1,8 +1,14 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaUser } from 'react-icons/fa';
+import axios from 'axios';
 
 const Header = () => {
+  const [User, setUser] = useState([])
+useEffect(() => {
+    axios.get("http://localhost:3000/user",{withCredentials: true}).then((res)=>setUser(res.data))
+}, [])
+  console.log(User)
   return (
     <header className="bg-white h-[80px] p-4 text-black">
       <div className="max-w-7xl mx-auto flex items-center justify-between h-full">

@@ -17,8 +17,9 @@ const InicioAlumno = () => {
   useEffect(() => {
     const fetchClasses = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/classes');
+        const response = await axios.get('http://localhost:3000/classes', {withCredentials: true});
         setClasses(response.data);
+        console.log(classes)
       } catch (error) {
         handleAxiosError(error, 'Error al cargar las clases');
       }
@@ -29,7 +30,7 @@ const InicioAlumno = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/user');
+        const response = await axios.get('http://localhost:3000/user', {withCredentials: true});
         setUserData(response.data); 
       } catch (error) {
         console.error('Error al obtener los datos del usuario:', error);
@@ -68,7 +69,7 @@ const InicioAlumno = () => {
       <SidebarAlumno />
       <div className="flex-grow p-6">
         <h1 className="text-3xl font-semibold text-gray-900">
-          Bienvenido, {userData.name} {userData.lastname}!
+          Bienvenido {userData.user_type}, {userData.username} {userData.lastname}!
         </h1>
         <p className="mt-4 text-gray-600">
           Aquí puedes acceder a tus clases, revisar tu progreso y mucho más.
@@ -78,9 +79,9 @@ const InicioAlumno = () => {
         <div className="mt-8">
           <h2 className="text-2xl font-semibold text-gray-800">Clases</h2>
           <div className="mt-4 space-y-4">
-            {classes.slice(currentIndex, currentIndex + itemsPerPage).map((clase, index) => (
+            {classes != [] &&classes.slice(currentIndex, currentIndex + itemsPerPage).map((clase, index) => (
               <div key={index} className="p-4 bg-white shadow-md rounded-lg">
-                <p className="text-lg text-gray-700">{clase.nombre}</p>
+                <p className="text-lg text-gray-700">{clase.class_name}</p>
               </div>
             ))}
           </div>
