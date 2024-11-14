@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';   
 import SidebarProfesor from '../../components/Sidebars/SidebarProfesor';
 import { FaPlus, FaChevronLeft, FaChevronRight, FaTimes } from 'react-icons/fa';
 
@@ -8,15 +9,7 @@ const InicioDocente = () => {
   const [classCourse, setClassCourse] = useState('');
   const [classProfessor, setClassProfessor] = useState('');
   const [classDate, setClassDate] = useState('');
-  const [classes, setClasses] = useState([
-    { id: 1, materia: 'Matemática', curso: '7° 2°', profesor: 'Juan Pérez' },
-    { id: 2, materia: 'Literatura', curso: '7° 2°', profesor: 'Ana López' },
-    { id: 3, materia: 'Historia del Arte', curso: '7° 2°', profesor: 'Carlos Martínez' },
-    { id: 4, materia: 'Ciencias', curso: '6° 1°', profesor: 'Luis García' },
-    { id: 5, materia: 'Biología', curso: '6° 2°', profesor: 'Clara Torres' },
-    { id: 6, materia: 'Geografía', curso: '5° 3°', profesor: 'Pedro Ramírez' },
-  ]);
-
+  const [classes, setClasses] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const itemsPerPage = 3;
 
@@ -45,6 +38,8 @@ const InicioDocente = () => {
         materia: className,
         curso: classCourse,
         profesor: classProfessor,
+        date: classDate,
+      },
         date: classDate,
       },
     ]);

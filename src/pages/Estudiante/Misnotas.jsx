@@ -1,57 +1,52 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import Sidebar from '../../components/Sidebars/SidebarAlumno';
-import { FaChevronDown, FaChevronUp } from 'react-icons/fa'; // Importamos los íconos
+import { FaChevronDown, FaChevronUp } from 'react-icons/fa'; 
+import withReactContent from 'sweetalert2-react-content';
+import Swal from 'sweetalert2';
 
-const subjectsData = {
-  Matemáticas: {
-    tasks: ['Tarea 1', 'Tarea 2', 'Tarea 3'],
-    grades: [8, 9, null],
-    entregadas: [true, true, false],
-    exams: [8, 7],
-    cuatrimestre: 9,
-  },
-  Lengua: {
-    tasks: ['Tarea 1', 'Tarea 2', 'Tarea 3'],
-    grades: [9, 8, 10],
-    entregadas: [true, true, true],
-    exams: [10, 9],
-    cuatrimestre: 9.5,
-  },
-  Ciencias: {
-    tasks: ['Tarea 1', 'Tarea 2', 'Tarea 3'],
-    grades: [7, null, 8],
-    entregadas: [true, false, true],
-    exams: [7, 8],
-    cuatrimestre: 7.5,
-  },
-  Historia: {
-    tasks: ['Tarea 1', 'Tarea 2', 'Tarea 3'],
-    grades: [8, 9, 7],
-    entregadas: [true, true, true],
-    exams: [9, 8],
-    cuatrimestre: 8.5,
-  },
-  Geografía: {
-    tasks: ['Tarea 1', 'Tarea 2', 'Tarea 3'],
-    grades: [9, 8, 9],
-    entregadas: [true, true, true],
-    exams: [9, 9],
-    cuatrimestre: 9,
-  },
-};
 
-const calculateAverage = (grades) => {
-  const validGrades = grades.filter((grade) => grade !== null);
-  const total = validGrades.reduce((acc, curr) => acc + curr, 0);
-  return validGrades.length > 0 ? (total / validGrades.length).toFixed(2) : 'N/A';
-};
+const Alerts = withReactContent(Swal);
 
 const Misnotas = () => {
+  const [subjectsData, setSubjectsData] = useState({});
   const [selectedSubject, setSelectedSubject] = useState('Matemáticas');
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // Estado para controlar el dropdown
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true); 
+        const response = await axios.get('http://localhost:3000/misnotas'); 
+        setSubjectsData(response.data);
+      } catch (error) {
+        const errorMessage = error.response 
+          ? `No se pudieron obtener los datos correctamente. Código: ${error.response.status}` 
+          : 'Error de conexión. Por favor, verifica tu red y vuelve a intentarlo.';
+
+        Alerts.fire({
+          title: <p>Error al cargar los datos</p>,
+          text: errorMessage,
+          icon: "error",
+        });
+        
+        console.error('Error al obtener datos:', error);
+      } finally {
+        setLoading(false); 
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const calculateAverage = (grades) => {
+    const validGrades = grades.filter((grade) => grade !== null);
+    const total = validGrades.reduce((acc, curr) => acc + curr, 0);
+    return validGrades.length > 0 ? (total / validGrades.length).toFixed(2) : 'N/A';
   };
 
   return (
@@ -63,7 +58,7 @@ const Misnotas = () => {
         <div className="relative mb-4">
           <button
             className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-md flex items-center justify-between w-52"
-            onClick={toggleDropdown} // Maneja el clic para mostrar/ocultar el dropdown
+            onClick={toggleDropdown}
           >
             {selectedSubject}
             {isDropdownOpen ? (
@@ -80,7 +75,7 @@ const Misnotas = () => {
                   key={subject}
                   onClick={() => {
                     setSelectedSubject(subject);
-                    toggleDropdown(); // Oculta el dropdown después de seleccionar
+                    toggleDropdown();
                   }}
                   className="block px-4 py-2 hover:bg-gray-200 text-gray-800 w-full text-left"
                 >
@@ -90,7 +85,7 @@ const Misnotas = () => {
               <button
                 onClick={() => {
                   setSelectedSubject('Todas');
-                  toggleDropdown(); // Oculta el dropdown después de seleccionar
+                  toggleDropdown();
                 }}
                 className="block px-4 py-2 hover:bg-gray-200 text-gray-800 w-full text-left"
               >
@@ -112,7 +107,7 @@ const Misnotas = () => {
                 <thead>
                   <tr className="bg-gray-200">
                     <th className="px-4 py-2 text-center">Materia</th>
-                    {Object.values(subjectsData)[0].tasks.map((task, i) => (
+                    {Object.values(subjectsData)[0]?.tasks?.map((task, i) => (
                       <th key={i} className="px-4 py-2 text-center">{task}</th>
                     ))}
                     <th className="px-4 py-2 text-center">Promedio</th>
@@ -205,7 +200,7 @@ const Misnotas = () => {
               <table className="table-auto w-full bg-white rounded-lg shadow-md">
                 <thead>
                   <tr className="bg-gray-200">
-                    {subjectsData[selectedSubject].tasks.map((task, i) => (
+                    {subjectsData[selectedSubject]?.tasks?.map((task, i) => (
                       <th key={i} className="px-4 py-2 text-center">{task}</th>
                     ))}
                     <th className="px-4 py-2 text-center">Promedio</th>
@@ -214,7 +209,7 @@ const Misnotas = () => {
                 <tbody>
                   <tr className="border-t">
                     <td className="px-4 py-2 text-center font-semibold">Notas</td>
-                    {subjectsData[selectedSubject].grades.map((grade, i) => (
+                    {subjectsData[selectedSubject]?.grades?.map((grade, i) => (
                       <td key={i} className="px-4 py-2 text-center">
                         {grade !== null ? (
                           <div>
@@ -249,9 +244,8 @@ const Misnotas = () => {
                 </thead>
                 <tbody>
                   <tr className="border-t">
-                    {subjectsData[selectedSubject].exams.map((exam, i) => (
-                      <td key={i} className="px-4 py-2 text-center">{exam}</td>
-                    ))}
+                    <td className="px-4 py-2 text-center">{subjectsData[selectedSubject]?.exams[0]}</td>
+                    <td className="px-4 py-2 text-center">{subjectsData[selectedSubject]?.exams[1]}</td>
                     <td className="px-4 py-2 text-center font-semibold">
                       {calculateAverage(subjectsData[selectedSubject].exams)}
                     </td>
@@ -272,7 +266,7 @@ const Misnotas = () => {
                 <tbody>
                   <tr className="border-t">
                     <td className="px-4 py-2 text-center font-semibold">
-                      {subjectsData[selectedSubject].cuatrimestre}
+                      {subjectsData[selectedSubject]?.cuatrimestre}
                     </td>
                   </tr>
                 </tbody>

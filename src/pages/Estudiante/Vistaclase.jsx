@@ -1,13 +1,59 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaBook, FaClipboardList, FaBullhorn, FaChalkboardTeacher } from 'react-icons/fa';
 import Sidebar from '../../components/Sidebars/SidebarAlumno';
+import axios from 'axios';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+
+const Alerts = withReactContent(Swal);
 
 const Vistaclase = () => {
   const [activeTab, setActiveTab] = useState('Tareas');
+  const [data, setData] = useState(null);
+
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get('http://localhost:3000/vistaclase');
+      if (response.status === 200) {
+        setData(response.data);
+      } else {
+        Alerts.fire({
+          title: <p>Error al cargar los datos</p>,
+          text: "No se pudieron obtener los datos correctamente. Código: " + response.status,
+          icon: "error",
+        });
+      }
+    } catch (error) {
+      if (error.response) {
+        Alerts.fire({
+          title: <p>Error del servidor</p>,
+          text: "Código de error: " + error.response.status + ". " + error.response.data.message,
+          icon: "error",
+        });
+      } else if (error.request) {
+        Alerts.fire({
+          title: <p>Error de conexión</p>,
+          text: "No se recibió respuesta del servidor. Inténtelo más tarde.",
+          icon: "error",
+        });
+      } else {
+        Alerts.fire({
+          title: <p>Error inesperado</p>,
+          text: "Se produjo un error: " + error.message,
+          icon: "error",
+        });
+      }
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -20,8 +66,8 @@ const Vistaclase = () => {
         <div className="relative h-40 bg-blue-600">
           <div className="absolute bottom-4 left-4 text-white">
             <h1 className="text-4xl font-bold">Clase 1</h1>
-            <h3 className="text-2x1 font-semibold">7mo 2da</h3>
-            <p className="text-lg">Juan Pérez</p>
+            <h3 className="text-2xl font-semibold">7mo 2da</h3>
+            <p className="text-lg">{useralumno} {useralumnopassword}</p>
           </div>
         </div>
 
@@ -51,7 +97,6 @@ const Vistaclase = () => {
           >
             Calendario
           </button>
-          
         </div>
 
         {/* Main content based on active tab with scrollbar */}
@@ -60,44 +105,21 @@ const Vistaclase = () => {
             <div>
               <h2 className="text-3xl font-bold mb-6">Tareas</h2>
               <div className="grid grid-cols-1 gap-4">
-                <div className="bg-white p-4 shadow-md rounded-lg flex items-center">
-                  <img 
-                    src="https://via.placeholder.com/50" 
-                    alt="Profesor Juan Pérez" 
-                    className="w-12 h-12 rounded-full mr-4"
-                  />
-                  <div>
-                    <h3 className="text-[16px]">Usuario publicó una nueva tarea: Tarea 1 - Investigación</h3>
-                    <p className="text-gray-600 text-[14px]">Fecha de entrega: 20 de septiembre, 2024</p>
-                    <a href="#tarea1" className="text-blue-500 hover:underline mt-2 block">Ver detalles</a>
+                {/*  mapear los datos de 'data' que se ha obtenido */}
+                {data && data.tareas.map((tarea, index) => (
+                  <div key={index} className="bg-white p-4 shadow-md rounded-lg flex items-center">
+                    <img 
+                      src={tarea.profesorImg || "https://via.placeholder.com/50"} 
+                      alt={tarea.profesorNombre} 
+                      className="w-12 h-12 rounded-full mr-4"
+                    />
+                    <div>
+                      <h3 className="text-[16px]">{tarea.titulo}</h3>
+                      <p className="text-gray-600 text-[14px]">Fecha de entrega: {tarea.fechaEntrega}</p>
+                      <a href={`#${tarea.id}`} className="text-blue-500 hover:underline mt-2 block">Ver detalles</a>
+                    </div>
                   </div>
-                </div>
-
-                <div className="bg-white p-4 shadow-md rounded-lg flex items-center">
-                  <img 
-                    src="https://via.placeholder.com/50" 
-                    alt="Profesor Juan Pérez" 
-                    className="w-12 h-12 rounded-full mr-4"
-                  />
-                  <div>
-                    <h3 className="text-xl font-semibold">Tarea 2: Ensayo</h3>
-                    <p className="text-gray-600">Fecha de entrega: 25 de septiembre, 2024</p>
-                    <a href="#tarea2" className="text-blue-500 hover:underline mt-2 block">Ver detalles</a>
-                  </div>
-                </div>
-
-                <div className="bg-white p-4 shadow-md rounded-lg flex items-center">
-                  <img 
-                    src="https://via.placeholder.com/50" 
-                    alt="Profesor Juan Pérez" 
-                    className="w-12 h-12 rounded-full mr-4"
-                  />
-                  <div>
-                    <h3 className="text-xl font-semibold">Tarea 3: Presentación</h3>
-                    <p className="text-gray-600">Fecha de entrega: 30 de septiembre, 2024</p>
-                    <a href="#tarea3" className="text-blue-500 hover:underline mt-2 block">Ver detalles</a>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
           )}
@@ -105,6 +127,7 @@ const Vistaclase = () => {
           {activeTab === 'Materiales' && (
             <div>
               <h2 className="text-3xl font-bold mb-6">Materiales</h2>
+<<<<<<< HEAD
               <div className="grid grid-cols-1 gap-4">
                 <div className="bg-white p-4 shadow-md rounded-t-[20px]">
                   <div className="bg-[#fff] p-4 border-b border-gray-300 mb-5">
@@ -121,27 +144,32 @@ const Vistaclase = () => {
                 </div>
                 <div className="border-t border-gray-300 my-4 w-full"></div>
               </div>
+=======
+              <ul className="list-disc list-inside">
+                {data && data.materiales.map((material, index) => (
+                  <li key={index}>{material.nombre}: <a href={material.link} className="text-blue-500 hover:underline">Descargar</a></li>
+                ))}
+              </ul>
+>>>>>>> refs/remotes/origin/master
             </div>
           
           
           )}
 
           {activeTab === 'Anuncios' && (
-           <div>
+            <div>
               <h2 className="text-3xl font-bold mb-6">Anuncios</h2>
               <div className="bg-white p-4 shadow-md rounded-lg flex flex-col space-y-4">
-                <div className='flex flex-row items-center space-x-2'>
-                  <img src="https://via.placeholder.com/50" alt="Imagen de perfil" className="w-12 h-12 rounded-full" />
-                  <div className='flex flex-col text-left'>
-                    <p>Usuario</p>
-                    <p className="text-gray-700 text-[14px]">15 sept</p>
+                {data && data.anuncios.map((anuncio, index) => (
+                  <div key={index} className='flex flex-row items-center space-x-2'>
+                    <img src={anuncio.img || "https://via.placeholder.com/50"} alt="Imagen de perfil" className="w-12 h-12 rounded-full" />
+                    <div className='flex flex-col text-left'>
+                      <p>{anuncio.usuario}</p>
+                      <p className="text-gray-700 text-[14px]">{anuncio.fecha}</p>
+                    </div>
+                    <p className="text-gray-600">{anuncio.mensaje}</p>
                   </div>
-                </div>
-                <div>
-                  <p className="text-gray-600 text-left items-center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Et, non nihil. Dolorem distinctio nostrum 
-                    similique esse recusandae hic reprehenderit, 
-                    iure, at voluptatem deserunt, consequuntur voluptatum earum cumque sapiente eos eaque!</p>
-                </div>
+                ))}
               </div>
             </div>
           )}
@@ -151,9 +179,9 @@ const Vistaclase = () => {
               <h2 className="text-3xl font-bold mb-6">Calendario</h2>
               <p>Próximas fechas importantes:</p>
               <ul className="list-disc list-inside">
-                <li>Entrega de la Tarea 1: 20 de septiembre, 2024</li>
-                <li>Entrega de la Tarea 2: 25 de septiembre, 2024</li>
-                <li>Examen parcial: 1 de octubre, 2024</li>
+                {data && data.calendario.map((fecha, index) => (
+                  <li key={index}>{fecha.descripcion}: {fecha.fecha}</li>
+                ))}
               </ul>
             </div>
           )}

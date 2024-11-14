@@ -11,7 +11,7 @@ const SidebarAlumno = () => {
             <FaUser className="text-gray-600 text-2xl" />
           </div>
           <div>
-            <p className="text-gray-900 font-semibold">Usuario_123456</p>
+            <p className="text-gray-900 font-semibold">{useralumno} {useralumnopassword}</p>
           </div>
         </div>
       </div>

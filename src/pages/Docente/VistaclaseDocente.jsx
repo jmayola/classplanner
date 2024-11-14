@@ -1,13 +1,58 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaBook, FaClipboardList, FaBullhorn, FaChalkboardTeacher } from 'react-icons/fa';
 import Sidebar from '../../components/Sidebars/SidebarProfesor';
+import withReactContent from 'sweetalert2-react-content';
+import Swal from 'sweetalert2';
+import axios from 'axios';
+
+const Alerts = withReactContent(Swal);
 
 const VistaclaseDocente = () => {
   const [activeTab, setActiveTab] = useState('Tareas');
+  const [data, setData] = useState(null);
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get('http://localhost:3000/vistaclasedocente');
+      if (response.status === 200) {
+        setData(response.data);
+      } else {
+        Alerts.fire({
+          title: <p>Error al cargar los datos</p>,
+          text: "No se pudieron obtener los datos correctamente. Código: " + response.status,
+          icon: "error",
+        });
+      }
+    } catch (error) {
+      if (error.response) {
+        Alerts.fire({
+          title: <p>Error del servidor</p>,
+          text: "Código de error: " + error.response.status + ". " + error.response.data.message,
+          icon: "error",
+        });
+      } else if (error.request) {
+        Alerts.fire({
+          title: <p>Error de conexión</p>,
+          text: "No se recibió respuesta del servidor. Inténtelo más tarde.",
+          icon: "error",
+        });
+      } else {
+        Alerts.fire({
+          title: <p>Error inesperado</p>,
+          text: "Se produjo un error: " + error.message,
+          icon: "error",
+        });
+      }
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -20,7 +65,7 @@ const VistaclaseDocente = () => {
         <div className="relative h-40 bg-blue-600">
           <div className="absolute bottom-4 left-4 text-white">
             <h1 className="text-4xl font-bold">Clase 1</h1>
-            <h3 className="text-2x1 font-semibold">7mo 2da</h3>
+            <h3 className="text-2xl font-semibold">7mo 2da</h3>
             <p className="text-lg">Juan Pérez</p>
           </div>
         </div>
@@ -51,7 +96,6 @@ const VistaclaseDocente = () => {
           >
             Calendario
           </button>
-          
         </div>
 
         {/* Main content based on active tab with scrollbar */}
@@ -60,6 +104,7 @@ const VistaclaseDocente = () => {
             <div>
               <h2 className="text-3xl font-bold mb-6">Tareas</h2>
               <div className="grid grid-cols-1 gap-4">
+                {/* podría  mapear las tareas desde el estado 'data' */}
                 <div className="bg-white p-4 shadow-md rounded-lg flex items-center">
                   <img 
                     src="https://via.placeholder.com/50" 
@@ -70,32 +115,6 @@ const VistaclaseDocente = () => {
                     <h3 className="text-[16px]">Usuario publicó una nueva tarea: Tarea 1 - Investigación</h3>
                     <p className="text-gray-600 text-[14px]">Fecha de entrega: 20 de septiembre, 2024</p>
                     <a href="#tarea1" className="text-blue-500 hover:underline mt-2 block">Ver detalles</a>
-                  </div>
-                </div>
-
-                <div className="bg-white p-4 shadow-md rounded-lg flex items-center">
-                  <img 
-                    src="https://via.placeholder.com/50" 
-                    alt="Profesor Juan Pérez" 
-                    className="w-12 h-12 rounded-full mr-4"
-                  />
-                  <div>
-                    <h3 className="text-xl font-semibold">Tarea 2: Ensayo</h3>
-                    <p className="text-gray-600">Fecha de entrega: 25 de septiembre, 2024</p>
-                    <a href="#tarea2" className="text-blue-500 hover:underline mt-2 block">Ver detalles</a>
-                  </div>
-                </div>
-
-                <div className="bg-white p-4 shadow-md rounded-lg flex items-center">
-                  <img 
-                    src="https://via.placeholder.com/50" 
-                    alt="Profesor Juan Pérez" 
-                    className="w-12 h-12 rounded-full mr-4"
-                  />
-                  <div>
-                    <h3 className="text-xl font-semibold">Tarea 3: Presentación</h3>
-                    <p className="text-gray-600">Fecha de entrega: 30 de septiembre, 2024</p>
-                    <a href="#tarea3" className="text-blue-500 hover:underline mt-2 block">Ver detalles</a>
                   </div>
                 </div>
               </div>

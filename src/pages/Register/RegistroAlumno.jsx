@@ -2,7 +2,6 @@ import React from 'react';
 import { Link,Form } from 'react-router-dom';
 import Footer from '../../components/Footer';
 import Header from '../../components/Header/Header';
-// import { useAuth } from "../../context/AuthContext";
 import axios from "axios";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
@@ -159,7 +158,6 @@ export const registroAlumno = async ({ request }) => {
     user_password: data.get("user_password"),
     user_type: "alumno"
   };
-  console.log(submission);
   try {
     Alerts.fire({
       title: "Registro",
@@ -176,7 +174,7 @@ export const registroAlumno = async ({ request }) => {
                   icon: "success",
                 });
               }
-            }).then(()=>{window.location = "/"})
+            }).then(()=>{window.location = "/inicioalumno"})
             .catch((err) => {
               if (err.request.status == 403 || err.request.status == 505) {
                 console.log(err)
