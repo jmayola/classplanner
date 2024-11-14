@@ -3,6 +3,7 @@ import { FaBook, FaClipboardList, FaBullhorn, FaChalkboardTeacher } from 'react-
 import Sidebar from '../../components/Sidebars/SidebarAlumno';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+
 import withReactContent from 'sweetalert2-react-content';
 
 const Alerts = withReactContent(Swal);
@@ -10,7 +11,7 @@ const Alerts = withReactContent(Swal);
 const Vistaclase = () => {
   const [activeTab, setActiveTab] = useState('Tareas');
   const [data, setData] = useState(null);
-
+  const [userData, setUserData] = useState({ name: '', lastname: '' });
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -50,7 +51,17 @@ const Vistaclase = () => {
       }
     }
   };
-
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/user', {withCredentials: true});
+        setUserData(response.data); 
+      } catch (error) {
+        console.error('Error al obtener los datos del usuario:', error);
+      }
+    };
+    fetchUser();
+  }, []);
   useEffect(() => {
     fetchData();
   }, []);
@@ -67,7 +78,7 @@ const Vistaclase = () => {
           <div className="absolute bottom-4 left-4 text-white">
             <h1 className="text-4xl font-bold">Clase 1</h1>
             <h3 className="text-2xl font-semibold">7mo 2da</h3>
-            <p className="text-lg">{useralumno} {useralumnopassword}</p>
+            <p className="text-lg">{userData.name} {userData.lastname}</p>
           </div>
         </div>
 
