@@ -1,15 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaPalette, FaGlobe, FaCalendarAlt, FaChalkboardTeacher, FaBook, FaEnvelope, FaUser, FaHome, FaCaretDown, FaCaretUp, FaCog, FaStar } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 const SidebarProfesor = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isConfigOpen, setIsConfigOpen] = useState(false);
+  const [user, setUser] = useState({ user_name: '', user_lastname: '' });
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const user = {
-    user_name: 'Juan',
-    user_lastname: 'Pérez',
-  };
+  useEffect(() => {
+    axios.get('http://localhost:3000/user')
+      .then(response => {
+        if (response.data) {
+          setUser({
+            user_name: response.data.user_name,
+            user_lastname: response.data.user_lastname
+          });
+          setError(null);
+        } else {
+          setError("No se encontraron datos del usuario.");
+        }
+      })
+      .catch(() => {
+        setError("Error al cargar el Nombre del usuario.");
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, []);
+  
+  
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -27,20 +49,38 @@ const SidebarProfesor = () => {
             <FaUser className="text-gray-600 text-2xl" />
           </div>
           <div>
-            <p className="text-gray-900 font-semibold">{user.user_name} {user.user_lastname}</p>
+            {isLoading ? (
+              <p className="text-gray-500 font-semibold">Cargando...</p>
+            ) : error ? (
+              <p className="text-red-500 font-semibold">{error}</p>
+            ) : (
+              <p className="text-gray-900 font-semibold">
+                {user.user_name} {user.user_lastname}
+              </p>
+            )}
           </div>
         </div>
       </div>
+  
       <nav className="px-6">
-        <ul className="space-y-2"> {/* Cambié space-y-2 a space-y-2 */}
+        <ul className="space-y-2">
+          {/* Inicio */}
           <li>
-            <Link to="/iniciodocente" className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+            <Link
+              to="/iniciodocente"
+              className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+            >
               <FaHome className="text-gray-600" />
               <span>Inicio</span>
             </Link>
           </li>
+  
+          {/* Mis clases con dropdown */}
           <li>
-            <div className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg cursor-pointer" onClick={toggleDropdown}>
+            <div
+              className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg cursor-pointer"
+              onClick={toggleDropdown}
+            >
               <FaChalkboardTeacher className="text-gray-600" />
               <Link to="/listaclases">
                 <span>Mis clases</span>
@@ -52,81 +92,121 @@ const SidebarProfesor = () => {
             {isDropdownOpen && (
               <ul className="ml-6 mt-2 space-y-1">
                 <li>
-                  <Link to="/vistaclase" className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <Link
+                    to="/vistaclase"
+                    className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+                  >
                     <span>Clase 1</span>
                   </Link>
                 </li>
                 <li>
-                  <Link to="/vistaclase" className="flex items-center space-x-4 py-2  text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <Link
+                    to="/vistaclase"
+                    className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+                  >
                     <span>Clase 2</span>
                   </Link>
                 </li>
                 <li>
-                  <Link to="/vistaclase" className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <Link
+                    to="/vistaclase"
+                    className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+                  >
                     <span>Clase 3</span>
                   </Link>
                 </li>
               </ul>
             )}
           </li>
+  
+          {/* Calificaciones */}
           <li>
-            <Link to="/calificaciones" className="flex items-center space-x-4 text-gray-700 hover:bg-gray-100 rounded-lg">
+            <Link
+              to="/calificaciones"
+              className="flex items-center space-x-4 text-gray-700 hover:bg-gray-100 rounded-lg"
+            >
               <FaBook className="text-gray-600" />
               <span>Calificaciones</span>
             </Link>
           </li>
+  
+          {/* Configuración */}
           <li>
-            <div className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg cursor-pointer" onClick={toggleConfig}>
+            <div
+              className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg cursor-pointer"
+              onClick={toggleConfig}
+            >
               <FaCog className="text-gray-600" />
               <span>Configuración</span>
             </div>
           </li>
-
+  
+          {/* Clases en las que estoy inscripto */}
           <div>
             <h3 className="text-[14px] text-gray-500 mt-6">Clases en las que estoy inscripto</h3>
             <div className="overflow-y-auto max-h-40 shadow-bottom">
-              <Link to="/vistaclase" className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+              <Link
+                to="/vistaclase"
+                className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+              >
                 <FaBook className="text-gray-600" />
                 <span>Clase 1</span>
               </Link>
-              <Link to="/vistaclase" className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+              <Link
+                to="/vistaclase"
+                className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+              >
                 <FaBook className="text-gray-600" />
                 <span>Clase 2</span>
               </Link>
-              <Link to="/vistaclase" className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+              <Link
+                to="/vistaclase"
+                className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+              >
                 <FaBook className="text-gray-600" />
                 <span>Clase 3</span>
               </Link>
-              <Link to="/vistaclase" className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+              <Link
+                to="/vistaclase"
+                className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+              >
                 <FaBook className="text-gray-600" />
                 <span>Clase 1</span>
               </Link>
-              <Link to="/vistaclase" className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+              <Link
+                to="/vistaclase"
+                className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+              >
                 <FaBook className="text-gray-600" />
                 <span>Clase 2</span>
               </Link>
-              <Link to="/vistaclase" className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+              <Link
+                to="/vistaclase"
+                className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+              >
                 <FaBook className="text-gray-600" />
                 <span>Clase 3</span>
               </Link>
             </div>
           </div>
-
-
-          <li className='mt-10'>
-            <Link to="/calendario" className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+  
+          {/* Calendario */}
+          <li className="mt-10">
+            <Link
+              to="/calendario"
+              className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+            >
               <FaCalendarAlt className="text-gray-600" />
               <span>Calendario</span>
             </Link>
           </li>
         </ul>
       </nav>
-
-
-      {isConfigOpen && (
-        <ConfigModal onClose={toggleConfig} user={user} />
-      )}
-
+  
+      {/* Modal de Configuración */}
+      {isConfigOpen && <ConfigModal onClose={toggleConfig} user={user} />}
+  
+      {/* Cerrar sesión */}
       <footer className="p-4 border-t border-gray-300">
         <Link to="/logout" className="flex items-center text-red-400 hover:underline">
           <span>Cerrar Sesión</span>
@@ -134,7 +214,7 @@ const SidebarProfesor = () => {
       </footer>
     </div>
   );
-};
+}  
 
 const ConfigModal = ({ onClose, user }) => {
   const [activeTab, setActiveTab] = useState('configuracion');
