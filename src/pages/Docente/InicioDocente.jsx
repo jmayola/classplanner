@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';   
+import React, { useState } from 'react';
+import { FaPlus, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { AiOutlineCopy } from 'react-icons/ai';
+import Alerts from 'sweetalert2';
 import SidebarProfesor from '../../components/Sidebars/SidebarProfesor';
-import { FaPlus, FaChevronLeft, FaChevronRight, FaTimes } from 'react-icons/fa';
 
 const InicioDocente = () => {
   const [isFormVisible, setFormVisible] = useState(false);
@@ -31,18 +32,32 @@ const InicioDocente = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
+    const uniqueCode = Math.floor(1000000 + Math.random() * 9000000).toString();
     setClasses([
       ...classes,
       {
-        id: classes.length + 1,
+        id: uniqueCode,
         materia: className,
         curso: classCourse,
         profesor: classProfessor,
         date: classDate,
       },
-        date: classDate,
-      },
     ]);
+    Alerts.fire({
+      title: 'Clase agregada',
+      text: `Código de clase: ${uniqueCode}`,
+      icon: 'success',
+      showCancelButton: true,
+      confirmButtonText: 'Copiar código',
+      cancelButtonText: 'Cerrar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        navigator.clipboard.writeText(uniqueCode);
+        Alerts.fire('Copiado!', 'El código de clase ha sido copiado al portapapeles.', 'success');
+      }
+    });
+
     setClassName('');
     setClassCourse('');
     setClassProfessor('');
@@ -109,83 +124,78 @@ const InicioDocente = () => {
 
         {isFormVisible && (
           <div className="fixed inset-0 bg-gray-700 bg-opacity-50 flex items-center justify-center z-50">
-          <div className="w-full max-w-md p-10 space-y-8 bg-white shadow-lg rounded-[20px]">
-            {/* <button
-              onClick={handleCloseForm}
-              className="absolute top-4 right-4 w-4 h-4 bg-[#ca1c1c] rounded-full flex items-center justify-center cursor-pointer"
-            ></button> */}
-            <h2 className="text-4xl font-semibold text-black text-center">
-              Agregar Clase
-            </h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-3">
-                <div>
-                  <label htmlFor="className" className="sr-only">Materia</label>
-                  <input
-                    type="text"
-                    id="className"
-                    value={className}
-                    onChange={(e) => setClassName(e.target.value)}
-                    className="block w-full px-4 py-3 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-[30px] focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                    placeholder="Materia"
-                    required
-                  />
+            <div className="w-full max-w-md p-10 space-y-8 bg-white shadow-lg rounded-[20px]">
+              <h2 className="text-4xl font-semibold text-black text-center">
+                Agregar Clase
+              </h2>
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="space-y-3">
+                  <div>
+                    <label htmlFor="className" className="sr-only">Materia</label>
+                    <input
+                      type="text"
+                      id="className"
+                      value={className}
+                      onChange={(e) => setClassName(e.target.value)}
+                      className="block w-full px-4 py-3 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-[30px] focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                      placeholder="Materia"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="classCourse" className="sr-only">Curso</label>
+                    <input
+                      type="text"
+                      id="classCourse"
+                      value={classCourse}
+                      onChange={(e) => setClassCourse(e.target.value)}
+                      className="block w-full px-4 py-3 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-[30px] focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                      placeholder="Curso"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="classProfessor" className="sr-only">Nombre del Profesor</label>
+                    <input
+                      type="text"
+                      id="classProfessor"
+                      value={classProfessor}
+                      onChange={(e) => setClassProfessor(e.target.value)}
+                      className="block w-full px-4 py-3 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-[30px] focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                      placeholder="Nombre del Profesor"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="classDate" className="sr-only">Fecha de Inicio</label>
+                    <input
+                      type="date"
+                      id="classDate"
+                      value={classDate}
+                      onChange={(e) => setClassDate(e.target.value)}
+                      className="block w-full px-4 py-3 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-[30px] focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                      required
+                    />
+                  </div>
                 </div>
-                <div>
-                  <label htmlFor="classCourse" className="sr-only">Curso</label>
-                  <input
-                    type="text"
-                    id="classCourse"
-                    value={classCourse}
-                    onChange={(e) => setClassCourse(e.target.value)}
-                    className="block w-full px-4 py-3 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-[30px] focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                    placeholder="Curso"
-                    required
-                  />
+                <div className="flex justify-between space-x-3">
+                  <button
+                    type="submit"
+                    className="w-full px-6 py-3 text-sm font-medium text-white bg-blue-500 border border-transparent rounded-[30px] hover:bg-[#002746] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black mt-3"
+                  >
+                    Agregar
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleCloseForm}
+                    className="w-full px-6 py-3 text-sm font-medium text-white bg-red-500 border border-transparent rounded-[30px] hover:bg-[#c40000] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black mt-3"
+                  >
+                    Cancelar
+                  </button>
                 </div>
-                <div>
-                  <label htmlFor="classProfessor" className="sr-only">Nombre del Profesor</label>
-                  <input
-                    type="text"
-                    id="classProfessor"
-                    value={classProfessor}
-                    onChange={(e) => setClassProfessor(e.target.value)}
-                    className="block w-full px-4 py-3 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-[30px] focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                    placeholder="Nombre del Profesor"
-                    required
-                  />
-                </div>
-                <div>
-                  <label htmlFor="classDate" className="sr-only">Fecha de Inicio</label>
-                  <input
-                    type="date"
-                    id="classDate"
-                    value={classDate}
-                    onChange={(e) => setClassDate(e.target.value)}
-                    className="block w-full px-4 py-3 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-[30px] focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                    required
-                  />
-                </div>
-              </div>
-              <div className="flex justify-between space-x-3">
-                <button
-                  type="submit"
-                  className="w-full px-6 py-3 text-sm font-medium text-white bg-blue-500 border border-transparent rounded-[30px] hover:bg-[#002746] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black mt-3"
-                >
-                  Agregar
-                </button>
-                <button
-                  type="button"
-                  onClick={handleCloseForm}
-                  className="w-full px-6 py-3 text-sm font-medium text-white bg-red-500 border border-transparent rounded-[30px] hover:bg-[#c40000] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black mt-3"
-                >
-                  Cancelar
-                </button>
-              </div>
-            </form>
+              </form>
+            </div>
           </div>
-        </div>
-        
         )}
 
         <div className="mt-8">

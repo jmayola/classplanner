@@ -127,30 +127,11 @@ const Vistaclase = () => {
           {activeTab === 'Materiales' && (
             <div>
               <h2 className="text-3xl font-bold mb-6">Materiales</h2>
-<<<<<<< HEAD
-              <div className="grid grid-cols-1 gap-4">
-                <div className="bg-white p-4 shadow-md rounded-t-[20px]">
-                  <div className="bg-[#fff] p-4 border-b border-gray-300 mb-5">
-                    <h3 className="text-black text-[16px]">
-                      20 de septiembre, 2024&nbsp;&nbsp;•&nbsp;&nbsp;Tarea 1 - Investigación
-                    </h3>
-                  </div>
-                  <div className="flex flex-row max-w-full">
-                      <a href="#" className="text-blue-500 hover:underline mr-10">MaterialdeEstudio.pdf</a>
-                      <a href="#" className="text-blue-500 hover:underline mr-10">MaterialdeEstudio.pdf</a>
-                      <a href="#" className="text-blue-500 hover:underline mr-10">MaterialdeEstudio.pdf</a>
-                      <a href="#" className="text-blue-500 hover:underline mr-10">MaterialdeEstudio.pdf</a>
-                    </div>
-                </div>
-                <div className="border-t border-gray-300 my-4 w-full"></div>
-              </div>
-=======
               <ul className="list-disc list-inside">
                 {data && data.materiales.map((material, index) => (
                   <li key={index}>{material.nombre}: <a href={material.link} className="text-blue-500 hover:underline">Descargar</a></li>
                 ))}
               </ul>
->>>>>>> refs/remotes/origin/master
             </div>
           
           
