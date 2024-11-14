@@ -6,9 +6,12 @@ import axios from 'axios';
 const Header = () => {
   const [User, setUser] = useState([])
 useEffect(() => {
-    axios.get("http://localhost:3000/user",{withCredentials: true}).then((res)=>setUser(res.data))
+    axios.get("http://localhost:3000/user",{withCredentials: true}).then((res)=>setUser(res.data)).catch((err)=>setUser(null))
 }, [])
   console.log(User)
+  const handleSessionClose = () =>{
+    axios.delete("http://localhost:3000/user",{withCredentials:true}).then((res)=> res.status == 202 && location.reload()).catch((res)=>alert("no tienes una sesion iniciada."))
+  }
   return (
     <header className="bg-white h-[80px] p-4 text-black">
       <div className="max-w-7xl mx-auto flex items-center justify-between h-full">
@@ -32,6 +35,7 @@ useEffect(() => {
         </nav>
 
         {/* Botones de Inicio de sesión y Registro a la derecha */}
+        {User ? <button className='text-center justify-center text-white hover:bg-gray-700 bg-[#151515] rounded-[30px] h-[30px] flex items-center' onClick={handleSessionClose}>Cerrar Sesion</button>:
         <div className="flex items-center space-x-5">
           <Link to="/login" className="text-center justify-center text-white hover:bg-gray-700 bg-[#151515] rounded-[30px] h-[30px] flex items-center">
             <span className="px-5">Iniciar sesión</span>
@@ -40,7 +44,7 @@ useEffect(() => {
             <span className="px-5">Registro</span>
           </Link>
         </div>
-        
+        }
       </div>
     </header>
   );

@@ -15,16 +15,12 @@ const InicioAlumno = () => {
   const itemsPerPage = 6;
 
   useEffect(() => {
-    const fetchClasses = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/classes', {withCredentials: true});
-        setClasses(response.data);
-        console.log(classes)
+        axios.get('http://localhost:3000/classes', {withCredentials: true}).then((response)=>setClasses(response.data))
+        .catch((err)=>handleAxiosError(err, 'Error al cargar las clases'))
       } catch (error) {
         handleAxiosError(error, 'Error al cargar las clases');
       }
-    };
-    fetchClasses();
   }, []);
 
   useEffect(() => {
@@ -79,8 +75,9 @@ const InicioAlumno = () => {
         <div className="mt-8">
           <h2 className="text-2xl font-semibold text-gray-800">Clases</h2>
           <div className="mt-4 space-y-4">
-            {classes != [] &&classes.slice(currentIndex, currentIndex + itemsPerPage).map((clase, index) => (
-              <div key={index} className="p-4 bg-white shadow-md rounded-lg">
+            {/* {classes != [] && classes.map((clase, index) => ( */}
+             {classes != [] &&classes.slice(currentIndex, currentIndex + itemsPerPage).map((clase, index) => (
+              <div key={index} className={`p-4 shadow-md rounded-lg border-b-2`} style={{borderBlockColor: clase.class_color}}>
                 <p className="text-lg text-gray-700">{clase.class_name}</p>
               </div>
             ))}
