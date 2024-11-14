@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaPlus, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { AiOutlineCopy } from 'react-icons/ai';
 import Alerts from 'sweetalert2';
 import SidebarProfesor from '../../components/Sidebars/SidebarProfesor';
+import axios from 'axios';
 
 const InicioDocente = () => {
   const [isFormVisible, setFormVisible] = useState(false);
   const [className, setClassName] = useState('');
   const [classCourse, setClassCourse] = useState('');
-  const [classProfessor, setClassProfessor] = useState('');
+  const [Color, setColor] = useState('');
   const [classDate, setClassDate] = useState('');
   const [classes, setClasses] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -29,21 +30,29 @@ const InicioDocente = () => {
   const handleAddClass = () => {
     setFormVisible(true);
   };
+  function generateUniqueCode(length = 8) {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let code = '';
+    
+    for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        code += characters[randomIndex];
+    }
 
-  const handleSubmit = (e) => {
+    return code;
+}
+
+  const handleSubmit = async(e) => {
     e.preventDefault();
     
-    const uniqueCode = Math.floor(1000000 + Math.random() * 9000000).toString();
-    setClasses([
-      ...classes,
-      {
-        id: uniqueCode,
-        materia: className,
-        curso: classCourse,
-        profesor: classProfessor,
-        date: classDate,
-      },
-    ]);
+    const uniqueCode = generateUniqueCode()
+      const data = {
+        class_name: className,
+        class_curso: classCourse,
+        class_color: Color,
+        class_token: uniqueCode,
+      }
+    await axios.post("http://localhost:3000/classes", data,{withCredentials:true}).then((res)=> res.status== 202 ?
     Alerts.fire({
       title: 'Clase agregada',
       text: `Código de clase: ${uniqueCode}`,
@@ -56,11 +65,14 @@ const InicioDocente = () => {
         navigator.clipboard.writeText(uniqueCode);
         Alerts.fire('Copiado!', 'El código de clase ha sido copiado al portapapeles.', 'success');
       }
-    });
+    }): Alerts.fire({
+      title: 'Error',
+      text: `No se pudo crear la clase`,
+      icon: 'error'}))
 
     setClassName('');
     setClassCourse('');
-    setClassProfessor('');
+    setColor('#ffffff');
     setClassDate('');
     setFormVisible(false);
   };
@@ -68,7 +80,7 @@ const InicioDocente = () => {
   const handleCloseForm = () => {
     setFormVisible(false);
   };
-
+  
   return (
     <div className="flex min-h-screen text-[#37352f]">
       <SidebarProfesor />
@@ -154,33 +166,20 @@ const InicioDocente = () => {
                       required
                     />
                   </div>
-                  <div>
-                    <label htmlFor="classProfessor" className="sr-only">Nombre del Profesor</label>
+                  <div className='flex flex-row'>
                     <input
-                      type="text"
-                      id="classProfessor"
-                      value={classProfessor}
-                      onChange={(e) => setClassProfessor(e.target.value)}
-                      className="block w-full px-4 py-3 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-[30px] focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                      placeholder="Nombre del Profesor"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="classDate" className="sr-only">Fecha de Inicio</label>
-                    <input
-                      type="date"
-                      id="classDate"
-                      value={classDate}
-                      onChange={(e) => setClassDate(e.target.value)}
-                      className="block w-full px-4 py-3 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-[30px] focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                      type="color"
+                      id="classColor"
+                      value={Color}
+                      onChange={(e) => setColor(e.target.value)}
+                      className="block w-full px-4 py-3 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-[30px] focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm h-20"
                       required
                     />
                   </div>
                 </div>
                 <div className="flex justify-between space-x-3">
                   <button
-                    type="submit"
+                    onClick={handleSubmit}
                     className="w-full px-6 py-3 text-sm font-medium text-white bg-blue-500 border border-transparent rounded-[30px] hover:bg-[#002746] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black mt-3"
                   >
                     Agregar
