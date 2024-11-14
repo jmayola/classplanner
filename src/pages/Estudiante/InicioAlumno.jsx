@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import SidebarAlumno from '../../components/Sidebars/SidebarAlumno';
 import { Link } from 'react-router-dom';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { FaChevronLeft, FaChevronRight, FaPlus, FaTimes } from 'react-icons/fa';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import axios from 'axios';
@@ -14,13 +14,15 @@ const InicioAlumno = () => {
   const [userData, setUserData] = useState({ name: '', lastname: '', user_type: '', username: '' });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [showInput, setShowInput] = useState(false);
+  const [newCode, setNewCode] = useState('');
   const itemsPerPage = 6;
 
   useEffect(() => {
     const fetchClasses = async () => {
       try {
         const response = await axios.get('http://localhost:3000/classes', { withCredentials: true });
-        setClasses(response.data);
+        setClasses(response.data ?? []);
         setLoading(false);
       } catch (err) {
         setLoading(false);
@@ -67,9 +69,16 @@ const InicioAlumno = () => {
     );
   };
 
+  const handleAddCode = () => {
+    console.log('Código ingresado:', newCode);
+    setNewCode('');
+    setShowInput(false);
+    Alerts.fire({ title: <p>Código agregado</p>, text: `Código ${newCode} agregado correctamente.`, icon: 'success' });
+  };
+
   return (
     <div className="flex min-h-screen bg-white text-[#37352f]">
-      <SidebarAlumno  classes={classes} user={userData}/>
+      {classes && <SidebarAlumno classes={classes} user={userData} />}
       <div className="flex-grow p-6">
         <h1 className="text-3xl font-semibold text-gray-900">
           Bienvenido, {userData.user_name} {userData.user_lastname}!
@@ -90,10 +99,10 @@ const InicioAlumno = () => {
               <p>No tienes clases asignadas</p>
             ) : (
               classes.slice(currentIndex, currentIndex + itemsPerPage).map((clase, index) => (
-                <Link to={`/vistaclase?clase=${clase.class_token}`} state={{classes:classes,user:userData}}>
-                <div key={index} className={`p-4 shadow-md rounded-lg border-b-2`} style={{borderBlockColor: clase.class_color}}>
-                  <p className="text-lg text-gray-700">{clase.class_name}</p>
-                </div>
+                <Link to={`/vistaclase?clase=${clase.class_token}`} state={{ classes: classes, user: userData }} key={index}>
+                  <div className={`p-4 shadow-md rounded-lg border-b-2`} style={{ borderBlockColor: clase.class_color }}>
+                    <p className="text-lg text-gray-700">{clase.class_name}</p>
+                  </div>
                 </Link>
               ))
             )}
@@ -119,6 +128,41 @@ const InicioAlumno = () => {
           </div>
         </div>
       </div>
+
+      <div className="fixed bottom-8 right-8">
+        <button onClick={() => setShowInput(!showInput)} className="p-4 bg-blue-500 rounded-full text-white shadow-lg">
+          <FaPlus />
+        </button>
+      </div>
+
+      {showInput && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="relative bg-white p-6 rounded shadow-lg flex flex-col items-center space-y-4 w-80">
+          
+            <div 
+              onClick={() => setShowInput(false)}
+              className="absolute top-4 right-4 w-4 h-4 bg-[#ca1c1c] rounded-full flex items-center justify-center cursor-pointer"
+            >
+              <FaTimes color='#fff' size={10}/>
+            </div>
+
+            <input
+              type="text"
+              value={newCode}
+              onChange={(e) => setNewCode(e.target.value)}
+              placeholder="Ingresa el código"
+              className="block w-full px-4 py-3 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-[30px] focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm "
+            />
+            <button
+              onClick={handleAddCode}
+              disabled={!newCode}
+              className="w-[80%] px-6 py-2 text-sm font-medium text-white bg-blue-500 border border-transparent rounded-[30px] hover:bg-[#006F7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              Agregar
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
