@@ -13,7 +13,26 @@ const InicioDocente = () => {
   const [classDate, setClassDate] = useState('');
   const [classes, setClasses] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [loading, setLoading] = useState(true); 
+  const [error, setError] = useState(null); 
   const itemsPerPage = 3;
+
+  useEffect(() => {
+    const fetchClasses = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/classes", { withCredentials: true });
+        if (response.data) {
+          setClasses(response.data); 
+        }
+      } catch (err) {
+        setError('Error al cargar las Clases');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchClasses();
+  }, []); 
 
   const handleNext = () => {
     setCurrentIndex((prevIndex) =>
@@ -30,6 +49,7 @@ const InicioDocente = () => {
   const handleAddClass = () => {
     setFormVisible(true);
   };
+
   function generateUniqueCode(length = 8) {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let code = '';
@@ -40,35 +60,42 @@ const InicioDocente = () => {
     }
 
     return code;
-}
+  }
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
-    const uniqueCode = generateUniqueCode()
-      const data = {
-        class_name: className,
-        class_curso: classCourse,
-        class_color: Color,
-        class_token: uniqueCode,
-      }
-    await axios.post("http://localhost:3000/classes", data,{withCredentials:true}).then((res)=> res.status== 202 ?
-    Alerts.fire({
-      title: 'Clase agregada',
-      text: `Código de clase: ${uniqueCode}`,
-      icon: 'success',
-      showCancelButton: true,
-      confirmButtonText: 'Copiar código',
-      cancelButtonText: 'Cerrar',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        navigator.clipboard.writeText(uniqueCode);
-        Alerts.fire('Copiado!', 'El código de clase ha sido copiado al portapapeles.', 'success');
-      }
-    }): Alerts.fire({
-      title: 'Error',
-      text: `No se pudo crear la clase`,
-      icon: 'error'}))
+    const uniqueCode = generateUniqueCode();
+    const data = {
+      class_name: className,
+      class_curso: classCourse,
+      class_color: Color,
+      class_token: uniqueCode,
+    };
+    
+    await axios
+      .post("http://localhost:3000/classes", data, { withCredentials: true })
+      .then((res) =>
+        res.status === 202
+          ? Alerts.fire({
+              title: 'Clase agregada',
+              text: `Código de clase: ${uniqueCode}`,
+              icon: 'success',
+              showCancelButton: true,
+              confirmButtonText: 'Copiar código',
+              cancelButtonText: 'Cerrar',
+            }).then((result) => {
+              if (result.isConfirmed) {
+                navigator.clipboard.writeText(uniqueCode);
+                Alerts.fire('Copiado!', 'El código de clase ha sido copiado al portapapeles.', 'success');
+              }
+            })
+          : Alerts.fire({
+              title: 'Error',
+              text: `No se pudo crear la clase`,
+              icon: 'error',
+            })
+      );
 
     setClassName('');
     setClassCourse('');
@@ -80,66 +107,79 @@ const InicioDocente = () => {
   const handleCloseForm = () => {
     setFormVisible(false);
   };
-  
+
   return (
     <div className="flex min-h-screen text-[#37352f]">
       <SidebarProfesor />
-
+  
       <div className="flex-grow p-6 bg-white">
         <h1 className="text-3xl font-semibold">Bienvenido, Profesor</h1>
         <p className="mt-4 text-gray-600">Acá podés administrar tus clases</p>
-
+  
+        {/* Sección de Clases */}
         <div className="mt-8 w-full relative">
           <h2 className="text-2xl font-semibold">Clases</h2>
-          <div className="flex items-center justify-between mt-4">
-            <button
-              onClick={handlePrev}
-              className="p-2 bg-gray-300 rounded-full hover:bg-gray-400"
-            >
-              <FaChevronLeft />
-            </button>
-            <div className="flex overflow-hidden space-x-4 w-full px-4">
-              <div
-                className="flex transition-transform duration-300 ease-in-out"
-                style={{
-                  transform: `translateX(-${(currentIndex * (100 / itemsPerPage))}%)`,
-                  width: `${(classes.length / itemsPerPage) * 100}%`,
-                }}
+  
+          {/* Mostrar mensaje de carga o error */}
+          {loading ? (
+            <p>Cargando clases...</p>
+          ) : error ? (
+            <p className="text-red-500">{error}</p>
+          ) : classes.length === 0 ? (
+            <p>No hay clases disponibles</p>
+          ) : (
+            <div className="flex items-center justify-between mt-4">
+              <button
+                onClick={handlePrev}
+                className="p-2 bg-gray-300 rounded-full hover:bg-gray-400"
               >
-                {classes != [] && classes.map((classItem) => (
-                  <div
-                    key={classItem.id}
-                    className="min-w-[30%] p-4 bg-white shadow-md rounded-lg"
-                  >
-                    <p className="text-lg text-gray-700">{classItem.materia}</p>
-                    <p className="text-gray-600">{classItem.curso}</p>
-                    <p className="text-gray-600">{classItem.profesor}</p>
-                  </div>
-                ))}
+                <FaChevronLeft />
+              </button>
+  
+              <div className="flex overflow-hidden space-x-4 w-full px-4">
+                <div
+                  className="flex transition-transform duration-300 ease-in-out"
+                  style={{
+                    transform: `translateX(-${(currentIndex * (100 / itemsPerPage))}%)`,
+                    width: `${(classes.length / itemsPerPage) * 100}%`,
+                  }}
+                >
+                  {classes.map((classItem) => (
+                    <div
+                      key={classItem.id}
+                      className="min-w-[30%] p-4 bg-white shadow-md rounded-lg"
+                    >
+                      <p className="text-lg text-gray-700">{classItem.materia}</p>
+                      <p className="text-gray-600">{classItem.curso}</p>
+                      <p className="text-gray-600">{classItem.profesor}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
+  
+              <button
+                onClick={handleNext}
+                className="p-2 bg-gray-300 rounded-full hover:bg-gray-400"
+              >
+                <FaChevronRight />
+              </button>
             </div>
-            <button
-              onClick={handleNext}
-              className="p-2 bg-gray-300 rounded-full hover:bg-gray-400"
-            >
-              <FaChevronRight />
-            </button>
-          </div>
+          )}
         </div>
-
+  
+        {/* Botón para agregar clase */}
         <button
           onClick={handleAddClass}
           className="fixed bottom-8 right-8 bg-blue-600 text-white p-4 rounded-full shadow-md hover:bg-blue-700"
         >
           <FaPlus className="text-2xl" />
         </button>
-
+  
+        {/* Formulario para agregar clase */}
         {isFormVisible && (
           <div className="fixed inset-0 bg-gray-700 bg-opacity-50 flex items-center justify-center z-50">
             <div className="w-full max-w-md p-10 space-y-8 bg-white shadow-lg rounded-[20px]">
-              <h2 className="text-4xl font-semibold text-black text-center">
-                Agregar Clase
-              </h2>
+              <h2 className="text-4xl font-semibold text-black text-center">Agregar Clase</h2>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="space-y-3">
                   <div>
@@ -154,6 +194,7 @@ const InicioDocente = () => {
                       required
                     />
                   </div>
+  
                   <div>
                     <label htmlFor="classCourse" className="sr-only">Curso</label>
                     <input
@@ -166,7 +207,9 @@ const InicioDocente = () => {
                       required
                     />
                   </div>
-                  <div className='flex flex-row'>
+  
+             
+                  <div className="flex flex-row">
                     <input
                       type="color"
                       id="classColor"
@@ -177,26 +220,26 @@ const InicioDocente = () => {
                     />
                   </div>
                 </div>
+  
                 <div className="flex justify-between space-x-3">
                   <button
                     onClick={handleSubmit}
-                    className="w-full px-6 py-3 text-sm font-medium text-white bg-blue-500 border border-transparent rounded-[30px] hover:bg-[#002746] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black mt-3"
+                    className="w-full px-6 py-3 text-sm font-medium text-white bg-blue-500 border border-transparent rounded-[30px] hover:bg-[#006F7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                   >
-                    Agregar
+                    Crear clase
                   </button>
                   <button
-                    type="button"
                     onClick={handleCloseForm}
-                    className="w-full px-6 py-3 text-sm font-medium text-white bg-red-500 border border-transparent rounded-[30px] hover:bg-[#c40000] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black mt-3"
+                    className="w-full px-6 py-3 text-sm font-medium text-white bg-red-500 border border-transparent rounded-[30px] hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                   >
-                    Cancelar
+                    Cerrar
                   </button>
                 </div>
               </form>
             </div>
           </div>
         )}
-
+  
         <div className="mt-8">
           <h2 className="text-2xl font-semibold text-gray-800">Calendario</h2>
           <div className="mt-4 p-4 bg-white shadow-md rounded-lg">
@@ -206,6 +249,11 @@ const InicioDocente = () => {
       </div>
     </div>
   );
+  
 };
 
+
 export default InicioDocente;
+
+
+
