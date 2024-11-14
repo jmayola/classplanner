@@ -105,12 +105,25 @@ const Vistaclase = () => {
           {activeTab === 'Materiales' && (
             <div>
               <h2 className="text-3xl font-bold mb-6">Materiales</h2>
-              <ul className="list-disc list-inside">
-                <li>Material 1: <a href="#material1" className="text-blue-500 hover:underline">Descargar PDF</a></li>
-                <li>Material 2: <a href="#material2" className="text-blue-500 hover:underline">Ver video</a></li>
-                <li>Material 3: <a href="#material3" className="text-blue-500 hover:underline">Leer artículo</a></li>
-              </ul>
+              <div className="grid grid-cols-1 gap-4">
+                <div className="bg-white p-4 shadow-md rounded-t-[20px]">
+                  <div className="bg-[#fff] p-4 border-b border-gray-300 mb-5">
+                    <h3 className="text-black text-[16px]">
+                      20 de septiembre, 2024&nbsp;&nbsp;•&nbsp;&nbsp;Tarea 1 - Investigación
+                    </h3>
+                  </div>
+                  <div className="flex flex-row max-w-full">
+                      <a href="#" className="text-blue-500 hover:underline mr-10">MaterialdeEstudio.pdf</a>
+                      <a href="#" className="text-blue-500 hover:underline mr-10">MaterialdeEstudio.pdf</a>
+                      <a href="#" className="text-blue-500 hover:underline mr-10">MaterialdeEstudio.pdf</a>
+                      <a href="#" className="text-blue-500 hover:underline mr-10">MaterialdeEstudio.pdf</a>
+                    </div>
+                </div>
+                <div className="border-t border-gray-300 my-4 w-full"></div>
+              </div>
             </div>
+          
+          
           )}
 
           {activeTab === 'Anuncios' && (
