@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaPaperclip, FaCommentDots, FaPlus, FaCheck, FaChevronDown, FaFileAlt } from 'react-icons/fa';
+import { FaPaperclip, FaCommentDots, FaPlus, FaCheck, FaChevronDown, FaFileAlt, FaTrash } from 'react-icons/fa';
 import SidebarAlumno from '../../components/Sidebars/SidebarAlumno';
 import BannerClase from '../../components/BannerClase';
 
@@ -12,9 +12,11 @@ function VistaTarea() {
   const [showDetails, setShowDetails] = useState(false); 
   const [taskStatus, setTaskStatus] = useState('');
   const [attachment, setAttachment] = useState(null);   
-  const [userData, setUserData] = useState({ user_lastname: "peña", user_name: "verdun", user_type: "alumno" });
+  const [userData, setUserData] = useState({ user_lastname: "Peña", user_name: "Verdun", user_type: "alumno" });
 
-  const dueDate = new Date('2024-11-01T23:59:00');  
+  const [comments, setComments] = useState([]); 
+
+  const dueDate = new Date('2024-11-18T23:59:00');  
 
   const [activeTab, setActiveTab] = useState('Tareas');
   const [data, setData] = useState(null);
@@ -30,9 +32,21 @@ function VistaTarea() {
   }, [dueDate]);
 
   const handleClassCommentSubmit = () => {
-    console.log("Comentario de clase:", classComment);
-    setClassComment('');
-    setShowClassCommentInput(false);
+    if (classComment.trim()) {
+      const newComment = {
+        id: new Date().getTime(), 
+        text: classComment,
+        userName: `${userData.user_name} ${userData.user_lastname}`,
+        time: new Date().toLocaleString(), 
+      };
+      setComments([newComment, ...comments]); 
+      setClassComment('');
+      setShowClassCommentInput(false);
+    }
+  };
+
+  const handleDeleteComment = (id) => {
+    setComments(comments.filter(comment => comment.id !== id));
   };
 
   const handleWorkSubmit = () => {
@@ -54,7 +68,7 @@ function VistaTarea() {
         classes={{ id_class: 1, class_name: "filosia de linux", class_curso: "8mo 2da", class_token: "asidj23" }} 
         user={userData} 
       />
-      
+  
       <div className="flex-1 overflow-y-auto">
         {/* Banner */}
         <BannerClase 
@@ -63,22 +77,44 @@ function VistaTarea() {
           userName={userData.user_name} 
           userLastname={userData.user_lastname} 
         />
-
+  
         {/* Contenido de la tarea */}
         <div className="bg-white shadow-md rounded-lg p-6 space-y-6 overflow-y-auto">
           {/* Información de la Tarea */}
           <div className="space-y-2">
             <h2 className="text-3xl font-semibold text-gray-900">Título de la tarea</h2>
-            <p className="text-sm text-gray-500">Vencimiento: {dueDate.toLocaleDateString()} {dueDate.toLocaleTimeString()}</p>
+            <p className="text-sm text-gray-500">
+              Vencimiento: {dueDate.toLocaleDateString()} {dueDate.toLocaleTimeString()}
+            </p>
             <p className="text-sm text-gray-500">Puntos: 10</p>
           </div>
-
-          {/* Comentario de Clase */}
+  
+          {/* Comentarios de Clase */}
           <div className="border-t pt-4">
             <h3 className="text-xl font-semibold text-gray-800 mb-2 flex items-center">
               <FaCommentDots className="mr-2" /> Comentarios de clase
             </h3>
-            {!showClassCommentInput ? (
+            <div className="space-y-4 mb-4">
+              {comments.map((comment) => (
+                <div key={comment.id} className="bg-gray-100 p-4 rounded-lg shadow-sm flex items-center">
+                  <div>
+                    <div className="text-sm text-gray-600 font-semibold">
+                      {comment.userName} - {comment.time}
+                    </div>
+                    <p className="text-gray-800">{comment.text}</p>
+                  </div>
+                  <button
+                    onClick={() => handleDeleteComment(comment.id)}
+                    className="text-red-500 hover:text-red-700 ml-auto"
+                  >
+                    <FaTrash />
+                  </button>
+                </div>
+              ))}
+            </div>
+  
+            {/* Formulario para agregar comentario */}
+            {!showClassCommentInput ? ( 
               <button
                 onClick={() => setShowClassCommentInput(true)}
                 className="flex items-center px-6 py-3 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600"
@@ -112,7 +148,7 @@ function VistaTarea() {
               </div>
             )}
           </div>
-
+  
           {/* Entrega de Trabajo */}
           <div className="border-t pt-4">
             <h3 className="text-xl font-semibold text-gray-800 mb-2 flex items-center">
@@ -183,7 +219,7 @@ function VistaTarea() {
               )}
             </div>
           </div>
-
+  
           <div className="border-t pt-4">
             <h3 className="text-xl font-semibold text-gray-800 mb-2">
               Estado de la tarea
@@ -196,6 +232,7 @@ function VistaTarea() {
       </div>
     </div>
   );
+  
 }
 
 export default VistaTarea;
