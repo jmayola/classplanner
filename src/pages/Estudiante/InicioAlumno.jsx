@@ -11,23 +11,30 @@ const Alerts = withReactContent(Swal);
 const InicioAlumno = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [classes, setClasses] = useState([]);
-  const [userData, setUserData] = useState({ name: '', lastname: '' });
+  const [userData, setUserData] = useState({ name: '', lastname: '', user_type: '', username: '' });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const itemsPerPage = 6;
 
   useEffect(() => {
+    const fetchClasses = async () => {
       try {
-        axios.get('http://localhost:3000/classes', {withCredentials: true}).then((response)=>setClasses(response.data))
-        .catch((err)=>handleAxiosError(err, 'Error al cargar las clases'))
-      } catch (error) {
-        handleAxiosError(error, 'Error al cargar las clases');
+        const response = await axios.get('http://localhost:3000/classes', { withCredentials: true });
+        setClasses(response.data);
+        setLoading(false);
+      } catch (err) {
+        setLoading(false);
+        handleAxiosError(err, 'Error al cargar las clases');
       }
+    };
+    fetchClasses();
   }, []);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/user', {withCredentials: true});
-        setUserData(response.data); 
+        const response = await axios.get('http://localhost:3000/user', { withCredentials: true });
+        setUserData(response.data);
       } catch (error) {
         console.error('Error al obtener los datos del usuario:', error);
       }
@@ -44,10 +51,10 @@ const InicioAlumno = () => {
     } else {
       message = `Error inesperado: ${error.message}`;
     }
+    setError(message);
     Alerts.fire({ title: <p>Error</p>, text: message, icon: 'error' });
   };
 
-  // Manejar la paginación
   const handleNext = () => {
     setCurrentIndex((prevIndex) =>
       prevIndex >= classes.length - itemsPerPage ? 0 : prevIndex + itemsPerPage
@@ -75,14 +82,21 @@ const InicioAlumno = () => {
         <div className="mt-8">
           <h2 className="text-2xl font-semibold text-gray-800">Clases</h2>
           <div className="mt-4 space-y-4">
-            {/* {classes != [] && classes.map((clase, index) => ( */}
-             {classes != [] &&classes.slice(currentIndex, currentIndex + itemsPerPage).map((clase, index) => (
-              <Link to={`/vistaclase?clase=${clase.class_token}`} state={{classes:classes,user:userData}}>
-              <div key={index} className={`p-4 shadow-md rounded-lg border-b-2`} style={{borderBlockColor: clase.class_color}}>
-                <p className="text-lg text-gray-700">{clase.class_name}</p>
-              </div>
-              </Link>
-            ))}
+            {loading ? (
+              <p>Cargando clases...</p>
+            ) : error ? (
+              <p className="text-red-500">{error}</p>
+            ) : classes.length === 0 ? (
+              <p>No tienes clases asignadas</p>
+            ) : (
+              classes.slice(currentIndex, currentIndex + itemsPerPage).map((clase, index) => (
+                <Link to={`/vistaclase?clase=${clase.class_token}`} state={{classes:classes,user:userData}}>
+                <div key={index} className={`p-4 shadow-md rounded-lg border-b-2`} style={{borderBlockColor: clase.class_color}}>
+                  <p className="text-lg text-gray-700">{clase.class_name}</p>
+                </div>
+                </Link>
+              ))
+            )}
           </div>
 
           <div className="flex justify-between mt-4">
