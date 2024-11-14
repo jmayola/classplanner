@@ -160,16 +160,16 @@ export const loginUserAction = async ({ request }) => {
                   text: "redirigiendo...",
                   icon: "success",
                 });
-                if(res.data == "docente"){
-                  window.location = "/iniciodocente"
-                }
-                else if (res.data == "alumno"){
-                  window.location = "/inicioalumno"
-                }
-                else{
-                  window.location = "/"
+              
+                if (res.data == "docente") {
+                  window.location.replace("/iniciodocente");
+                } else if (res.data == "alumno") {
+                  window.location.replace("/inicioalumno");
+                } else {
+                  window.location.replace("/");
                 }
               }
+              
             })
             .catch((err) => {
               if (err.request.status == 403 || err.request.status == 505) {

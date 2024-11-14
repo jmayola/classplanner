@@ -24,14 +24,13 @@ const SidebarProfesor = () => {
         }
       })
       .catch(() => {
-        setError("Error al cargar el Nombre del usuario.");
+        setError("Error al cargar el nombre del usuario.");
       })
       .finally(() => {
         setIsLoading(false);
       });
   }, []);
-  
-  
+
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -42,7 +41,7 @@ const SidebarProfesor = () => {
   };
 
   return (
-    <div className="w-64 bg-[#f7f7ff] shadow-md">
+    <div className="w-64 bg-[#F7F7FF] shadow-md">
       <div className="p-6">
         <div className="flex items-center space-x-4">
           <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center">
@@ -218,6 +217,22 @@ const SidebarProfesor = () => {
 
 const ConfigModal = ({ onClose, user }) => {
   const [activeTab, setActiveTab] = useState('configuracion');
+  const [profileImage, setProfileImage] = useState(null);
+
+  const handleSaveImage = async () => {
+    if (profileImage) {
+      alert("Imagen guardada con éxito");
+    } else {
+      alert("Por favor, selecciona una imagen");
+    }
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setProfileImage(URL.createObjectURL(file)); 
+    }
+  };
 
   const renderContent = () => {
     switch (activeTab) {
@@ -247,13 +262,28 @@ const ConfigModal = ({ onClose, user }) => {
           <div>
             <h3 className="mb-2 font-semibold">Información del perfil</h3>
             <label className="block mb-2">Nombre</label>
-            <input type="text" className="border rounded p-2 mb-4 w-full" value={user.user_name} />
+            <input type="text" className="border rounded p-2 mb-4 w-full" value={user.user_name} readOnly />
             
             <label className="block mb-2">Apellido</label>
-            <input type="text" className="border rounded p-2 mb-4 w-full" value={user.user_lastname} />
+            <input type="text" className="border rounded p-2 mb-4 w-full" value={user.user_lastname} readOnly />
             
             <label className="block mb-2">Foto de perfil</label>
-            <input type="file" className="mb-4" />
+            {profileImage && (
+              <div className="mb-4">
+                <img src={profileImage} alt="Perfil" className="w-24 h-24 object-cover rounded-full" />
+                <button
+                  className="mt-2 bg-blue-500 text-white p-2 rounded-lg"
+                  onClick={handleSaveImage}
+                >
+                  Guardar Imagen
+                </button>
+              </div>
+            )}
+            <input 
+              type="file" 
+              className="mb-4" 
+              onChange={handleImageChange}
+            />
           </div>
         );
       case 'idioma':
@@ -293,7 +323,6 @@ const ConfigModal = ({ onClose, user }) => {
         return null;
     }
   };
-  
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-start justify-center rounded-[15px] p-10">
@@ -304,6 +333,7 @@ const ConfigModal = ({ onClose, user }) => {
           onClick={onClose}
           className="absolute top-4 right-4 w-4 h-4 bg-[#ca1c1c] rounded-full flex items-center justify-center cursor-pointer"
         >
+          <span className="text-white text-sm">X</span>
         </div>
 
         {/* Sidebar de configuración */}
@@ -348,7 +378,6 @@ const ConfigModal = ({ onClose, user }) => {
               <FaPalette /> <span>Tema</span>
             </li>
           </ul>
-
         </div>
         
         {/* Contenido principal dinámico */}
@@ -365,5 +394,6 @@ const ConfigModal = ({ onClose, user }) => {
     </div>
   );
 };
+
 
 export default SidebarProfesor;
