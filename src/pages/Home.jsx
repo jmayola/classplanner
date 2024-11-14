@@ -1,13 +1,38 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Header from '../components/Header/Header';
 import Footer from '../components/Footer';
+import axios from 'axios';
 
 function Home() { 
   const navigate = useNavigate();
-
+  const [UserData, setUserData] = useState([])
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/user', {withCredentials: true});
+        setUserData(response.data); 
+      } catch (error) {
+        console.error('Error al obtener los datos del usuario:', error);
+      }
+    };
+    fetchUser();
+  }, []);
   const handleLoginRedirect = () => {
-    navigate('/login');
+    if (UserData != []){
+      if (UserData.user_type == "alumno"){
+        navigate('/inicioalumno');
+      }
+      else if (UserData.user_type == "docente") {
+        navigate('/iniciodocente');
+      }
+      else{
+        navigate('/login');    
+      }
+    }
+    else{
+      navigate('/login');
+    }
   };
 
   return (
@@ -21,22 +46,12 @@ function Home() {
             <p className="py-4 md:py-6 text-base md:text-lg text-gray-900">
               Explora las posibilidades y descubre nuevas oportunidades. ¡Estamos aquí para ayudarte a crecer!
             </p>
-            <Link to="/inicioalumno">
               <button 
                 className="bg-blue-500 hover:bg-[#002746] text-white font-medium py-2 px-4 md:py-3 md:px-6 rounded-[30px]"
-                //onClick={handleLoginRedirect}
+                onClick={handleLoginRedirect}
               >
                 Empezar
               </button>
-            </Link>
-            <Link to="/iniciodocente">
-              <button 
-                className="bg-blue-500 hover:bg-[#002746] text-white font-medium py-2 px-4 md:py-3 md:px-6 rounded-[30px]"
-                //onClick={handleLoginRedirect}
-              >
-                Empezar Docente
-              </button>
-            </Link>
           </div>
         </div>
         <div className="mt-6 md:mt-0">

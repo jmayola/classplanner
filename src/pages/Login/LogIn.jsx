@@ -161,12 +161,12 @@ export const loginUserAction = async ({ request }) => {
                   icon: "success",
                 });
               
-                if (res.data == "docente") {
-                  window.location.replace("/iniciodocente");
-                } else if (res.data == "alumno") {
-                  window.location.replace("/inicioalumno");
+                if (res.data.user_type == "docente") {
+                  window.location = "/iniciodocente"
+                } else if (res.data.user_type == "alumno") {
+                  window.location ="/inicioalumno"
                 } else {
-                  window.location.replace("/");
+                  window.location ="/"
                 }
               }
               

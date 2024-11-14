@@ -15,6 +15,7 @@ import Misnotas from './pages/Estudiante/Misnotas';
 import Vistaclase from './pages/Estudiante/Vistaclase';
 import VistaclaseDocente from './pages/Docente/VistaclaseDocente';
 import Listaclases from './pages/Docente/Listaclases';
+import Logout from './pages/Logout';
 import Calificaciones from "./routes/Calificaciones";
 
 
@@ -36,6 +37,7 @@ function App() {
     { path: "/listaclases", element: <Listaclases /> },
     { path: "/vistaclasedocente", element: <VistaclaseDocente /> },
     { path: "/misnotas", element: <Misnotas /> },
+    { path: "/logout", element: <Logout /> },
   ]);
   return <RouterProvider router={router} />;
 }

@@ -62,10 +62,10 @@ const InicioAlumno = () => {
 
   return (
     <div className="flex min-h-screen bg-white text-[#37352f]">
-      <SidebarAlumno />
+      <SidebarAlumno  classes={classes} user={userData}/>
       <div className="flex-grow p-6">
         <h1 className="text-3xl font-semibold text-gray-900">
-          Bienvenido {userData.user_type}, {userData.username} {userData.lastname}!
+          Bienvenido, {userData.user_name} {userData.user_lastname}!
         </h1>
         <p className="mt-4 text-gray-600">
           Aquí puedes acceder a tus clases, revisar tu progreso y mucho más.
@@ -77,9 +77,11 @@ const InicioAlumno = () => {
           <div className="mt-4 space-y-4">
             {/* {classes != [] && classes.map((clase, index) => ( */}
              {classes != [] &&classes.slice(currentIndex, currentIndex + itemsPerPage).map((clase, index) => (
+              <Link to={`/vistaclase?clase=${clase.class_token}`} state={{classes:classes,user:userData}}>
               <div key={index} className={`p-4 shadow-md rounded-lg border-b-2`} style={{borderBlockColor: clase.class_color}}>
                 <p className="text-lg text-gray-700">{clase.class_name}</p>
               </div>
+              </Link>
             ))}
           </div>
 

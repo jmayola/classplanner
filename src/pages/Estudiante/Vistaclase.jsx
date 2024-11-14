@@ -5,13 +5,17 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 
 import withReactContent from 'sweetalert2-react-content';
+import { useLocation,useParams } from 'react-router-dom';
 
 const Alerts = withReactContent(Swal);
 
 const Vistaclase = () => {
+  let {classes,user} = useLocation()
+  let {id} = useParams()
   const [activeTab, setActiveTab] = useState('Tareas');
   const [data, setData] = useState(null);
   const [userData, setUserData] = useState({ name: '', lastname: '' });
+  const [Class, setClass] = useState({})
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -19,7 +23,7 @@ const Vistaclase = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/vistaclase');
+      const response = await axios.get('http://localhost:3000/classes',{withCredentials:true});
       if (response.status === 200) {
         setData(response.data);
       } else {
@@ -52,24 +56,18 @@ const Vistaclase = () => {
     }
   };
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await axios.get('http://localhost:3000/user', {withCredentials: true});
-        setUserData(response.data); 
-      } catch (error) {
-        console.error('Error al obtener los datos del usuario:', error);
-      }
-    };
-    fetchUser();
-  }, []);
-  useEffect(() => {
     fetchData();
+    setUserData(user)
+    console.log(user)
+    console.log(classes)
+    console.log(id)
+    setClass(classes.filter((val,i)=>val.token == id))
   }, []);
 
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Sidebar */}
-      <Sidebar />
+      {/* <Sidebar classes={classes} user={user} /> */}
 
       {/* Main content */}
       <div className="flex flex-col w-full">
