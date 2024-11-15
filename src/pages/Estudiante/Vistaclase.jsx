@@ -5,77 +5,43 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 
 import withReactContent from 'sweetalert2-react-content';
-import { useLocation,useParams } from 'react-router-dom';
+import { useLocation} from 'react-router-dom';
 
 const Alerts = withReactContent(Swal);
 
 const Vistaclase = () => {
-  let {classes,user} = useLocation()
-  let {id} = useParams()
+  let {classes,user,id} = useLocation().state
   const [activeTab, setActiveTab] = useState('Tareas');
   const [data, setData] = useState(null);
   const [userData, setUserData] = useState({ name: '', lastname: '' });
-  const [Class, setClass] = useState({})
+  const [Class, setClass] = useState([])
+  const [Tarea, setTarea] = useState([])
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
-
-  const fetchData = async () => {
-    try {
-      const response = await axios.get('http://localhost:3000/classes',{withCredentials:true});
-      if (response.status === 200) {
-        setData(response.data);
-      } else {
-        Alerts.fire({
-          title: <p>Error al cargar los datos</p>,
-          text: "No se pudieron obtener los datos correctamente. Código: " + response.status,
-          icon: "error",
-        });
-      }
-    } catch (error) {
-      if (error.response) {
-        Alerts.fire({
-          title: <p>Error del servidor</p>,
-          text: "Código de error: " + error.response.status + ". " + error.response.data.message,
-          icon: "error",
-        });
-      } else if (error.request) {
-        Alerts.fire({
-          title: <p>Error de conexión</p>,
-          text: "No se recibió respuesta del servidor. Inténtelo más tarde.",
-          icon: "error",
-        });
-      } else {
-        Alerts.fire({
-          title: <p>Error inesperado</p>,
-          text: "Se produjo un error: " + error.message,
-          icon: "error",
-        });
-      }
-    }
-  };
   useEffect(() => {
-    fetchData();
     setUserData(user)
-    console.log(user)
-    console.log(classes)
-    console.log(id)
-    setClass(classes.filter((val,i)=>val.token == id))
+    setClass(classes)
+    getTareas()
   }, []);
-
+  const getTareas = ()=>{
+    axios.get("http://localhost:3000/tasks",{withCredentials:true})
+    .then((res)=>setTarea(res.data))
+    .catch((err)=>Alerts("Error","No hay tareas","error"))
+  }
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Sidebar */}
-      {/* <Sidebar classes={classes} user={user} /> */}
+      { classes && user && <Sidebar classes={classes} user={user} />}
 
       {/* Main content */}
       <div className="flex flex-col w-full">
         {/* Banner similar a Google Classroom */}
         <div className="relative h-40 bg-blue-600">
           <div className="absolute bottom-4 left-4 text-white">
-            <h1 className="text-4xl font-bold">Clase 1</h1>
-            <h3 className="text-2xl font-semibold">7mo 2da</h3>
+            <h1 className="text-4xl font-bold">{Class.class_name}</h1>
+            <h3 className="text-2xl font-semibold">{Class.class_curso}</h3>
             <p className="text-lg">{userData.name} {userData.lastname}</p>
           </div>
         </div>
@@ -115,7 +81,7 @@ const Vistaclase = () => {
               <h2 className="text-3xl font-bold mb-6">Tareas</h2>
               <div className="grid grid-cols-1 gap-4">
                 {/*  mapear los datos de 'data' que se ha obtenido */}
-                {data && data.tareas.map((tarea, index) => (
+                {Tarea && Tarea.map((tarea, index) => (
                   <div key={index} className="bg-white p-4 shadow-md rounded-lg flex items-center">
                     <img 
                       src={tarea.profesorImg || "https://via.placeholder.com/50"} 
@@ -123,8 +89,8 @@ const Vistaclase = () => {
                       className="w-12 h-12 rounded-full mr-4"
                     />
                     <div>
-                      <h3 className="text-[16px]">{tarea.titulo}</h3>
-                      <p className="text-gray-600 text-[14px]">Fecha de entrega: {tarea.fechaEntrega}</p>
+                      <h3 className="text-[16px]">{tarea.title}</h3>
+                      <p className="text-gray-600 text-[14px]">Fecha de entrega: {tarea.deliver_until}</p>
                       <a href={`#${tarea.id}`} className="text-blue-500 hover:underline mt-2 block">Ver detalles</a>
                     </div>
                   </div>

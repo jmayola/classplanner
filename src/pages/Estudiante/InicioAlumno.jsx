@@ -29,7 +29,6 @@ const InicioAlumno = () => {
     };
     fetchClasses();
   }, []);
-
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -90,7 +89,7 @@ const InicioAlumno = () => {
               <p>No tienes clases asignadas</p>
             ) : (
               classes.slice(currentIndex, currentIndex + itemsPerPage).map((clase, index) => (
-                <Link to={`/vistaclase?clase=${clase.class_token}`} state={{classes:classes,user:userData}}>
+                <Link to={"/vistaclase"} state={{classes:clase, user:userData, id:clase.class_token}}>
                 <div key={index} className={`p-4 shadow-md rounded-lg border-b-2`} style={{borderBlockColor: clase.class_color}}>
                   <p className="text-lg text-gray-700">{clase.class_name}</p>
                 </div>
