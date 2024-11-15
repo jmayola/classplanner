@@ -2,58 +2,86 @@ import React, { useState, useEffect } from 'react';
 import { FaPaperclip, FaCommentDots, FaPlus, FaCheck, FaChevronDown, FaFileAlt, FaTrash } from 'react-icons/fa';
 import SidebarAlumno from '../../components/Sidebars/SidebarAlumno';
 import BannerClase from '../../components/BannerClase';
-
+import { useLocation } from 'react-router-dom';
+import { SettingsApplicationsSharp } from '@mui/icons-material';
+import axios from 'axios';
+import Alerts from "../../../hooks/Alerts"
 function VistaTarea() {
+  let {classes,user,tarea} = useLocation().state
+
   const [classComment, setClassComment] = useState('');
   const [workComment, setWorkComment] = useState('');
   const [showClassCommentInput, setShowClassCommentInput] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [showAttachments, setShowAttachments] = useState(false);
   const [showDetails, setShowDetails] = useState(false); 
   const [taskStatus, setTaskStatus] = useState('');
   const [attachment, setAttachment] = useState(null);   
   const [userData, setUserData] = useState({ user_lastname: "Peña", user_name: "Verdun", user_type: "alumno" });
-
+  const [dueDate,setDueDate] = useState()
   const [comments, setComments] = useState([]); 
 
-  const dueDate = new Date('2024-11-18T23:59:00');  
-
-  const [activeTab, setActiveTab] = useState('Tareas');
-  const [data, setData] = useState(null);
-
   useEffect(() => {
+    setUserData(user)
+    getComments()
     const currentDate = new Date();
-    
-    if (currentDate <= dueDate) {
+    if(tarea.deliver_until != "Sin Limite"){
+      setDueDate(new Date(tarea.deliver_until))
+      if (currentDate <= dueDate) {
+        setTaskStatus('Asignado');
+      } else {
+        setTaskStatus('Sin entregar');
+      }
+    }
+    else{
+      setDueDate(null)
       setTaskStatus('Asignado');
-    } else {
-      setTaskStatus('Sin entregar');
     }
-  }, [dueDate]);
-
+    
+  }, [dueDate,comments]);
+  const getComments = ()=>{
+    // axios.get("https://localhost:3000/comments?id_task="+tarea.id_task,{withCredentials:true}).then((res)=>setComments(res.data))
+  }
   const handleClassCommentSubmit = () => {
-    if (classComment.trim()) {
+    if (classComment) {
       const newComment = {
-        id: new Date().getTime(), 
+        id_task: tarea.id_task, 
         text: classComment,
-        userName: `${userData.user_name} ${userData.user_lastname}`,
-        time: new Date().toLocaleString(), 
       };
-      setComments([newComment, ...comments]); 
-      setClassComment('');
-      setShowClassCommentInput(false);
+      axios.post("https://localhost:3000/comments", newComment,{withCredentials:true})
+      .then((res)=> {
+        if(res.status == 202 || res.status == 200){
+          Alerts({title:"Comentario Añadido",message:"El comentario ha sido añadido a la clase",icon:"success"})
+          setComments([newComment, ...comments]); 
+          setClassComment('');
+          setShowClassCommentInput(false);
+        }})
+      .catch((err)=>{
+        Alerts({title:"Error",message:err.response.data,icon:"error"})
+      })
     }
   };
 
-  const handleDeleteComment = (id) => {
-    setComments(comments.filter(comment => comment.id !== id));
-  };
-
+  const formData = new FormData();
+  formData.append("submission_file", attachment);
+  formData.append("submission_comment", workComment);
+  formData.append("id_task", tarea.id_task);
   const handleWorkSubmit = () => {
-    console.log("Trabajo entregado:", workComment);
-    console.log("Archivo adjunto:", attachment);
-    setWorkComment('');
-    setSubmitted(true);
+    axios.post("http://localhost:3000/submission", formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        withCredentials: true,
+      }
+    )
+    .then((res)=>{
+      if (res.status == 202 || res.status == 200){
+        setWorkComment('');
+        setSubmitted(true);
+        Alerts({title:"Tarea Enviada",message:"La tarea ha sido enviada exitosamente",icon:"success"})
+      }
+    })
+    .catch((err)=>Alerts({title:"Error",message:err.response.data,icon:"error"}))
   };
 
   const handleAttachmentChange = (e) => {
@@ -65,15 +93,15 @@ function VistaTarea() {
     <div className="flex min-h-screen overflow-hidden">
       {/* Sidebar */}
       <SidebarAlumno 
-        classes={{ id_class: 1, class_name: "filosia de linux", class_curso: "8mo 2da", class_token: "asidj23" }} 
+        classes={classes} 
         user={userData} 
       />
   
       <div className="flex-1 overflow-y-auto">
         {/* Banner */}
         <BannerClase 
-          className="Clase 1" 
-          classCurso="7mo 2da" 
+          className={classes.class_name} 
+          classCurso={classes.class_curso}
           userName={userData.user_name} 
           userLastname={userData.user_lastname} 
         />
@@ -82,9 +110,9 @@ function VistaTarea() {
         <div className="bg-white shadow-md rounded-lg p-6 space-y-6 overflow-y-auto">
           {/* Información de la Tarea */}
           <div className="space-y-2">
-            <h2 className="text-3xl font-semibold text-gray-900">Título de la tarea</h2>
+            <h2 className="text-3xl font-semibold text-gray-900">{tarea.title}</h2>
             <p className="text-sm text-gray-500">
-              Vencimiento: {dueDate.toLocaleDateString()} {dueDate.toLocaleTimeString()}
+              Vencimiento: {dueDate ? dueDate.toLocaleDateString() : "Sin Limite"} {dueDate && dueDate.toLocaleTimeString()}
             </p>
             <p className="text-sm text-gray-500">Puntos: 10</p>
           </div>
@@ -103,12 +131,6 @@ function VistaTarea() {
                     </div>
                     <p className="text-gray-800">{comment.text}</p>
                   </div>
-                  <button
-                    onClick={() => handleDeleteComment(comment.id)}
-                    className="text-red-500 hover:text-red-700 ml-auto"
-                  >
-                    <FaTrash />
-                  </button>
                 </div>
               ))}
             </div>
@@ -170,6 +192,7 @@ function VistaTarea() {
                         type="file"
                         onChange={handleAttachmentChange}
                         className="hidden"
+                        accept='.pdf,.docx,.odt'
                       />
                     </label>
                   ) : (
@@ -192,6 +215,7 @@ function VistaTarea() {
                         value={workComment}
                         onChange={(e) => setWorkComment(e.target.value)}
                         placeholder="Detalles sobre tu trabajo (opcional)"
+                        maxLength={200}
                         className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
                       <div className="flex items-center space-x-4">
@@ -205,13 +229,15 @@ function VistaTarea() {
                         </button>
                         <label className="px-4 py-2 border border-gray-300 text-gray-600 font-semibold rounded-lg hover:bg-gray-100 flex items-center cursor-pointer">
                           <FaPaperclip className="mr-2" />
-                          Agregar Trabajo
+                          {attachment ? "Modificar Trabajo" : "Agregar Trabajo"}
                           <input
                             type="file"
                             onChange={handleAttachmentChange}
                             className="hidden"
+                          accept='.pdf,.docx,.odt'
                           />
                         </label>
+                        <p>{attachment ? attachment.name : null}</p>
                       </div>
                     </div>
                   )}

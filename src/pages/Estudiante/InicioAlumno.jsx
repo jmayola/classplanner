@@ -5,43 +5,24 @@ import { FaChevronLeft, FaChevronRight, FaPlus, FaTimes } from 'react-icons/fa';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import axios from 'axios';
-
+import { useClasses } from '../../../contexts/Classes';
 const Alerts = withReactContent(Swal);
 
 const InicioAlumno = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [classes, setClasses] = useState([]);
-  const [userData, setUserData] = useState({ name: '', lastname: '', user_type: '', username: '' });
+  const [userData, setUserData] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [showInput, setShowInput] = useState(false);
   const [newCode, setNewCode] = useState('');
   const itemsPerPage = 6;
-
+  const {classes, setClasses, user} = useClasses()
   useEffect(() => {
-    const fetchClasses = async () => {
-      try {
-        const response = await axios.get('http://localhost:3000/classes', { withCredentials: true });
-        setClasses(response.data ?? []);
-        setLoading(false);
-      } catch (err) {
-        setLoading(false);
-        handleAxiosError(err, 'Error al cargar las clases');
-      }
-    };
-    fetchClasses();
-  }, []);
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await axios.get('http://localhost:3000/user', { withCredentials: true });
-        setUserData(response.data);
-      } catch (error) {
-        console.error('Error al obtener los datos del usuario:', error);
-      }
-    };
-    fetchUser();
-  }, []);
+    if(classes.length >= 1){
+      setLoading(false)
+      setUserData(user)
+    }
+  }, [user,classes]);
 
   const handleAxiosError = (error, customMessage) => {
     let message = customMessage;
@@ -77,7 +58,7 @@ const InicioAlumno = () => {
 
   return (
     <div className="flex min-h-screen bg-white text-[#37352f]">
-      {classes && <SidebarAlumno classes={classes} user={userData} />}
+      {classes && user && <SidebarAlumno user={userData} />}
       <div className="flex-grow p-6">
         <h1 className="text-3xl font-semibold text-gray-900">
           Bienvenido, {userData.user_name} {userData.user_lastname}!
@@ -97,7 +78,7 @@ const InicioAlumno = () => {
             ) : classes.length === 0 ? (
               <p>No tienes clases asignadas</p>
             ) : (
-              classes.slice(currentIndex, currentIndex + itemsPerPage).map((clase, index) => (
+              classes.map((clase, index) => (
                 <Link to={"/vistaclase"} state={{classes:clase, user:userData, id:clase.class_token}}>
                 <div key={index} className={`p-4 shadow-md rounded-lg border-b-2`} style={{borderBlockColor: clase.class_color}}>
                   <p className="text-lg text-gray-700">{clase.class_name}</p>
@@ -105,15 +86,6 @@ const InicioAlumno = () => {
                 </Link>
               ))
             )}
-          </div>
-
-          <div className="flex justify-between mt-4">
-            <button onClick={handlePrev} className="p-2 bg-gray-200 rounded">
-              <FaChevronLeft />
-            </button>
-            <button onClick={handleNext} className="p-2 bg-gray-200 rounded">
-              <FaChevronRight />
-            </button>
           </div>
         </div>
 

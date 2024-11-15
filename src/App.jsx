@@ -19,6 +19,7 @@ import Logout from './pages/Logout';
 import Calificaciones from "./routes/Calificaciones";
 import VistaTarea from "./pages/Estudiante/VistaTarea";
 import VistatareaDocente from "./pages/Docente/VistatareaDocente";
+import { ClassesProvider } from "../contexts/Classes";
 
 function App() {
   const router = createBrowserRouter([
@@ -42,7 +43,13 @@ function App() {
     { path: "/VistaTarea", element: <VistaTarea /> },
     { path: "/VistaTareaDocente", element: <VistatareaDocente /> },
   ]);
-  return <RouterProvider router={router} />;
+  return (
+  <>
+  <ClassesProvider>
+  <RouterProvider router={router} />;
+  </ClassesProvider>
+  </>
+  )
 }
 
 export default App;

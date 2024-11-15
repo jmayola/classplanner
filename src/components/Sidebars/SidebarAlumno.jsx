@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom';
 import { FaHome, FaUser, FaFileAlt, FaStickyNote, FaCalendarAlt, FaBook, FaCog } from 'react-icons/fa';
 import axios from 'axios';
 import ConfigModal from '../Configuration';
+import { useClasses } from '../../../contexts/Classes';
 
-const SidebarAlumno = ({classes,user}) => {
+const SidebarAlumno = () => {
+  const {classes,user } = useClasses()
   const [userData, setUserData] = useState(user)
   const [Classes, setClasses] = useState(classes)
   const [isConfigOpen, setIsConfigOpen] = useState(false);
@@ -21,7 +23,7 @@ const SidebarAlumno = ({classes,user}) => {
       <div className="p-6">
         <div className="flex items-center space-x-4">
           <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center">
-            {userData.user_photo ? <img src={`http://localhost:3000/${userData.user_photo}`} alt="" /> : <FaUser className="text-gray-600 text-2xl" />}
+            {userData.user_photo ? <img src={`http://localhost:3000/${userData.user_photo}`} className="w-12 h-12 bg-gray-300 rounded-full" alt="image_profile" /> : <FaUser className="text-gray-600 text-2xl" />}
           </div>
           <div>
             <p className="text-gray-900 font-semibold">{userData.user_name} {userData.user_lastname}</p>
@@ -53,30 +55,12 @@ const SidebarAlumno = ({classes,user}) => {
         <div>
             <h3 className="text-[14px] text-gray-500 mt-6">Clases en las que estoy inscripto</h3>
             <div className="overflow-y-auto max-h-40">
-              <Link to="/vistaclase" className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+              {classes && classes.map((clase, index) => (
+                <Link to={"/vistaclase?clase="+clase.class_name} state={{classes:clase, user:userData, id:clase.class_token}} className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
                 <FaBook className="text-gray-600" />
-                <span>Clase 1</span>
-              </Link>
-              <Link to="/vistaclase" className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
-                <FaBook className="text-gray-600" />
-                <span>Clase 2</span>
-              </Link>
-              <Link to="/vistaclase" className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
-                <FaBook className="text-gray-600" />
-                <span>Clase 3</span>
-              </Link>
-              <Link to="/vistaclase" className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
-                <FaBook className="text-gray-600" />
-                <span>Clase 1</span>
-              </Link>
-              <Link to="/vistaclase" className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
-                <FaBook className="text-gray-600" />
-                <span>Clase 2</span>
-              </Link>
-              <Link to="/vistaclase" className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
-                <FaBook className="text-gray-600" />
-                <span>Clase 3</span>
-              </Link>
+                <span>{clase.class_name}</span>
+                </Link>
+              ))}
             </div>
           </div>
 

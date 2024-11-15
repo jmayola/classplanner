@@ -47,7 +47,7 @@ export default function ConfigModal({ onClose, user }) {
     switch (activeTab) {
       case 'configuracion':
         return (
-          <div>
+          <div className='z-50 relative'>
             <h3 className="mb-2 font-semibold">Configuración de la cuenta</h3>
             <label className="block mb-2">Cambiar contraseña</label>
             <input type="password" value={Password} onChange={(e) => setPassword(e.target.value)} className="border rounded p-2 mb-4 w-full" placeholder="Nueva contraseña" />
@@ -152,11 +152,7 @@ export default function ConfigModal({ onClose, user }) {
           </div>
           {/* Imagen de perfil y nombre de usuario */}
           <div className="flex items-center mb-6">
-            <img
-              src="https://via.placeholder.com/50"
-              alt="profile"
-              className="w-8 h-8 rounded-full mr-4"
-            />
+          {user.user_photo ? <img src={`http://localhost:3000/${user.user_photo}`} className="w-8 h-8 rounded-full mr-4" alt="profile" /> : <FaUser className="w-8 h-8 rounded-full mr-4" />}
             <p className="text-base">{user.user_name} {user.user_lastname}</p>
           </div>
 

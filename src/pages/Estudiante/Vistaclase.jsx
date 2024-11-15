@@ -5,7 +5,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 
 import withReactContent from 'sweetalert2-react-content';
-import { useLocation} from 'react-router-dom';
+import { Link, useLocation} from 'react-router-dom';
 
 const Alerts = withReactContent(Swal);
 
@@ -24,10 +24,13 @@ const Vistaclase = () => {
     setUserData(user)
     setClass(classes)
     getTareas()
-  }, []);
+  }, [classes,user,id]);
   const getTareas = ()=>{
     axios.get("http://localhost:3000/tasks",{withCredentials:true})
-    .then((res)=>setTarea(res.data))
+    .then((res)=>{
+      const data = res.data.filter((val)=>val.id_class === classes.id_class)
+      setTarea(data)
+    })
     .catch((err)=>Alerts("Error","No hay tareas","error"))
   }
   return (
@@ -81,7 +84,8 @@ const Vistaclase = () => {
               <h2 className="text-3xl font-bold mb-6">Tareas</h2>
               <div className="grid grid-cols-1 gap-4">
                 {/*  mapear los datos de 'data' que se ha obtenido */}
-                {Tarea && Tarea.map((tarea, index) => (
+                {Tarea ? Tarea.map((tarea, index) => (
+                  <Link to={"/vistatarea"} state={{classes:Class,user:userData,tarea:tarea}}>
                   <div key={index} className="bg-white p-4 shadow-md rounded-lg flex items-center">
                     <img 
                       src={tarea.profesorImg || "https://via.placeholder.com/50"} 
@@ -91,10 +95,10 @@ const Vistaclase = () => {
                     <div>
                       <h3 className="text-[16px]">{tarea.title}</h3>
                       <p className="text-gray-600 text-[14px]">Fecha de entrega: {tarea.deliver_until}</p>
-                      <a href={`#${tarea.id}`} className="text-blue-500 hover:underline mt-2 block">Ver detalles</a>
                     </div>
                   </div>
-                ))}
+                  </Link>
+                )) : <p>Cargando tareas...</p>}
               </div>
             </div>
           )}
