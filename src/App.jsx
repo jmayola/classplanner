@@ -17,7 +17,8 @@ import VistaclaseDocente from './pages/Docente/VistaclaseDocente';
 import Listaclases from './pages/Docente/Listaclases';
 import Logout from './pages/Logout';
 import Calificaciones from "./routes/Calificaciones";
-
+import VistaTarea from "./pages/Estudiante/VistaTarea";
+import VistatareaDocente from "./pages/Docente/VistatareaDocente";
 
 function App() {
   const router = createBrowserRouter([
@@ -38,6 +39,8 @@ function App() {
     { path: "/vistaclasedocente", element: <VistaclaseDocente /> },
     { path: "/misnotas", element: <Misnotas /> },
     { path: "/logout", element: <Logout /> },
+    { path: "/VistaTarea", element: <VistaTarea /> },
+    { path: "/VistaTareaDocente", element: <VistatareaDocente /> },
   ]);
   return <RouterProvider router={router} />;
 }
