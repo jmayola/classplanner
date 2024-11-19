@@ -174,13 +174,13 @@ export const registroAlumno = async ({ request }) => {
                   icon: "success",
                 });
               }
-            }).then(()=>{window.location = "/inicioalumno"})
+            }).then(()=>{window.location = "/login"})
             .catch((err) => {
               if (err.request.status == 403 || err.request.status == 505) {
                 console.log(err)
                 return Alerts.fire({
                   title: <p>Registro Fallido</p>,
-                  text: err.request.body,
+                  text: err.response.data,
                   icon: "error",
                 });
               }

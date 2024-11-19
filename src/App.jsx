@@ -20,6 +20,8 @@ import Calificaciones from "./routes/Calificaciones";
 import VistaTarea from "./pages/Estudiante/VistaTarea";
 import VistatareaDocente from "./pages/Docente/VistatareaDocente";
 import { ClassesProvider } from "../contexts/Classes";
+import AboutUs from "./routes/Aboutus";
+import Contact from "./routes/Contact";
 
 function App() {
   const router = createBrowserRouter([
@@ -42,11 +44,13 @@ function App() {
     { path: "/logout", element: <Logout /> },
     { path: "/VistaTarea", element: <VistaTarea /> },
     { path: "/VistaTareaDocente", element: <VistatareaDocente /> },
+    { path: "/about", element: <AboutUs /> },
+    { path: "/contact", element: <Contact /> },
   ]);
   return (
   <>
   <ClassesProvider>
-  <RouterProvider router={router} />;
+  <RouterProvider router={router} />
   </ClassesProvider>
   </>
   )

@@ -28,7 +28,7 @@ function ClassesProvider({ children }) {
   }, []);
 
   return (
-    <ClassesContext.Provider value={{ classes, setClasses, user,setUserData }}>
+    <ClassesContext.Provider value={{ classes, setClasses, user,setUserData, fetchClasses }}>
       {children}
     </ClassesContext.Provider>
   );

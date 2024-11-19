@@ -16,7 +16,7 @@ const InicioAlumno = () => {
   const [showInput, setShowInput] = useState(false);
   const [newCode, setNewCode] = useState('');
   const itemsPerPage = 6;
-  const {classes, setClasses, user} = useClasses()
+  const {classes, setClasses, user ,fetchClasses} = useClasses()
   useEffect(() => {
     if(classes.length >= 1){
       setLoading(false)
@@ -50,10 +50,17 @@ const InicioAlumno = () => {
   };
 
   const handleAddCode = () => {
-    console.log('Código ingresado:', newCode);
-    setNewCode('');
-    setShowInput(false);
-    Alerts.fire({ title: <p>Código agregado</p>, text: `Código ${newCode} agregado correctamente.`, icon: 'success' });
+    axios.post("http://localhost:3000/joinClass",{"class_token":newCode},{withCredentials:true})
+    .then((res)=>{
+      if(res.status == 202 || res. status == 200){
+        setNewCode('');
+        setShowInput(false);
+        Alerts.fire({ title: <p>Código agregado</p>, text: `Código ${newCode} agregado correctamente.`, icon: 'success' });
+        fetchClasses()
+      }})
+      .catch((err)=>{
+        Alerts.fire({ title: "Error", text: err.response.data, icon: 'error' });
+      })
   };
 
   return (

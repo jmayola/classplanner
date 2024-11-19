@@ -56,7 +56,7 @@ const SidebarAlumno = () => {
             <h3 className="text-[14px] text-gray-500 mt-6">Clases en las que estoy inscripto</h3>
             <div className="overflow-y-auto max-h-40">
               {classes && classes.map((clase, index) => (
-                <Link to={"/vistaclase?clase="+clase.class_name} state={{classes:clase, user:userData, id:clase.class_token}} className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                <Link key={index} to={"/vistaclase?clase="+clase.class_name} state={{classes:clase, user:userData, id:clase.class_token}} className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
                 <FaBook className="text-gray-600" />
                 <span>{clase.class_name}</span>
                 </Link>
