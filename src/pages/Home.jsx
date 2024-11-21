@@ -39,7 +39,7 @@ function Home() {
     <div className="flex flex-col min-h-screen">
       <Header />
       <div className="w-full flex-grow p-4 md:p-10 flex flex-col md:flex-row items-center justify-between">
-        <div className="hero-content text-left md:w-[50%] mt-10 md:mt-0 md:ml-10">
+        <div className="hero-content text-left md:w-[50%] mt-10 md:mt-0 md:ml-10 mb-[10%]">
           <div className="max-w-md">
             <h1 className="text-3xl md:text-5xl font-bold text-[#252525]">¡Bienvenido!</h1>
             <h1 className="text-3xl md:text-5xl font-bold text-[#252525]">Planifica y organizá tus clases</h1>
