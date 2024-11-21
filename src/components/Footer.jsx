@@ -17,20 +17,12 @@ function Footer() {
         </div>
 
         {/* Secciones de links */}
-        <div className="flex flex-col lg:flex-row w-full lg:justify-around">
+        <div className="flex flex-col lg:flex-row w-full lg:w-1/2 lg:justify-around">
           <div className="flex flex-col mb-6 lg:mb-0">
             <h3 className="text-lg font-semibold mb-3 text-[#252525]">Información</h3>
             <Link to="/ContactUs" className="mb-2 text-sm text-gray-600 hover:text-gray-800">Contacto</Link>
             <Link to="/Termsandconditions" className="mb-2 text-sm text-gray-600 hover:text-gray-800">Términos y condiciones</Link>
             <Link to="/PrivacyPolicy" className="text-sm text-gray-600 hover:text-gray-800">Política de privacidad</Link>
-          </div>
-
-          <div className="flex flex-col mb-6 lg:mb-0">
-            <h3 className="text-lg font-semibold mb-3 text-[#252525]">Productos</h3>
-            <Link to="/Web" className="mb-2 text-sm text-gray-600 hover:text-gray-800">Remeras</Link>
-            <Link to="/App" className="mb-2 text-sm text-gray-600 hover:text-gray-800">Pantalones</Link>
-            <Link to="/Software" className="mb-2 text-sm text-gray-600 hover:text-gray-800">Accesorios</Link>
-            <Link to="/Ecommerce" className="text-sm text-gray-500 hover:text-gray-800">Equipo</Link>
           </div>
 
           {/* Sección de contactos y suscripción */}
