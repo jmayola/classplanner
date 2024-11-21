@@ -2,6 +2,7 @@ import React from "react";
 import {createBrowserRouter, RouterProvider, BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import Header from "./components/Header/Header";
 import Home from "./pages/Home";
+import ErrorPage from "./pages/Error";
 import LoginScreen,{ loginUserAction } from "./pages/Login/LogIn";
 import RegisterScreen from "./pages/Register/RegisterScreen";
 import RegistroDocente, { registroDocente } from "./pages/Register/RegistroDocente";
@@ -27,25 +28,25 @@ function App() {
   const router = createBrowserRouter([
     { path: "/", element: <Home /> },
     { path: "/login", element: <LoginScreen />, action: loginUserAction},
-    { path: "/registerscreen", element: <RegisterScreen /> },
+    { path: "/registerscreen", element: <RegisterScreen />, errorElement: <ErrorPage /> },
     { path: "/footer", element: <Footer /> },
     { path: "/header", element: <Header /> },
-    { path: "/termsandconditions", element: <TermsAndConditions /> },
-    { path: "/privacypolicy", element: <PrivacyPolicy /> },
+    { path: "/termsandconditions", element: <TermsAndConditions />, errorElement: <ErrorPage /> },
+    { path: "/privacypolicy", element: <PrivacyPolicy />, errorElement: <ErrorPage /> },
     { path: "/registrodocente", element: <RegistroDocente />, action: registroDocente  },
     { path: "/registroalumno", element: <RegistroAlumno />, action: registroAlumno },
-    { path: "/inicioalumno", element: <InicioAlumno /> },
-    { path: "/iniciodocente", element: <InicioDocente /> },
-    { path: "/calificaciones", element: <Calificaciones /> },
-    { path: "/vistaclase", element: <Vistaclase /> },
-    { path: "/listaclases", element: <Listaclases /> },
-    { path: "/vistaclasedocente", element: <VistaclaseDocente /> },
-    { path: "/misnotas", element: <Misnotas /> },
-    { path: "/logout", element: <Logout /> },
-    { path: "/VistaTarea", element: <VistaTarea /> },
-    { path: "/VistaTareaDocente", element: <VistatareaDocente /> },
-    { path: "/about", element: <AboutUs /> },
-    { path: "/contact", element: <Contact /> },
+    { path: "/inicioalumno", element: <InicioAlumno />, errorElement: <ErrorPage /> },
+    { path: "/iniciodocente", element: <InicioDocente />, errorElement: <ErrorPage /> },
+    { path: "/calificaciones", element: <Calificaciones />, errorElement: <ErrorPage /> },
+    { path: "/vistaclase", element: <Vistaclase />, errorElement: <ErrorPage /> },
+    { path: "/listaclases", element: <Listaclases />, errorElement: <ErrorPage /> },
+    { path: "/vistaclasedocente", element: <VistaclaseDocente />, errorElement: <ErrorPage /> },
+    { path: "/misnotas", element: <Misnotas />, errorElement: <ErrorPage /> },
+    { path: "/logout", element: <Logout />, errorElement: <ErrorPage /> },
+    { path: "/VistaTarea", element: <VistaTarea/>, errorElement: <ErrorPage /> },
+    { path: "/VistaTareaDocente", element: <VistatareaDocente />, errorElement: <ErrorPage />},
+    { path: "/about", element: <AboutUs />, errorElement: <ErrorPage /> },
+    { path: "/contact", element: <Contact />, errorElement: <ErrorPage /> },
   ]);
   return (
   <>
