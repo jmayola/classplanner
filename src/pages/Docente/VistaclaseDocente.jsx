@@ -3,7 +3,7 @@ import { FaBook, FaClipboardList, FaBullhorn, FaChalkboardTeacher } from 'react-
 import Sidebar from '../../components/Sidebars/SidebarAlumno';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import AgregarClase from "../../components/AgregarClase"
+// import AgregarClase from "../../components/AgregarClase"
 import withReactContent from 'sweetalert2-react-content';
 import { Link, useLocation} from 'react-router-dom';
 import SidebarDocente from '../../components/Sidebars/SidebarProfesor';
@@ -148,7 +148,7 @@ const Vistaclase = () => {
           )}
         </div>
       </div>
-      <AgregarClase id_class={Class.id_class}/>
+      {/* <AgregarClase id_class={Class.id_class}/> */}
     </div>
   );
 };
