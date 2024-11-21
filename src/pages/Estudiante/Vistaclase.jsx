@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 
 import withReactContent from 'sweetalert2-react-content';
 import { Link, useLocation} from 'react-router-dom';
+import BannerClase from '../../components/BannerClase';
 
 const Alerts = withReactContent(Swal);
 
@@ -24,7 +25,7 @@ const Vistaclase = () => {
     setUserData(user)
     setClass(classes)
     getTareas()
-  }, [classes,user,id]);
+  }, [classes,id,user]);
   const getTareas = ()=>{
     axios.get("http://localhost:3000/tasks",{withCredentials:true})
     .then((res)=>{
@@ -34,21 +35,22 @@ const Vistaclase = () => {
     .catch((err)=>Alerts("Error","No hay tareas","error"))
   }
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-gray-100 relative -z-0 ">
       {/* Sidebar */}
       { classes && user && <Sidebar classes={classes} user={user} />}
 
       {/* Main content */}
       <div className="flex flex-col w-full">
         {/* Banner similar a Google Classroom */}
-        <div className="relative h-40 bg-blue-600">
-          <div className="absolute bottom-4 left-4 text-white">
-            <h1 className="text-4xl font-bold">{Class.class_name}</h1>
-            <h3 className="text-2xl font-semibold">{Class.class_curso}</h3>
-            <p className="text-lg">{userData.name} {userData.lastname}</p>
-          </div>
-        </div>
-
+        {Class && (
+          <BannerClase
+            className={Class.class_name}
+            classCurso={Class.class_curso}
+            classColor={Class.class_color}
+            userName={userData.user_name}
+            userLastname={userData.user_lastname}
+          />
+        )}
         {/* Tabs */}
         <div className="flex justify-center bg-white shadow-md">
           <button

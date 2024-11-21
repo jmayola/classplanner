@@ -47,7 +47,7 @@ export default function ConfigModal({ onClose, user }) {
     switch (activeTab) {
       case 'configuracion':
         return (
-          <div className='z-50 relative'>
+          <div className='z-10 sticky'>
             <h3 className="mb-2 font-semibold">Configuración de la cuenta</h3>
             <label className="block mb-2">Cambiar contraseña</label>
             <input type="password" value={Password} onChange={(e) => setPassword(e.target.value)} className="border rounded p-2 mb-4 w-full" placeholder="Nueva contraseña" />

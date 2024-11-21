@@ -12,7 +12,6 @@ import {
 import SidebarAlumno from "../../components/Sidebars/SidebarAlumno";
 import BannerClase from "../../components/BannerClase";
 import { useLocation } from "react-router-dom";
-import { SettingsApplicationsSharp } from "@mui/icons-material";
 import axios from "axios";
 import Alerts from "../../../hooks/Alerts";
 function VistaTarea() {
@@ -36,8 +35,6 @@ function VistaTarea() {
 
   useEffect(() => {
     setUserData(user);
-    getComments();
-    getSubmission()
     const currentDate = new Date();
     if (tarea.deliver_until != "Sin Limite") {
       setDueDate(new Date(tarea.deliver_until));
@@ -51,6 +48,11 @@ function VistaTarea() {
       setTaskStatus("Asignado");
     }
   }, [dueDate]);
+  useEffect(()=>{
+    getSubmission()
+    getComments();
+
+  },[])
   const getComments = () => {
     axios
       .get("http://localhost:3000/comments?id_task=" + tarea.id_task, {
@@ -71,7 +73,15 @@ function VistaTarea() {
           setWorkComment(response.submission_comment)
           setSubmitted(true)
         }
-      });
+        else{
+          setAttachment("")
+          setWorkComment("")
+          setSubmitted(false)
+        }
+      })
+      .catch((err)=>{
+        console.log(err)
+      })
   };
   
   const handleClassCommentSubmit = () => {
@@ -96,7 +106,7 @@ function VistaTarea() {
               message: "El comentario ha sido añadido a la clase",
               icon: "success",
             });
-            setComments([newComment, ...comments]);
+            getComments()
             setClassComment("");
             setShowClassCommentInput(false);
           }
@@ -141,11 +151,11 @@ function VistaTarea() {
   };
 
   return (
-    <div className="flex min-h-screen overflow-hidden">
+    <div className="flex min-h-screen overflow-hidden relative -z-0">
       {/* Sidebar */}
       <SidebarAlumno classes={classes} user={userData} />
 
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto relative -z-10">
         {/* Banner */}
         <BannerClase
           className={classes.class_name}
@@ -155,7 +165,7 @@ function VistaTarea() {
         />
 
         {/* Contenido de la tarea */}
-        <div className="bg-white shadow-md rounded-lg p-6 space-y-6 overflow-y-auto">
+        <div className="bg-white shadow-md relative rounded-lg p-6 space-y-6 overflow-y-auto ">
           {/* Información de la Tarea */}
           <div className="space-y-2">
             <h2 className="text-3xl font-semibold text-gray-900">

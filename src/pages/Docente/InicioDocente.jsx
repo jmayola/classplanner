@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { FaPlus, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
-import { AiOutlineCopy } from 'react-icons/ai';
 import Alerts from 'sweetalert2';
 import SidebarProfesor from '../../components/Sidebars/SidebarProfesor';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
+import { useClasses } from '../../../contexts/Classes';
 
 const InicioDocente = () => {
   const [isFormVisible, setFormVisible] = useState(false);
@@ -11,18 +12,19 @@ const InicioDocente = () => {
   const [classCourse, setClassCourse] = useState('');
   const [Color, setColor] = useState('');
   const [classDate, setClassDate] = useState('');
-  const [classes, setClasses] = useState([]);
+  const [userData, setUserData] = useState({});
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true); 
   const [error, setError] = useState(null); 
   const itemsPerPage = 3;
-
+  const {classes, setClasses, user ,fetchClasses} = useClasses()
   useEffect(() => {
     const fetchClasses = async () => {
       try {
         const response = await axios.get("http://localhost:3000/classes", { withCredentials: true });
         if (response.data) {
           setClasses(response.data); 
+          setUserData(user)
         }
       } catch (err) {
         setError('Error al cargar las Clases');
@@ -30,7 +32,6 @@ const InicioDocente = () => {
         setLoading(false);
       }
     };
-
     fetchClasses();
   }, []); 
 
@@ -110,7 +111,7 @@ const InicioDocente = () => {
 
   return (
     <div className="flex min-h-screen text-[#37352f]">
-      <SidebarProfesor />
+      <SidebarProfesor user={userData}/>
   
       <div className="flex-grow p-6 bg-white">
         <h1 className="text-3xl font-semibold">Bienvenido, Profesor</h1>
@@ -144,16 +145,13 @@ const InicioDocente = () => {
                     width: `${(classes.length / itemsPerPage) * 100}%`,
                   }}
                 >
-                  {classes.map((classItem) => (
-                    <div
-                      key={classItem.id}
-                      className="min-w-[30%] p-4 bg-white shadow-md rounded-lg"
-                    >
-                      <p className="text-lg text-gray-700">{classItem.materia}</p>
-                      <p className="text-gray-600">{classItem.curso}</p>
-                      <p className="text-gray-600">{classItem.profesor}</p>
-                    </div>
-                  ))}
+                  {classes.map((clase, index) => (
+                <Link to={"/vistaclasedocente"} state={{classes:clase, user:userData, id:clase.class_token}}>
+                <div key={index} className={`p-4 shadow-md rounded-lg border-b-4 border-r-2 mr-3`} style={{borderBlockColor: clase.class_color}}>
+                  <p className="text-lg text-gray-700">{clase.class_name}</p>
+                </div>
+                </Link>
+              ))}
                 </div>
               </div>
   
