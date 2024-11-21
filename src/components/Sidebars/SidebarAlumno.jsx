@@ -36,14 +36,6 @@ const SidebarAlumno = () => {
           <FaHome className="text-gray-600" />
           <span>Inicio</span>
         </Link>
-        <Link to="/mis-trabajos" className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
-          <FaFileAlt className="text-gray-600" />
-          <span>Mis trabajos</span>
-        </Link>
-        <Link to="/misnotas" className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
-          <FaStickyNote className="text-gray-600" />
-          <span>Mis notas</span>
-        </Link>
         {/* //configuracion */}
             <div
               className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg cursor-pointer"
