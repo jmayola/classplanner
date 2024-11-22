@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FaHome, FaUser, FaFileAlt, FaStickyNote, FaCalendarAlt, FaBook, FaCog, FaBars } from 'react-icons/fa';
+import { FaHome, FaUser, FaFileAlt, FaStickyNote, FaCalendarAlt, FaBook, FaCog, FaBars, FaTimes } from 'react-icons/fa';
 import axios from 'axios';
 import ConfigModal from '../Configuration';
 import { useClasses } from '../../../contexts/Classes';
@@ -35,7 +35,9 @@ const SidebarDocente = () => {
       {/* Sidebar */}
       <div className={`fixed inset-0 bg-[#F7F7FF] shadow-md z-50 transition-transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:relative md:w-64`}>
         <div className="p-6">
-          <div className="flex items-center space-x-4">
+          {/* Close Button for Sidebar in Mobile View */}
+
+          <div className="flex items-center space-x-4 w-screen flex-row">
             <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center">
               {userData.user_photo ? (
                 <img src={`http://localhost:3000/${userData.user_photo}`} className="w-12 h-12 bg-gray-300 rounded-full" alt="image_profile" />
@@ -43,9 +45,17 @@ const SidebarDocente = () => {
                 <FaUser className="text-gray-600 text-2xl" />
               )}
             </div>
+            
             <div>
               <p className="text-gray-900 font-semibold">{userData.user_name} {userData.user_lastname}</p>
             </div>
+
+          <button
+            onClick={toggleSidebar} // This will close the sidebar
+            className="md:hidden w-8 h-8 bg-[#ca1c1c] rounded-full flex items-center justify-center cursor-pointer"
+          >
+            <FaTimes color='#fff' size={16} />
+          </button>
           </div>
         </div>
 
