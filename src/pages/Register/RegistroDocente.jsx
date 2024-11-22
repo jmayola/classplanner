@@ -1,18 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Form, Link } from 'react-router-dom';
 import Footer from '../../components/Footer';
 import Header from '../../components/Header/Header';
-// import { useAuth } from "../../context/AuthContext";
 import axios from "axios";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import { EyeIcon } from '@heroicons/react/24/solid';
+import { EyeSlashIcon } from '@heroicons/react/24/solid';
+import Loading from '../../components/Loading';
+
 const Alerts = withReactContent(Swal);
+
 const RegistroDocente = () => {
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const togglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
+  const toggleConfirmPasswordVisibility = () =>
+    setConfirmPasswordVisible(!confirmPasswordVisible);
+
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
-      
       {/* Header */}
       <Header />
+      {isLoading && <Loading />}
 
       {/* Formulario de Registro de Docentes */}
       <div className="flex flex-grow items-center justify-center p-4 md:p-10">
@@ -24,8 +37,8 @@ const RegistroDocente = () => {
             </p>
           </div>
 
-         {/* Botón de inicio de sesión con Google */}
-         <div className="flex justify-center">
+          {/* Botón de inicio de sesión con Google */}
+          <div className="flex justify-center">
             <button
               className="flex items-center justify-center w-full px-6 py-3 mb-4 text-sm md:text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-[30px] shadow hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400"
             >
@@ -43,9 +56,7 @@ const RegistroDocente = () => {
           <Form method='POST' action='/registrodocente' className="space-y-4" >
             <div className="space-y-3">
               <div>
-                <label htmlFor="teacher-name" className="sr-only">
-                  Nombre
-                </label>
+                <label htmlFor="teacher-name" className="sr-only">Nombre</label>
                 <input
                   id="teacher-name"
                   name="user_name"
@@ -57,9 +68,7 @@ const RegistroDocente = () => {
                 />
               </div>
               <div>
-                <label htmlFor="teacher-lastname" className="sr-only">
-                  Apellido
-                </label>
+                <label htmlFor="teacher-lastname" className="sr-only">Apellido</label>
                 <input
                   id="teacher-lastname"
                   name="user_lastname"
@@ -71,9 +80,7 @@ const RegistroDocente = () => {
                 />
               </div>
               <div>
-                <label htmlFor="email-address" className="sr-only">
-                  Correo Electrónico
-                </label>
+                <label htmlFor="email-address" className="sr-only">Correo Electrónico</label>
                 <input
                   id="email-address"
                   name="user_mail"
@@ -84,33 +91,55 @@ const RegistroDocente = () => {
                   placeholder="Correo Electrónico"
                 />
               </div>
-              <div>
-                <label htmlFor="password" className="sr-only">
-                  Contraseña
-                </label>
+
+              {/* Contraseña */}
+              <div className="relative">
+                <label htmlFor="password" className="sr-only">Contraseña</label>
                 <input
                   id="password"
                   name="user_password"
-                  type="password"
+                  type={passwordVisible ? "text" : "password"}
                   autoComplete="new-password"
                   required
                   className="block w-full px-4 py-3 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-[30px] focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                   placeholder="Contraseña"
                 />
+                <button
+                  type="button"
+                  onClick={togglePasswordVisibility}
+                  className="absolute inset-y-0 right-4 flex items-center text-gray-500"
+                >
+                  {passwordVisible ? (
+                    <EyeSlashIcon className="w-5 h-5" />
+                  ) : (
+                    <EyeIcon className="w-5 h-5" />
+                  )}
+                </button>
               </div>
-              <div>
-                <label htmlFor="confirm-password" className="sr-only">
-                  Confirmar Contraseña
-                </label>
+
+              {/* Confirmar Contraseña */}
+              <div className="relative">
+                <label htmlFor="confirm-password" className="sr-only">Confirmar Contraseña</label>
                 <input
                   id="confirm-password"
                   name="user_repassword"
-                  type="password"
+                  type={confirmPasswordVisible ? "text" : "password"}
                   autoComplete="new-password"
                   required
                   className="block w-full px-4 py-3 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-[30px] focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                   placeholder="Confirmar Contraseña"
                 />
+                <button
+                  type="button"
+                  onClick={toggleConfirmPasswordVisibility}
+                  className="absolute inset-y-0 right-4 flex items-center text-gray-500"
+                >
+                  {confirmPasswordVisible ? (
+                    <EyeSlashIcon className="w-5 h-5" />
+                  ) : (
+                    <EyeIcon className="w-5 h-5" />
+                  )}
+                </button>
               </div>
             </div>
 
@@ -130,12 +159,12 @@ const RegistroDocente = () => {
             </div>
 
             <div>
-                <button
-                  type="submit"
-                  className="w-full px-6 py-3 text-sm md:text-base font-medium text-white bg-blue-500 border border-transparent rounded-[30px] hover:bg-[#002746] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black mt-3"
-                >
-                  Regístrate
-                </button>
+              <button
+                type="submit"
+                className="w-full px-6 py-3 text-sm md:text-base font-medium text-white bg-blue-500 border border-transparent rounded-[30px] hover:bg-[#002746] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black mt-3"
+              >
+                Regístrate
+              </button>
             </div>
           </Form>
         </div>
@@ -158,41 +187,65 @@ export const registroDocente = async ({ request }) => {
     user_password_confirmation: data.get("user_repassword"),
     user_type: "docente"
   };
-  try {
-    Alerts.fire({
-      title: <p>Ingreso</p>,
-      didOpen: () => {
-        Alerts.showLoading(
-          axios
-            .post("http://localhost:3000/register", submission)
-            .then((res) => {
-              console.log(res);
-              if (res.status === 200 || res.status === 202) {
-                return Alerts.fire({
-                  title: <p>Ingreso</p>,
-                  text: "redirigiendo...",
-                  icon: "success",
-                });
-              }
-            }).then(() => { window.location = "/iniciodocente"; })
-            .catch((err) => {
-              if (err.request.status === 403 || err.request.status === 505) {
-                return Alerts.fire({
-                  title: <p>Ingreso Fallido</p>,
-                  text: "Contraseña mal Ingresada",
-                  icon: "error",
-                });
-              }
-            })
-        );
-      },
-    });
-  } catch (err) {
+
+  const validatePassword = (password) => {
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return passwordRegex.test(password);
+  };
+
+  if (!validatePassword(submission.user_password)) {
     return Alerts.fire({
-      title: <p>Ingreso Fallido</p>,
-      text: "Error en el Sistema, Intentelo más tarde.",
+      title: "Contraseña Inválida",
+      text: "La contraseña debe contener al menos una mayúscula, una minúscula, un número y un carácter especial.",
       icon: "error",
     });
   }
+
+  if (submission.user_password !== submission.user_password_confirmation) {
+    return Alerts.fire({
+      title: "Contraseñas no coinciden",
+      text: "Las contraseñas no coinciden, por favor revisa.",
+      icon: "error",
+    });
+  }
+
+  try {
+    Alerts.fire({
+      title: "Registrando...",
+      didOpen: () => {
+        Alerts.showLoading();  
+        axios
+          .post("http://localhost:3000/register", submission)
+          .then((res) => {
+            console.log(res);
+            if (res.status === 200 || res.status === 202) {
+              Alerts.fire({
+                title: "Registro Exitoso",
+                text: "Redirigiendo...",
+                icon: "success",
+              });
+            }
+          })
+          .then(() => {
+            window.location = "/iniciodocente";
+          })
+          .catch((err) => {
+            Alerts.fire({
+              title: "Ingreso Fallido",
+              text: err.response?.data?.message || "Error al procesar la solicitud.",
+              icon: "error",
+            });
+          });
+      },
+    });
+  } catch (err) {
+    Alerts.fire({
+      title: "Error en el Sistema",
+      text: "Intenta más tarde.",
+      icon: "error",
+    });
+  }
+
   return null;
 };
+

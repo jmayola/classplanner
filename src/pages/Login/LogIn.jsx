@@ -1,13 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, redirect, Form } from "react-router-dom";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header/Header";
 import axios from "axios";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import Loading from "../../components/Loading";
+
 const Alerts = withReactContent(Swal);
 const LoginScreen = () => {
   // const auth = useAuth();
+  const [isLoading, setIsLoading] = useState(false); 
 
   const handleGoogle = async (e) => {
     e.preventDefault();
@@ -48,6 +51,7 @@ const LoginScreen = () => {
 
   return (
     <div className="flex flex-col min-h-screen justify-between bg-gray-50">
+       {isLoading && <Loading />}
       <Header />
       <div className="flex items-center justify-center flex-grow m-[5%]">
         <div className="w-full max-w-md p-10 space-y-8 bg-white shadow-lg rounded-[20px]">
@@ -146,49 +150,54 @@ export const loginUserAction = async ({ request }) => {
     user_mail: data.get("email"),
     user_password: data.get("password"),
   };
+
   try {
     Alerts.fire({
       title: <p>Ingreso</p>,
       didOpen: () => {
-        Alerts.showLoading(
-          axios
-            .post("http://localhost:3000/login", submission, {withCredentials: true})
-            .then(async(res) => {
-              if (res.status == 200 || res.status == 202) {
-                await Alerts.fire({
-                  title: <p>Ingreso</p>,
-                  text: "redirigiendo...",
-                  icon: "success",
-                });
-              
-                if (res.data.user_type == "docente") {
-                  window.location = "/iniciodocente"
-                } else if (res.data.user_type == "alumno") {
-                  window.location ="/inicioalumno"
-                } else {
-                  window.location ="/"
-                }
+        Alerts.showLoading(); 
+        axios
+          .post("http://localhost:3000/login", submission, {
+            withCredentials: true,
+          })
+          .then(async (res) => {
+            Alerts.close(); 
+            if (res.status === 200 || res.status === 202) {
+              await Alerts.fire({
+                title: <p>Ingreso</p>,
+                text: "redirigiendo...",
+                icon: "success",
+              });
+
+              if (res.data.user_type === "docente") {
+                window.location = "/iniciodocente";
+              } else if (res.data.user_type === "alumno") {
+                window.location = "/inicioalumno";
+              } else {
+                window.location = "/";
               }
-              
-            })
-            .catch((err) => {
-              if (err.request.status == 403 || err.request.status == 505) {
-                return Alerts.fire({
-                  title: <p>Ingreso Fallido</p>,
-                  text: err.request.response,
-                  icon: "error",
-                });
-              }
-            })
-        );
+            }
+          })
+          .catch((err) => {
+            Alerts.close(); 
+            if (err.request.status === 403 || err.request.status === 505) {
+              Alerts.fire({
+                title: <p>Ingreso Fallido</p>,
+                text: err.request.response,
+                icon: "error",
+              });
+            }
+          });
       },
-    })
+    });
   } catch (err) {
-              return Alerts.fire({
-                  title: <p>Ingreso Fallido</p>,
-                  text: "Error en el Sistema, Intentelo mas tarde.",
-                  icon: "error",
-                });
+    Alerts.close(); 
+    Alerts.fire({
+      title: <p>Ingreso Fallido</p>,
+      text: "Error en el Sistema, Intentelo más tarde.",
+      icon: "error",
+    });
   }
   return null;
 };
+
