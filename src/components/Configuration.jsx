@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaTimes, FaUser, FaCog, FaGlobe, FaPalette } from 'react-icons/fa';
 import axios from 'axios';
-
+import ReactDOM from 'react-dom';
 export default function ConfigModal({ onClose, user }) {
   const [activeTab, setActiveTab] = useState('configuracion');
   const [profileImage, setProfileImage] = useState(null);
@@ -133,7 +133,7 @@ export default function ConfigModal({ onClose, user }) {
     }
   };
 
-  return (
+  return ReactDOM.createPortal(
     <>
       {/* Overlay for the modal */}
       <div className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[1000]`}>
@@ -197,6 +197,7 @@ export default function ConfigModal({ onClose, user }) {
 
         </div>
       </div>
-    </>
+    </>,
+    document.body // Aquí es donde se renderiza el portal
   );
 }
