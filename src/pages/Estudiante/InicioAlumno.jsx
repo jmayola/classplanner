@@ -68,7 +68,6 @@ const InicioAlumno = () => {
       {classes && user && <SidebarAlumno user={userData} />}
       <div className="flex-grow p-6">
         <h1 className="text-3xl font-semibold text-gray-900">
-          {userData.user_name}
           Bienvenido, {user.user_name} {user.user_lastname}!
         </h1>
         <p className="mt-4 text-gray-600">

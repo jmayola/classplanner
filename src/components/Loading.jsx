@@ -1,29 +1,23 @@
 import React from "react";
+import { IoPerson } from "react-icons/io5"; // Ícono de persona (de Ionicons)
 
 const Loading = () => {
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-      <div className="loader bg-white p-4 rounded-full shadow-lg">
-        <svg
-          className="animate-spin h-8 w-8 text-blue-500"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-        >
-          <circle
-            className="opacity-25"
-            cx="12"
-            cy="12"
-            r="10"
-            stroke="currentColor"
-            strokeWidth="4"
-          ></circle>
-          <path
-            className="opacity-75"
-            fill="currentColor"
-            d="M4 12a8 8 0 018-8v8H4z"
-          ></path>
-        </svg>
+    <div className="fixed inset-0 flex flex-col items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+      <div className="loader bg-white p-6 rounded-lg shadow-xl flex flex-col items-center">
+        {/* Ícono de una persona animada */}
+        <div className="text-blue-500 text-5xl animate-bounce mb-6">
+          <IoPerson />
+        </div>
+        {/* Puntos animados que cambian de color */}
+        <div className="flex space-x-4">
+          <div className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center animate-bounce delay-0">
+          </div>
+          <div className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center animate-bounce delay-200">
+          </div>
+          <div className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center animate-bounce delay-400">
+          </div>
+        </div>
       </div>
     </div>
   );
