@@ -227,7 +227,7 @@ export const registroDocente = async ({ request }) => {
             }
           })
           .then(() => {
-            window.location = "/iniciodocente";
+            window.location = "/login";
           })
           .catch((err) => {
             Alerts.fire({
