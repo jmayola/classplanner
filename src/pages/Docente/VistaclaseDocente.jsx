@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { Link, useLocation} from 'react-router-dom';
 import SidebarDocente from '../../components/Sidebars/SidebarProfesor';
+import BannerClase from '../../components/BannerClase';
 
 const Alerts = withReactContent(Swal);
 
@@ -40,15 +41,18 @@ const Vistaclase = () => {
       { classes && user && <SidebarDocente classes={classes} user={user} />}
 
       {/* Main content */}
-      <div className="flex flex-col w-full">
+      <div className="flex flex-col w-full -z-0">
         {/* Banner similar a Google Classroom */}
-        <div className="relative h-40 bg-blue-600 -z-0">
-          <div className="absolute bottom-4 left-4 text-white">
-            <h1 className="text-4xl font-bold">{Class.class_name}</h1>
-            <h3 className="text-2xl font-semibold">{Class.class_curso}</h3>
-            <p className="text-lg">{userData.name} {userData.lastname}</p>
-          </div>
-        </div>
+        {Class && (
+          <BannerClase
+            className={Class.class_name}
+            classCurso={Class.class_curso}
+            classColor={Class.class_color}
+            classToken={Class.class_token}
+            userName={userData.user_name}
+            userLastname={userData.user_lastname}
+          />
+        )}
 
         {/* Tabs */}
         <div className="flex justify-center bg-white shadow-md">

@@ -133,6 +133,7 @@ function VistaTarea() {
         if (res.status == 202 || res.status == 200) {
           setWorkComment("");
           setSubmitted(true);
+          getSubmission()
           Alerts({
             title: "Tarea Enviada",
             message: "La tarea ha sido enviada exitosamente",
@@ -160,6 +161,8 @@ function VistaTarea() {
         <BannerClase
           className={classes.class_name}
           classCurso={classes.class_curso}
+          classColor={classes.class_color}
+          classToken={classes.class_token}
           userName={userData.user_name}
           userLastname={userData.user_lastname}
         />
@@ -171,6 +174,10 @@ function VistaTarea() {
             <h2 className="text-3xl font-semibold text-gray-900">
               {tarea.title}
             </h2>
+            <p className="text-sm text-gray-500">
+              Descripcion:{" "}
+              {tarea.description}
+            </p>
             <p className="text-sm text-gray-500">
               Vencimiento:{" "}
               {dueDate ? dueDate.toLocaleDateString() : "Sin Limite"}{" "}

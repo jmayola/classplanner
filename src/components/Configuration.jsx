@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaTimes, FaHome, FaUser, FaFileAlt, FaStickyNote, FaCalendarAlt, FaStar, FaBook, FaCog, FaGlobe, FaPalette } from 'react-icons/fa';
+import { FaTimes, FaUser, FaCog, FaGlobe, FaPalette } from 'react-icons/fa';
 import axios from 'axios';
 
 export default function ConfigModal({ onClose, user }) {
@@ -134,68 +134,69 @@ export default function ConfigModal({ onClose, user }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-start justify-center rounded-[15px] p-10">
-      <div className="relative bg-white flex rounded-[15px] shadow-lg w-2/3">
-        
-        {/* Botón de cierre en forma de círculo rojo */}
-        <div
-          onClick={onClose} // Llama a la función onClose al hacer clic
-          className="absolute top-4 right-4 w-4 h-4 bg-[#ca1c1c] rounded-full flex items-center justify-center cursor-pointer"
-        >
-          <FaTimes color='#fff' size={10} />
-        </div>
-
-        {/* Sidebar de configuración */}
-        <div className="w-1/4 bg-gray-100 p-6 border-r rounded-[15px]">
-          <div>
-            <h1 className='text-gray-500 mt-0 mb-2 font-semibold text-[16px]'>Cuenta</h1>
-          </div>
-          {/* Imagen de perfil y nombre de usuario */}
-          <div className="flex items-center mb-6">
-          {user.user_photo ? <img src={`http://localhost:3000/${user.user_photo}`} className="w-8 h-8 rounded-full mr-4" alt="profile" /> : <FaUser className="w-8 h-8 rounded-full mr-4" />}
-            <p className="text-base">{user.user_name} {user.user_lastname}</p>
+    <>
+      {/* Overlay for the modal */}
+      <div className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[1000]`}>
+        {/* Modal Container */}
+        <div className={`relative bg-white flex flex-col rounded-lg shadow-lg w-full max-w-lg md:w-full`}>
+          
+          {/* Close Button */}
+          <div
+            onClick={onClose}
+            className="absolute top-4 right-4 w-6 h-6 bg-[#ca1c1c] rounded-full flex items-center justify-center cursor-pointer"
+          >
+            <FaTimes color='#fff' size={12} />
           </div>
 
-          {/* Opciones del sidebar */}
-          <ul className="space-y-2 items-start">
-            <li
-              className={`flex items-center space-x-2 cursor-pointer text-gray-700 hover:bg-gray-300 hover:rounded-[15px] w-[110%] h-10 pl-3 ${activeTab === 'configuracion' ? 'text-blue-600' : ''} rounded-lg transition-all`}
-              onClick={() => setActiveTab('configuracion')}
-            >
-              <FaCog /> <span>Configuración</span>
-            </li>
-            <li
-              className={`flex items-center space-x-2 cursor-pointer text-gray-700 hover:bg-gray-300 hover:rounded-[15px] w-[110%] h-10 pl-3 ${activeTab === 'perfil' ? 'text-blue-600' : ''} rounded-lg transition-all`}
-              onClick={() => setActiveTab('perfil')}
-            >
-              <FaUser /> <span>Mi perfil</span>
-            </li>
-            <li
-              className={`flex items-center space-x-2 cursor-pointer text-gray-700 hover:bg-gray-300 hover:rounded-[15px] w-[110%] h-10 pl-3 ${activeTab === 'idioma' ? 'text-blue-600' : ''} rounded-lg transition-all`}
-              onClick={() => setActiveTab('idioma')}
-            >
-              <FaGlobe /> <span>Idioma y región</span>
-            </li>
-            <li
-              className={`flex items-center space-x-2 cursor-pointer text-gray-700 hover:bg-gray-300 hover:rounded-[15px] w-[110%] h-10 pl-3 ${activeTab === 'tema' ? 'text-blue-600' : ''} rounded-lg transition-all`}
-              onClick={() => setActiveTab('tema')}
-            >
-              <FaPalette /> <span>Tema</span>
-            </li>
-          </ul>
-        </div>
+          {/* Sidebar for configuration */}
+          <div className={`w-full md:flex md:w-auto md:border-r md:bg-gray-100`}>
+            {/* Sidebar content */}
+            {/** Sidebar Header */}
+            <div className={`md:w-[25%] p-6 border-b md:border-b-none md:border-r`}>
+              {/* Account Header */}
+              <h1 className='text-gray-500 mt-0 mb-2 font-semibold text-[16px]'>Cuenta</h1>
 
-        {/* Contenido principal dinámico */}
-        <div className="w-3/4 p-6">
-          <h2 className="text-xl font-semibold mb-4">
-            {activeTab === 'configuracion' && 'Configuración'}
-            {activeTab === 'perfil' && 'Mi perfil'}
-            {activeTab === 'idioma' && 'Idioma y región'}
-            {activeTab === 'tema' && 'Tema visual'}
-          </h2>
-          {renderContent()}
+              {/* Profile Image and Username */}
+              <div className="flex items-center mb-6">
+                {user.user_photo ? 
+                  (<img src={`http://localhost:3000/${user.user_photo}`} 
+                        className="w-8 h-8 rounded-full mr-4" alt="profile" />) : 
+                  (<FaUser className="w-8 h-8 rounded-full mr-4" />)}
+                <p className="text-base">{user.user_name} {user.user_lastname}</p>
+              </div>
+
+              {/* Sidebar Options */}
+              <ul className="space-y-2">
+                {['configuracion', 'perfil', 'idioma', 'tema'].map(tab => (
+                  <li key={tab}
+                    onClick={() => setActiveTab(tab)}
+                    className={`flex items-center space-x-2 cursor-pointer text-gray-700 hover:bg-gray-300 hover:rounded-lg w-full h-[40px] pl-[10px] ${activeTab === tab ? 'text-blue-600' : ''} transition-all`}>
+                    {tab === 'configuracion' && (<FaCog />)}
+                    {tab === 'perfil' && (<FaUser />)}
+                    {tab === 'idioma' && (<FaGlobe />)}
+                    {tab === 'tema' && (<FaPalette />)}
+                    <span>{tab.charAt(0).toUpperCase() + tab.slice(1)}</span> {/* Capitalize first letter */}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Main Content Area */}
+            <div className={`w-full md:w-[75%] p-[20px]`}>
+              {/* Dynamic Content Header */}
+              <h2 className={`text-xl font-semibold mb-[10px]`}>
+                {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
+              </h2>
+
+              {/* Render Dynamic Content */}
+              {renderContent()}
+              
+            </div>
+
+          </div>
+
         </div>
       </div>
-    </div>
+    </>
   );
 }

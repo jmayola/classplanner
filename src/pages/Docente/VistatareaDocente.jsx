@@ -143,8 +143,7 @@ function VistatareaDocente() {
             className={Class.class_name}
             classCurso={Class.class_curso}
             classColor={Class.class_color}
-            userName={userData.user_name}
-            userLastname={userData.user_lastname}
+            classToken={Class.class_token}
           />
         )}
 
@@ -182,8 +181,12 @@ function VistatareaDocente() {
               {/* Task Details */}
               <div className="mb-6">
                 <p>
-                  <strong>Título de la tarea:</strong>
+                  <strong>Título de la tarea: </strong>
                   {tarea.title}
+                </p>
+                <p>
+                  <strong>Descripcion de la tarea: </strong>
+                  {tarea.description}
                 </p>
                 <p>
                   <strong>Vencimiento:</strong>

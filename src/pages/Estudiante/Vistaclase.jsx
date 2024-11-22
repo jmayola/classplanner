@@ -47,6 +47,7 @@ const Vistaclase = () => {
             className={Class.class_name}
             classCurso={Class.class_curso}
             classColor={Class.class_color}
+            classToken={Class.class_token}
             userName={userData.user_name}
             userLastname={userData.user_lastname}
           />

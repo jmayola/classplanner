@@ -110,7 +110,7 @@ const InicioDocente = () => {
   };
 
   return (
-    <div className="flex min-h-screen text-[#37352f]">
+    <div className="flex min-h-screen max-lg:h-[50vh] text-[#37352f]">
       <SidebarProfesor user={userData}/>
   
       <div className="flex-grow p-6 bg-white">
@@ -137,7 +137,7 @@ const InicioDocente = () => {
                 <FaChevronLeft />
               </button>
   
-              <div className="flex overflow-hidden space-x-4 w-full px-4">
+              <div className="flex overflow-hidden space-x-4 w-full px-4 max-lg:flex-col">
                 <div
                   className="flex transition-transform duration-300 ease-in-out"
                   style={{
