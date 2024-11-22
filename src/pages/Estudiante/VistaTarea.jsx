@@ -14,9 +14,12 @@ import BannerClase from "../../components/BannerClase";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import Alerts from "../../../hooks/Alerts";
+import Loading from "../../components/Loading";
+
 function VistaTarea() {
   let { classes, user, tarea } = useLocation().state;
 
+  const [isLoading, setIsLoading] = useState(false);
   const [classComment, setClassComment] = useState("");
   const [workComment, setWorkComment] = useState("");
   const [showClassCommentInput, setShowClassCommentInput] = useState(false);
@@ -31,7 +34,7 @@ function VistaTarea() {
   });
   const [dueDate, setDueDate] = useState();
   const [comments, setComments] = useState([]);
-  const [Delivered, setDelivered] = useState("")
+  const [Delivered, setDelivered] = useState("");
 
   useEffect(() => {
     setUserData(user);
@@ -48,42 +51,52 @@ function VistaTarea() {
       setTaskStatus("Asignado");
     }
   }, [dueDate]);
-  useEffect(()=>{
-    getSubmission()
-    getComments();
 
-  },[])
+  useEffect(() => {
+    getSubmission();
+    getComments();
+  }, []);
+
   const getComments = () => {
+    setIsLoading(true); 
     axios
       .get("http://localhost:3000/comments?id_task=" + tarea.id_task, {
         withCredentials: true,
       })
-      .then((res) => setComments(res.data));
+      .then((res) => {
+        setComments(res.data);
+      })
+      .finally(() => {
+        setIsLoading(false); 
+      });
   };
-  const getSubmission = () =>{
+
+  const getSubmission = () => {
+    setIsLoading(true); 
     axios
       .get("http://localhost:3000/submission?id_task=" + tarea.id_task, {
         withCredentials: true,
       })
-      .then((res) =>{
-        if(res.status == 202 || res.status == 200){
-          let response = res.data
-          console.log(response)
-          setAttachment({name:response.submission_file})
-          setWorkComment(response.submission_comment)
-          setSubmitted(true)
-        }
-        else{
-          setAttachment("")
-          setWorkComment("")
-          setSubmitted(false)
+      .then((res) => {
+        if (res.status == 202 || res.status == 200) {
+          let response = res.data;
+          setAttachment({ name: response.submission_file });
+          setWorkComment(response.submission_comment);
+          setSubmitted(true);
+        } else {
+          setAttachment("");
+          setWorkComment("");
+          setSubmitted(false);
         }
       })
-      .catch((err)=>{
-        console.log(err)
+      .catch((err) => {
+        console.log(err);
       })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
-  
+
   const handleClassCommentSubmit = () => {
     if (classComment) {
       const newComment = {
@@ -92,9 +105,10 @@ function VistaTarea() {
         userName: userData.user_name,
         userLastname: userData.user_lastname,
         user_photo: {
-          String: userData.user_photo
-        }
+          String: userData.user_photo,
+        },
       };
+      setIsLoading(true); 
       axios
         .post("http://localhost:3000/comments", newComment, {
           withCredentials: true,
@@ -106,13 +120,16 @@ function VistaTarea() {
               message: "El comentario ha sido añadido a la clase",
               icon: "success",
             });
-            getComments()
+            getComments();
             setClassComment("");
             setShowClassCommentInput(false);
           }
         })
         .catch((err) => {
           Alerts({ title: "Error", message: err.response.data, icon: "error" });
+        })
+        .finally(() => {
+          setIsLoading(false); 
         });
     }
   };
@@ -121,7 +138,9 @@ function VistaTarea() {
   formData.append("submission_file", attachment);
   formData.append("submission_comment", workComment);
   formData.append("id_task", tarea.id_task);
+
   const handleWorkSubmit = () => {
+    setIsLoading(true); 
     axios
       .post("http://localhost:3000/submission", formData, {
         headers: {
@@ -133,7 +152,7 @@ function VistaTarea() {
         if (res.status == 202 || res.status == 200) {
           setWorkComment("");
           setSubmitted(true);
-          getSubmission()
+          getSubmission();
           Alerts({
             title: "Tarea Enviada",
             message: "La tarea ha sido enviada exitosamente",
@@ -143,7 +162,10 @@ function VistaTarea() {
       })
       .catch((err) =>
         Alerts({ title: "Error", message: err.response.data, icon: "error" })
-      );
+      )
+      .finally(() => {
+        setIsLoading(false); 
+      });
   };
 
   const handleAttachmentChange = (e) => {
@@ -153,6 +175,8 @@ function VistaTarea() {
 
   return (
     <div className="flex min-h-screen overflow-hidden relative -z-0">
+      {isLoading && <Loading />}
+
       {/* Sidebar */}
       <SidebarAlumno classes={classes} user={userData} />
 
@@ -203,7 +227,7 @@ function VistaTarea() {
                         <img
                           src={`http://localhost:3000/${comment.user_photo.String}`}
                           className="w-12 h-12 bg-gray-300 rounded-full object-contain"
-                          alt="image_profile"
+                          alt=""
                         />
                       ) : (
                         <FaUser className="text-gray-600 text-2xl" />
