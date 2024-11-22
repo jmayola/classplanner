@@ -364,19 +364,20 @@ function VistaTarea() {
               )}
             </div>
           </div>
-
-          <div className="border-t pt-4">
-            <h3 className="text-xl font-semibold text-gray-800 mb-2">
-              Estado de la tarea
-            </h3>
-            <div
-              className={`text-lg font-semibold ${
-                taskStatus === "Asignado" ? "text-green-600" : "text-red-600"
-              }`}
-            >
-              {taskStatus === "Asignado" ? "Asignado" : "Sin entregar"}
+          {submitted ? null : (
+            <div className="border-t pt-4">
+              <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                Estado de la tarea
+              </h3>
+              <div
+                className={`text-lg font-semibold ${
+                  taskStatus === "Asignado" ? "text-green-600" : "text-red-600"
+                }`}
+              >
+                {taskStatus === "Asignado" ? "Asignado" : "Sin entregar"}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>
