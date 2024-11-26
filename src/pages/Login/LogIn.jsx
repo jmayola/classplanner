@@ -1,17 +1,20 @@
 import React, { useState } from "react";
-import { Link, redirect, Form } from "react-router-dom";
+import { Link, Form } from "react-router-dom";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header/Header";
 import axios from "axios";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import Loading from "../../components/Loading";
+import { Icon } from "@iconify/react"; 
 
 const Alerts = withReactContent(Swal);
-const LoginScreen = () => {
-  // const auth = useAuth();
-  const [isLoading, setIsLoading] = useState(false); 
 
+const LoginScreen = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); 
+  
+  
   const handleGoogle = async (e) => {
     e.preventDefault();
 
@@ -48,20 +51,20 @@ const LoginScreen = () => {
       }
     }
   };
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
+  };
 
   return (
     <div className="flex flex-col min-h-screen justify-between bg-gray-50">
-       {isLoading && <Loading />}
+      {isLoading && <Loading />}
       <Header />
       <div className="flex items-center justify-center flex-grow m-[5%]">
         <div className="w-full max-w-md p-10 space-y-8 bg-white shadow-lg rounded-[20px]">
           <div className="flex flex-col items-center mb-6">
-            <h2 className="text-4xl font-semibold text-black">
-              Iniciar Sesión
-            </h2>
+            <h2 className="text-4xl font-semibold text-black">Iniciar Sesión</h2>
             <p className="text-gray-400 text-2x1 text-center w-[300px] mt-5">
-              Inicia sesión con una cuenta ya existente o ingresá con tu cuenta
-              de Google
+              Inicia sesión con una cuenta ya existente o ingresá con tu cuenta de Google
             </p>
           </div>
           {/* Botón de inicio de sesión con Google */}
@@ -72,13 +75,10 @@ const LoginScreen = () => {
                 alt="Google Logo"
                 className="w-5 h-5 mr-3"
               />
-              <span className="flex-grow text-center">
-                Iniciar sesión con Google
-              </span>
+              <span className="flex-grow text-center">Iniciar sesión con Google</span>
             </button>
           </div>
-          <hr className="border-t border-gray-300 mt-0" />{" "}
-          {/* Línea divisora */}
+          <hr className="border-t border-gray-300 mt-0" /> 
           <Form method="POST" action="/login" className="space-y-4">
             <div className="rounded-md shadow-sm space-y-3">
               <div>
@@ -95,19 +95,29 @@ const LoginScreen = () => {
                   placeholder="Correo Electrónico"
                 />
               </div>
-              <div>
+              <div className="relative">
                 <label htmlFor="password" className="sr-only">
                   Contraseña
                 </label>
                 <input
                   id="password"
                   name="password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   autoComplete="current-password"
                   required
                   className="block w-full px-4 py-3 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-[30px] focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                   placeholder="Contraseña"
                 />
+                <button
+                  type="button"
+                  onClick={togglePasswordVisibility}
+                  className="absolute inset-y-0 right-3 flex items-center text-gray-500"
+                >
+                  <Icon
+                    icon={showPassword ? "mdi:eye-off-outline" : "mdi:eye-outline"}
+                    className="w-5 h-5"
+                  />
+                </button>
               </div>
             </div>
 
@@ -135,7 +145,6 @@ const LoginScreen = () => {
           </Form>
         </div>
       </div>
-
       {/* Footer */}
       <Footer />
     </div>
@@ -143,6 +152,7 @@ const LoginScreen = () => {
 };
 
 export default LoginScreen;
+
 
 export const loginUserAction = async ({ request }) => {
   const data = await request.formData();

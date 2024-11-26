@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import SidebarAlumno from '../../components/Sidebars/SidebarAlumno';
 import { Link } from 'react-router-dom';
-import { FaChevronLeft, FaChevronRight, FaPlus, FaTimes } from 'react-icons/fa';
+import { FaChevronLeft, FaChevronRight, FaPlus, FaTimes, FaExclamationTriangle } from 'react-icons/fa'; // Importando el ícono de advertencia
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import axios from 'axios';
@@ -16,13 +16,22 @@ const InicioAlumno = () => {
   const [showInput, setShowInput] = useState(false);
   const [newCode, setNewCode] = useState('');
   const itemsPerPage = 6;
-  const {classes, setClasses, user ,fetchClasses} = useClasses()
+  const { classes, setClasses, user, fetchClasses } = useClasses();
+
   useEffect(() => {
-    if(classes.length >= 1){
-      setLoading(false)
-      setUserData(user)
-    }
-  }, [user,classes]);
+    const fetchData = async () => {
+      try {
+        await fetchClasses();  
+        setLoading(false);  
+        setUserData(user);
+      } catch (error) {
+        setLoading(false);
+        handleAxiosError(error, "No se pudieron cargar las clases.");
+      }
+    };
+
+    fetchData();
+  }, [user, classes, fetchClasses]);
 
   const handleAxiosError = (error, customMessage) => {
     let message = customMessage;
@@ -50,17 +59,18 @@ const InicioAlumno = () => {
   };
 
   const handleAddCode = () => {
-    axios.post("http://localhost:3000/joinClass",{"class_token":newCode},{withCredentials:true})
-    .then((res)=>{
-      if(res.status == 202 || res. status == 200){
-        setNewCode('');
-        setShowInput(false);
-        Alerts.fire({ title: <p>Código agregado</p>, text: `Código ${newCode} agregado correctamente.`, icon: 'success' });
-        fetchClasses()
-      }})
-      .catch((err)=>{
-        Alerts.fire({ title: "Error", text: err.response.data, icon: 'error' });
+    axios.post("http://localhost:3000/joinClass", { "class_token": newCode }, { withCredentials: true })
+      .then((res) => {
+        if (res.status == 202 || res.status == 200) {
+          setNewCode('');
+          setShowInput(false);
+          Alerts.fire({ title: <p>Código agregado</p>, text: `Código ${newCode} agregado correctamente.`, icon: 'success' });
+          fetchClasses();
+        }
       })
+      .catch((err) => {
+        Alerts.fire({ title: "Error", text: err.response.data, icon: 'error' });
+      });
   };
 
   return (
@@ -79,17 +89,20 @@ const InicioAlumno = () => {
           <h2 className="text-2xl font-semibold text-gray-800">Clases</h2>
           <div className="mt-4 space-y-4">
             {loading ? (
-              <p>Cargando clases...</p>
+              <p><span className="animate-spin"><FaExclamationTriangle /></span> Cargando clases...</p>
             ) : error ? (
               <p className="text-red-500">{error}</p>
             ) : classes.length === 0 ? (
-              <p>No tienes clases asignadas</p>
+              <div className="flex items-center space-x-2 text-gray-500">
+                <FaExclamationTriangle />
+                <p>No tienes clases asignadas</p>
+              </div>
             ) : (
               classes.map((clase, index) => (
-                <Link to={"/vistaclase"} state={{classes:clase, user:userData, id:clase.class_token}}>
-                <div key={index} className={`p-4 shadow-md rounded-lg border-b-2`} style={{borderBlockColor: clase.class_color}}>
-                  <p className="text-lg text-gray-700">{clase.class_name}</p>
-                </div>
+                <Link to={"/vistaclase"} state={{ classes: clase, user: userData, id: clase.class_token }} key={index}>
+                  <div className={`p-4 shadow-md rounded-lg border-b-2`} style={{ borderBlockColor: clase.class_color }}>
+                    <p className="text-lg text-gray-700">{clase.class_name}</p>
+                  </div>
                 </Link>
               ))
             )}
@@ -116,7 +129,6 @@ const InicioAlumno = () => {
       {showInput && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="relative bg-white p-6 rounded shadow-lg flex flex-col items-center space-y-4 w-80">
-          
             <div 
               onClick={() => setShowInput(false)}
               className="absolute top-4 right-4 w-4 h-4 bg-[#ca1c1c] rounded-full flex items-center justify-center cursor-pointer"
