@@ -58,7 +58,7 @@ function AgregarClase({id_class}) {
         {isFormVisible && (
           <div className="fixed inset-0 bg-gray-700 bg-opacity-50 flex items-center justify-center z-50">
             <div className="w-full max-w-md p-10 space-y-8 bg-white shadow-lg rounded-[20px]">
-              <h2 className="text-4xl font-semibold text-black text-center">Agregar Clase</h2>
+              <h2 className="text-4xl font-semibold text-black text-center">Agregar Tarea</h2>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="space-y-3">
                   <div>
