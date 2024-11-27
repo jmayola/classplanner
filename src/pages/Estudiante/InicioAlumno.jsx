@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import SidebarAlumno from '../../components/Sidebars/SidebarAlumno';
 import { Link } from 'react-router-dom';
-import { FaChevronLeft, FaChevronRight, FaPlus, FaTimes, FaExclamationTriangle } from 'react-icons/fa'; // Importando el ícono de advertencia
+import { FaChevronLeft, FaChevronRight, FaPlus, FaTimes, FaRegFrown } from 'react-icons/fa'; 
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import axios from 'axios';
@@ -89,12 +89,12 @@ const InicioAlumno = () => {
           <h2 className="text-2xl font-semibold text-gray-800">Clases</h2>
           <div className="mt-4 space-y-4">
             {loading ? (
-              <p><span className="animate-spin"><FaExclamationTriangle /></span> Cargando clases...</p>
+              <p><span className="animate-spin"></span> Cargando clases...</p>
             ) : error ? (
               <p className="text-red-500">{error}</p>
             ) : classes.length === 0 ? (
               <div className="flex items-center space-x-2 text-gray-500">
-                <FaExclamationTriangle />
+                <FaRegFrown />
                 <p>No tienes clases asignadas</p>
               </div>
             ) : (
@@ -106,16 +106,6 @@ const InicioAlumno = () => {
                 </Link>
               ))
             )}
-          </div>
-        </div>
-
-        {/* Sección de Calendario */}
-        <div className="mt-8">
-          <h2 className="text-2xl font-semibold text-gray-800">Calendario</h2>
-          <div className="mt-4 p-4 bg-white shadow-md rounded-lg">
-            <Link to="/calendario" className="text-lg text-blue-500">
-              Ver calendario completo
-            </Link>
           </div>
         </div>
       </div>
