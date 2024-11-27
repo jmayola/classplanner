@@ -33,22 +33,8 @@ const RegistroDocente = () => {
           <div className="flex flex-col items-center mb-6">
             <h2 className="text-3xl md:text-4xl font-semibold text-black text-center p-5">Regístrate como Docente</h2>
             <p className="text-gray-500 text-base md:text-lg text-center mt-4">
-              Crea una cuenta para docentes completando los siguientes campos o registrando tu cuenta de Google.
+              Crea una cuenta para docentes completando los siguientes campos.
             </p>
-          </div>
-
-          {/* Botón de inicio de sesión con Google */}
-          <div className="flex justify-center">
-            <button
-              className="flex items-center justify-center w-full px-6 py-3 mb-4 text-sm md:text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-[30px] shadow hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400"
-            >
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg"
-                alt="Google Logo"
-                className="w-5 h-5 mr-3"
-              />
-              <span className="flex-grow text-center">Registrarse con Google</span>
-            </button>
           </div>
 
           <hr className="border-t border-gray-300 mt-0" />  {/* Línea divisora */}

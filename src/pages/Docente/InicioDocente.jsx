@@ -132,7 +132,7 @@ const InicioDocente = () => {
             <div className="flex items-center justify-between mt-4">
               <button
                 onClick={handlePrev}
-                className="p-2 bg-gray-300 rounded-full hover:bg-gray-400"
+                className="p-2"
               >
                 <FaChevronLeft />
               </button>
@@ -147,9 +147,25 @@ const InicioDocente = () => {
                 >
                   {classes.map((clase, index) => (
                 <Link to={"/vistaclasedocente"} state={{classes:clase, user:userData, id:clase.class_token}}>
-                <div key={index} className={`p-4 shadow-md rounded-lg border-b-4 border-r-2 mr-3`} style={{borderBlockColor: clase.class_color}}>
-                  <p className="text-lg text-gray-700">{clase.class_name}</p>
-                </div>
+                  <div className='justify-around mx-2'>
+                    <div
+                      key={index}
+                      className="relative border-b-2 shadow-md rounded-lg overflow-hidden hover:shadow-2xl transition-shadow duration-200 w-[130px]"
+                    >
+                      <div
+                        className="h-32"
+                        style={{ backgroundColor: clase.class_color }}
+                      ></div>
+
+                      {/* Contenido superpuesto */}
+                      <div className="relative -mt-16 p-4 bg-white rounded-b-lg">
+                        <h2 className="text-lg font-semibold text-gray-800 truncate">
+                          {clase.class_name}
+                        </h2>
+                        <p className="text-sm text-gray-600 truncate">{clase.class_curso}</p>
+                      </div>
+                    </div>
+                  </div>
                 </Link>
               ))}
                 </div>
@@ -157,7 +173,7 @@ const InicioDocente = () => {
   
               <button
                 onClick={handleNext}
-                className="p-2 bg-gray-300 rounded-full hover:bg-gray-400"
+                className="p-2"
               >
                 <FaChevronRight />
               </button>
@@ -213,37 +229,30 @@ const InicioDocente = () => {
                       id="classColor"
                       value={Color}
                       onChange={(e) => setColor(e.target.value)}
-                      className="block w-full px-4 py-3 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-[30px] focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm h-20"
+                      className="block w-full placeholder-gray-500 border border-gray-300 rounded-[30px] focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm h-20"
                       required
                     />
                   </div>
                 </div>
   
-                <div className="flex justify-between space-x-3">
+                <div className="flex flex-col">
                   <button
                     onClick={handleSubmit}
-                    className="w-full px-6 py-3 text-sm font-medium text-white bg-blue-500 border border-transparent rounded-[30px] hover:bg-[#006F7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    className="w-full px-6 py-3 text-sm font-medium text-white bg-blue-500 border border-transparent rounded-[30px] hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                   >
                     Crear clase
                   </button>
                   <button
                     onClick={handleCloseForm}
-                    className="w-full px-6 py-3 text-sm font-medium text-white bg-red-500 border border-transparent rounded-[30px] hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                    className="w-full px-6 py-3  text-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                   >
-                    Cerrar
+                    Cancelar
                   </button>
                 </div>
               </form>
             </div>
           </div>
         )}
-  
-        <div className="mt-8">
-          <h2 className="text-2xl font-semibold text-gray-800">Calendario</h2>
-          <div className="mt-4 p-4 bg-white shadow-md rounded-lg">
-            <p className="text-lg text-gray-700">Ver calendario completo</p>
-          </div>
-        </div>
       </div>
     </div>
   );
