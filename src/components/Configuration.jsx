@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { FaTimes, FaUser, FaCog, FaGlobe, FaPalette } from 'react-icons/fa';
+import { FaTimes, FaUser, FaCog, FaGlobe, FaPalette  } from 'react-icons/fa';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import ReactDOM from 'react-dom';
 export default function ConfigModal({ onClose, user }) {
   const [activeTab, setActiveTab] = useState('configuracion');
@@ -75,7 +76,6 @@ export default function ConfigModal({ onClose, user }) {
 
             <label className="block mb-2">Apellido</label>
             <input type="text" className="border rounded p-2 mb-4 w-full" value={user.user_lastname} readOnly />
-
             <label className="block mb-2">Foto de perfil</label>
             {profileImage && (
               <div className="mb-4">
@@ -93,6 +93,12 @@ export default function ConfigModal({ onClose, user }) {
               className="mb-4"
               onChange={handleImageChange}
             />
+                 {/* Logout Button */}
+      <div className="px-6 flex justify-center mb-6">
+        <Link to="/logout" className="flex items-center text-red-400 hover:underline">
+          <span>Cerrar Sesión</span>
+        </Link>
+      </div>
           </div>
         );
       case 'idioma':
