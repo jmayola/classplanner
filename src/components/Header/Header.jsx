@@ -35,7 +35,7 @@ useEffect(() => {
         </nav>
 
         {/* Botones de Inicio de sesión y Registro a la derecha */}
-        {User ? <button className='text-center justify-center text-white hover:bg-gray-700 bg-[#151515] rounded-[30px] h-[30px] flex items-center' onClick={handleSessionClose}>Cerrar Sesion</button>:
+        {User ? <button className='text-center p-5 justify-center text-white hover:bg-gray-700 bg-[#151515] rounded-[30px] h-[30px] flex items-center' onClick={handleSessionClose}>Cerrar Sesión</button>:
         <div className="flex items-center space-x-5">
           <Link to="/login" className="text-center justify-center text-white hover:bg-gray-700 bg-[#151515] rounded-[30px] h-[30px] flex items-center">
             <span className="px-5">Iniciar sesión</span>
