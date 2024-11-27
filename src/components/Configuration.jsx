@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FaTimes, FaUser, FaCog, FaGlobe, FaPalette  } from 'react-icons/fa';
+import { IoSettingsOutline, IoPersonOutline, IoGlobeOutline, IoColorPaletteOutline } from 'react-icons/io5';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import ReactDOM from 'react-dom';
@@ -149,7 +150,7 @@ export default function ConfigModal({ onClose, user }) {
   return ReactDOM.createPortal(
     <>
       <div className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[1000]`}>
-        <div className={`relative bg-[#fff] flex flex-col rounded-40 shadow-lg max-w-3xl md:w-full`}>
+        <div className={`relative bg-[#fff] flex flex-col rounded-shadow-lg max-w-3xl md:w-full`}>
           <div
             onClick={onClose}
             className="absolute top-4 right-4 w-4 h-4 bg-[#ca1c1c] rounded-full flex items-center justify-center cursor-pointer"
@@ -174,10 +175,10 @@ export default function ConfigModal({ onClose, user }) {
                   <li key={tab}
                     onClick={() => setActiveTab(tab)}
                     className={`flex items-center space-x-2 cursor-pointer text-gray-900 hover:bg-[#f5f5f5] hover:rounded-[15px] w-full h-[40px] px-3 pr-3 ${activeTab === tab ? 'text-blue-600' : ''} transition-all`}>
-                    {tab === 'configuracion' && (<FaCog />)}
-                    {tab === 'perfil' && (<FaUser />)}
-                    {tab === 'idioma' && (<FaGlobe />)}
-                    {tab === 'tema' && (<FaPalette />)}
+                    {tab === 'configuracion' && <IoSettingsOutline size={28} color='#222'/>}
+                    {tab === 'perfil' && <IoPersonOutline size={20} color='#222'/>}
+                    {tab === 'idioma' && <IoGlobeOutline size={20} color='#222'/>}
+                    {tab === 'tema' && <IoColorPaletteOutline size={20} color='#222'/>}
                     <span>{tab.charAt(0).toUpperCase() + tab.slice(1)}</span>
                   </li>
                 ))}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FaHome, FaUser, FaFileAlt, FaStickyNote, FaCalendarAlt, FaBook, FaCog, FaBars, FaTimes } from 'react-icons/fa';
+import { IoHomeOutline, IoPerson , IoSettingsOutline, IoBookOutline, IoCloseOutline, IoMenuOutline } from 'react-icons/io5';
 import axios from 'axios';
 import ConfigModal from '../Configuration';
 import { useClasses } from '../../../contexts/Classes';
@@ -29,7 +29,7 @@ const SidebarDocente = () => {
     <div className="relative">
       {/* Hamburger Menu Icon for Mobile */}
       <button onClick={toggleSidebar} className="md:hidden p-4">
-        <FaBars className="text-gray-600 text-2xl" />
+        <IoMenuOutline size={24} />
       </button>
 
       {/* Sidebar */}
@@ -42,7 +42,7 @@ const SidebarDocente = () => {
               {userData.user_photo ? (
                 <img src={`http://localhost:3000/${userData.user_photo}`} className="w-12 h-12 bg-gray-300 rounded-full" alt="image_profile" />
               ) : (
-                <FaUser className="text-gray-600 text-2xl" />
+                <IoPerson size={24} />
               )}
             </div>
             
@@ -54,21 +54,21 @@ const SidebarDocente = () => {
             onClick={toggleSidebar} // This will close the sidebar
             className="md:hidden w-8 h-8 bg-[#ca1c1c] rounded-full flex items-center justify-center cursor-pointer"
           >
-            <FaTimes color='#fff' size={16} />
+            <IoCloseOutline color='#fff' size={16} />
           </button>
           </div>
         </div>
 
         <nav className="px-6">
           <Link to="/iniciodocente" className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
-            <FaHome className="text-gray-600" />
+            <IoHomeOutline className="text-gray-600" />
             <span>Inicio</span>
           </Link>
           <div
             className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg cursor-pointer"
             onClick={toggleConfig}
           >
-            <FaCog className="text-gray-600" />
+            <IoSettingsOutline className="text-gray-600" />
             <span>Configuración</span>
           </div>
 
@@ -77,7 +77,7 @@ const SidebarDocente = () => {
             <div className="overflow-y-auto max-h-40 mb-10">
               {classes && classes.map((clase, index) => (
                 <Link key={index} to={`/vistaclasedocente?clase=${clase.class_name}`} state={{ classes: clase, user: userData, id: clase.class_token }} className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
-                  <FaBook className="text-gray-600" />
+                  <IoBookOutline className="text-gray-600" />
                   <span>{clase.class_name}</span>
                 </Link>
               ))}

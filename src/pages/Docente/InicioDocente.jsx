@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FaPlus, FaChevronLeft, FaChevronRight,FaClipboard } from 'react-icons/fa';
+import { IoAdd, IoChevronBack, IoChevronForward, IoCopyOutline } from 'react-icons/io5';
 import Alerts from 'sweetalert2';
 import SidebarProfesor from '../../components/Sidebars/SidebarProfesor';
 import axios from 'axios';
@@ -151,7 +151,7 @@ const InicioDocente = () => {
                 onClick={handlePrev}
                 className="p-2"
               >
-                <FaChevronLeft />
+                <IoChevronBack size={24}/>
               </button>
   
               <div className="flex overflow-hidden space-x-4 w-full px-4 max-lg:flex-col">
@@ -185,10 +185,10 @@ const InicioDocente = () => {
                       <div>
                         <p className="text-m text-[#222] px-4 py-3 truncate flex items-center justify-between">
                           {clase.class_token}
-                          <FaClipboard 
-                            onClick={() => handleCopy(clase.class_token)} 
-                            className="cursor-pointer text-blue-500 ml-2"
-                          />
+                          <IoCopyOutline
+                                onClick={() => handleCopy(clase.class_token)}
+                                color='#000'
+                              />
                         </p> 
                       </div>
                     </div>
@@ -202,7 +202,7 @@ const InicioDocente = () => {
                 onClick={handleNext}
                 className="p-2"
               >
-                <FaChevronRight />
+                <IoChevronForward size={24}/>
               </button>
             </div>
           )}
@@ -213,7 +213,7 @@ const InicioDocente = () => {
           onClick={handleAddClass}
           className="fixed bottom-8 right-8 bg-blue-600 text-white p-4 rounded-full shadow-md hover:bg-blue-700"
         >
-          <FaPlus className="text-2xl" />
+          <IoAdd className="text-2xl" />
         </button>
   
         {/* Formulario para agregar clase */}
