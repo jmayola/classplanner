@@ -49,9 +49,10 @@ export default function ConfigModal({ onClose, user }) {
       case 'configuracion':
         return (
           <div className='z-10 sticky'>
-            <h3 className="mb-2 font-semibold">Configuración de la cuenta</h3>
+            <h3 className="mb-2 text-[#252525]">Configuración de la cuenta</h3>
+            <div className='border-t border-gray-200 w-[100%] my-4 m-auto'/>
             <label className="block mb-2">Cambiar contraseña</label>
-            <input type="password" value={Password} onChange={(e) => setPassword(e.target.value)} className="border rounded p-2 mb-4 w-full" placeholder="Nueva contraseña" />
+            <input type="password" value={Password} onChange={(e) => setPassword(e.target.value)} className="border rounded-[40px] px-4 py-2 mb-4 w-full" placeholder="Nueva contraseña" />
 
             <label className="block mb-2">Notificaciones</label>
             <div className="mb-4">
@@ -70,7 +71,8 @@ export default function ConfigModal({ onClose, user }) {
       case 'perfil':
         return (
           <div>
-            <h3 className="mb-2 font-semibold">Información del perfil</h3>
+            <h3 className="mb-2 text-[#252525]">Información del perfil</h3>
+            <div className='border-t border-gray-200 w-[100%] my-4 m-auto'/>
             <label className="block mb-2">Nombre</label>
             <input type="text" className="border rounded p-2 mb-4 w-full" value={user.user_name} readOnly />
 
@@ -93,18 +95,22 @@ export default function ConfigModal({ onClose, user }) {
               className="mb-4"
               onChange={handleImageChange}
             />
-                 {/* Logout Button */}
-      <div className="px-6 flex justify-center mb-6">
-        <Link to="/logout" className="flex items-center text-red-400 hover:underline">
-          <span>Cerrar Sesión</span>
-        </Link>
-      </div>
+            
+
+            <div className='border-t border-gray-200 w-[100%] my-4 m-auto'/>
+
+            <div className="mb-6 w-[25%]">
+              <Link to="/logout" className=" text-center flex text-white px-5 py-2 bg-[#ca1c1c] rounded-[40px] hover:bg-[#a81616]">
+                <span >Cerrar Sesión</span>
+              </Link>
+            </div>
           </div>
         );
       case 'idioma':
         return (
           <div>
-            <h3 className="mb-2 font-semibold">Idioma y región</h3>
+            <h3 className="mb-2 text-[#252525]">Idioma y región</h3>
+            <div className='border-t border-gray-200 w-[100%] my-4 m-auto'/>
             <label className="block mb-2">Idioma preferido</label>
             <select className="border rounded p-2 mb-4 w-full">
               <option>Español</option>
@@ -123,7 +129,8 @@ export default function ConfigModal({ onClose, user }) {
       case 'tema':
         return (
           <div>
-            <h3 className="mb-2 font-semibold">Tema visual</h3>
+            <h3 className="mb-2 text-[#252525]">Tema visual</h3>
+            <div className='border-t border-gray-200 w-[100%] my-4 m-auto'/>
             <label className="block mb-2">Selecciona un tema</label>
             <select className="border rounded p-2 mb-4 w-full">
               <option>Claro</option>
@@ -142,7 +149,7 @@ export default function ConfigModal({ onClose, user }) {
   return ReactDOM.createPortal(
     <>
       <div className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[1000]`}>
-        <div className={`relative bg-[#f5f5f5] flex flex-col rounded-40 shadow-lg max-w-3xl md:w-full`}>
+        <div className={`relative bg-[#fff] flex flex-col rounded-40 shadow-lg max-w-3xl md:w-full`}>
           <div
             onClick={onClose}
             className="absolute top-4 right-4 w-4 h-4 bg-[#ca1c1c] rounded-full flex items-center justify-center cursor-pointer"
@@ -150,18 +157,15 @@ export default function ConfigModal({ onClose, user }) {
           </div>
 
           {/* Sidebar */}
-          <div className={`w-full md:flex md:w-auto md:border-r md:bg-gray-300`}>
+          <div className={`w-full md:flex md:w-auto md:border-r md:bg-white`}>
             <div className={`md:w-[25%] p-6 border-b md:border-b-none md:border-r`}>
-              {/* Account Header */}
-              <h1 className='text-gray-500 mt-0 mb-2 font-semibold text-[16px]'>Cuenta</h1>
-
-              {/* Profile Image and Username */}
-              <div className="flex items-center mb-6">
+              
+              <div className="flex items-center mb-6 px-3">
                 {user.user_photo ? 
                   (<img src={`http://localhost:3000/${user.user_photo}`} 
-                        className="w-7 h-7 rounded-full mr-4" alt="profile" />) : 
-                  (<FaUser className="w-7 h-7 rounded-full mr-4" />)}
-                <p className="text-base font-[20px]">{user.user_name} {user.user_lastname}</p>
+                        className="w-8 h-8 rounded-full mr-4" alt="profile" />) : 
+                  (<FaUser className="w-8 h-8 mr-4" />)}
+                <p className="text-base text-[#333] font-[20px]">{user.user_name} {user.user_lastname}</p>
               </div>
 
               {/* Sidebar Options */}
@@ -169,12 +173,12 @@ export default function ConfigModal({ onClose, user }) {
                 {['configuracion', 'perfil', 'idioma', 'tema'].map(tab => (
                   <li key={tab}
                     onClick={() => setActiveTab(tab)}
-                    className={`flex items-center space-x-2 cursor-pointer text-gray-700 hover:bg-gray-300 hover:rounded-lg w-full h-[40px] pl-[10px] ${activeTab === tab ? 'text-blue-600' : ''} transition-all`}>
+                    className={`flex items-center space-x-2 cursor-pointer text-gray-900 hover:bg-[#f5f5f5] hover:rounded-[15px] w-full h-[40px] px-3 pr-3 ${activeTab === tab ? 'text-blue-600' : ''} transition-all`}>
                     {tab === 'configuracion' && (<FaCog />)}
                     {tab === 'perfil' && (<FaUser />)}
                     {tab === 'idioma' && (<FaGlobe />)}
                     {tab === 'tema' && (<FaPalette />)}
-                    <span>{tab.charAt(0).toUpperCase() + tab.slice(1)}</span> {/* Capitalize first letter */}
+                    <span>{tab.charAt(0).toUpperCase() + tab.slice(1)}</span>
                   </li>
                 ))}
               </ul>
@@ -182,12 +186,10 @@ export default function ConfigModal({ onClose, user }) {
 
             {/* Main Content Area */}
             <div className={`w-full md:w-[75%] p-[20px]`}>
-              {/* Dynamic Content Header */}
-              <h2 className={`text-xl font-semibold mb-[10px]`}>
+              <h2 className={`text-xl mb-[10px] font-bold`}>
                 {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
               </h2>
 
-              {/* Render Dynamic Content */}
               {renderContent()}
               
             </div>
@@ -197,6 +199,6 @@ export default function ConfigModal({ onClose, user }) {
         </div>
       </div>
     </>,
-    document.body // Aquí es donde se renderiza el portal
+    document.body 
   );
 }
