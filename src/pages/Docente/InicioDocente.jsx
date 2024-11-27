@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FaPlus, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { FaPlus, FaChevronLeft, FaChevronRight,FaClipboard } from 'react-icons/fa';
 import Alerts from 'sweetalert2';
 import SidebarProfesor from '../../components/Sidebars/SidebarProfesor';
 import axios from 'axios';
@@ -108,6 +108,23 @@ const InicioDocente = () => {
   const handleCloseForm = () => {
     setFormVisible(false);
   };
+  const handleCopy = (classToken) => {
+    navigator.clipboard.writeText(classToken)
+      .then(() => {
+        Alerts.fire({
+          title: '¡Copiado!',
+          text: `El código de clase ${classToken} ha sido copiado al portapapeles.`,
+          icon: 'success'
+        });
+      })
+      .catch((err) => {
+        Alerts.fire({
+          title: 'Error',
+          text: 'Hubo un problema al copiar el código.',
+          icon: 'error'
+        });
+      });
+  };
 
   return (
     <div className="flex min-h-screen max-lg:h-[50vh] text-[#37352f]">
@@ -166,7 +183,13 @@ const InicioDocente = () => {
                       </div>
                       <div className='border-t border-gray-200 w-[90%] m-auto'/>
                       <div>
-                        <p className="text-m text-[#222] px-4 py-3 truncate">{clase.class_token}</p>
+                        <p className="text-m text-[#222] px-4 py-3 truncate flex items-center justify-between">
+                          {clase.class_token}
+                          <FaClipboard 
+                            onClick={() => handleCopy(clase.class_token)} 
+                            className="cursor-pointer text-blue-500 ml-2"
+                          />
+                        </p> 
                       </div>
                     </div>
                   </div>

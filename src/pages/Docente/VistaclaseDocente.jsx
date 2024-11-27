@@ -35,6 +35,24 @@ const Vistaclase = () => {
     })
     .catch((err)=>Alerts("Error","No hay tareas","error"))
   }
+  const handleCopy = (classToken) => {
+    navigator.clipboard.writeText(classToken)
+      .then(() => {
+        Alerts.fire({
+          title: '¡Copiado!',
+          text: `El código de clase ${classToken} ha sido copiado al portapapeles.`,
+          icon: 'success'
+        });
+      })
+      .catch((err) => {
+        Alerts.fire({
+          title: 'Error',
+          text: 'Hubo un problema al copiar el código.',
+          icon: 'error'
+        });
+      });
+  };
+
   return (
     <div className="flex h-screen bg-gray-100 -z-0">
       {/* Sidebar */}
