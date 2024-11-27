@@ -104,7 +104,7 @@ function AgregarClase({id_class}) {
                   </div>
                 </div>
   
-                <div className="flex justify-between space-x-3">
+                <div className="flex flex-col">
                   <input
                     type='submit'
                     value={"Crear Tarea"}
@@ -113,7 +113,7 @@ function AgregarClase({id_class}) {
                   />
                   <button
                     onClick={handleCloseTask}
-                    className="w-full px-6 py-3 text-sm font-medium text-white bg-red-500 border border-transparent rounded-[30px] hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                    className="w-full px-6 py-3 text-sm font-medium text-red-700 border border-transparent focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                   >
                     Cerrar
                   </button>
