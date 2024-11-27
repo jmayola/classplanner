@@ -141,23 +141,16 @@ export default function ConfigModal({ onClose, user }) {
 
   return ReactDOM.createPortal(
     <>
-      {/* Overlay for the modal */}
       <div className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[1000]`}>
-        {/* Modal Container */}
-        <div className={`relative bg-white flex flex-col rounded-lg shadow-lg w-full max-w-lg md:w-full`}>
-          
-          {/* Close Button */}
+        <div className={`relative bg-[#f5f5f5] flex flex-col rounded-40 shadow-lg max-w-3xl md:w-full`}>
           <div
             onClick={onClose}
-            className="absolute top-4 right-4 w-6 h-6 bg-[#ca1c1c] rounded-full flex items-center justify-center cursor-pointer"
+            className="absolute top-4 right-4 w-4 h-4 bg-[#ca1c1c] rounded-full flex items-center justify-center cursor-pointer"
           >
-            <FaTimes color='#fff' size={12} />
           </div>
 
-          {/* Sidebar for configuration */}
-          <div className={`w-full md:flex md:w-auto md:border-r md:bg-gray-100`}>
-            {/* Sidebar content */}
-            {/** Sidebar Header */}
+          {/* Sidebar */}
+          <div className={`w-full md:flex md:w-auto md:border-r md:bg-gray-300`}>
             <div className={`md:w-[25%] p-6 border-b md:border-b-none md:border-r`}>
               {/* Account Header */}
               <h1 className='text-gray-500 mt-0 mb-2 font-semibold text-[16px]'>Cuenta</h1>
@@ -166,9 +159,9 @@ export default function ConfigModal({ onClose, user }) {
               <div className="flex items-center mb-6">
                 {user.user_photo ? 
                   (<img src={`http://localhost:3000/${user.user_photo}`} 
-                        className="w-8 h-8 rounded-full mr-4" alt="profile" />) : 
-                  (<FaUser className="w-8 h-8 rounded-full mr-4" />)}
-                <p className="text-base">{user.user_name} {user.user_lastname}</p>
+                        className="w-7 h-7 rounded-full mr-4" alt="profile" />) : 
+                  (<FaUser className="w-7 h-7 rounded-full mr-4" />)}
+                <p className="text-base font-[20px]">{user.user_name} {user.user_lastname}</p>
               </div>
 
               {/* Sidebar Options */}

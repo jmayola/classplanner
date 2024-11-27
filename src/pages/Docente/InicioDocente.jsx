@@ -150,7 +150,7 @@ const InicioDocente = () => {
                   <div className='justify-around mx-2'>
                     <div
                       key={index}
-                      className="relative border-b-2 shadow-md rounded-lg overflow-hidden hover:shadow-2xl transition-shadow duration-200 w-[130px]"
+                      className="relative border-b-2 shadow-md rounded-lg overflow-hidden hover:shadow-2xl transition-shadow duration-200 w-[200px] h-[200px]"
                     >
                       <div
                         className="h-32"
@@ -163,6 +163,10 @@ const InicioDocente = () => {
                           {clase.class_name}
                         </h2>
                         <p className="text-sm text-gray-600 truncate">{clase.class_curso}</p>
+                      </div>
+                      <div className='border-t border-gray-200 w-[90%] m-auto'/>
+                      <div>
+                        <p className="text-m text-[#222] px-4 py-3 truncate">{clase.class_token}</p>
                       </div>
                     </div>
                   </div>

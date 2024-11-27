@@ -47,7 +47,7 @@ const SidebarDocente = () => {
             </div>
             
             <div>
-              <p className="text-gray-900 font-semibold">{userData.user_name} {userData.user_lastname}</p>
+              <p className="text-[#333] font-semibold">{userData.user_name} {userData.user_lastname}</p>
             </div>
 
           <button
@@ -74,7 +74,7 @@ const SidebarDocente = () => {
 
           <div>
             <h3 className="text-[14px] text-gray-500 mt-6">Clases en las que estoy inscripto</h3>
-            <div className="overflow-y-auto max-h-40">
+            <div className="overflow-y-auto max-h-40 mb-10">
               {classes && classes.map((clase, index) => (
                 <Link key={index} to={`/vistaclasedocente?clase=${clase.class_name}`} state={{ classes: clase, user: userData, id: clase.class_token }} className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
                   <FaBook className="text-gray-600" />
@@ -82,13 +82,6 @@ const SidebarDocente = () => {
                 </Link>
               ))}
             </div>
-          </div>
-
-          <div className="mt-6">
-            <Link to="/calendario" className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
-              <FaCalendarAlt className="text-gray-600" />
-              <span>Calendario</span>
-            </Link>
           </div>
         </nav>
 

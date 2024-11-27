@@ -15,7 +15,7 @@ const ConfigScreen = () => {
   const handleTimezoneChange = (e) => setTimezone(e.target.value);
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex bg-[#f5f5f5]">
       {/* Sidebar Izquierda */}
       <aside className="w-1/4 bg-white p-6 border-r border-gray-200">
         <div className="mb-4">
