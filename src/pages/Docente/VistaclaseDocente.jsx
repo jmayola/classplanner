@@ -103,7 +103,7 @@ const Vistaclase = () => {
 
           {activeTab === 'Tareas' && (
             <div className="flex p-10">
-                <div className="w-[20%] h-[50%] p-5 bg-white shadow-md rounded-lg mr-10">
+                <div className="w-[20%] h-[120px] p-5 bg-white shadow-md rounded-lg mr-10">
                   <div className="text-sm sm:text-base md:text-lg flex flex-col items-start px-1">
                     <h2 className='font-bold'>Código de la clase</h2>
                     <div className='flex flex-row mt-3 items-center justify-between'>
@@ -128,12 +128,16 @@ const Vistaclase = () => {
                     ) : (
                       Tarea.map((tarea, index) => (
                         <Link to={"/vistatareadocente"} state={{classes:Class, user:userData, tarea:tarea}} key={index}>
-                          <div className="bg-white p-4 shadow-md rounded-lg flex items-center">
+                          <div className="bg-white p-4 shadow-md rounded-lg flex items-center hover:bg-[#fafafa]">
+                          {tarea.profesorImg ? (
                             <img 
-                              src={tarea.profesorImg || "https://via.placeholder.com/50"} 
-                              alt={tarea.profesorNombre} 
+                              src={tarea.profesorImg} 
+                              alt={tarea.profesorNombre || "Profesor"} 
                               className="w-12 h-12 rounded-full mr-4"
                             />
+                          ) : (
+                            <IoClipboardOutline size={40} color='#fff' className='mr-3 bg-blue-500 p-2 rounded-full'/>
+                          )}
                             <div>
                               <h3 className="text-[16px]">{tarea.title}</h3>
                               <p className="text-gray-600 text-[14px]">Fecha de entrega: {tarea.deliver_until}</p>

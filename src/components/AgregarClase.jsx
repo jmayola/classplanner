@@ -99,7 +99,7 @@ function AgregarClase({id_class}) {
                       value={Deliver}
                       min={new Date().toISOString().split("T")[0]} // Obtiene la fecha de hoy en formato YYYY-MM-DD
                       onChange={(e) => setDeliver(e.target.value)}
-                      className="block w-full px-4 py-3 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-[30px] focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm h-20"
+                      className="block w-full px-4 py-2 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-[30px] focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                     />
                   </div>
                 </div>
@@ -109,7 +109,7 @@ function AgregarClase({id_class}) {
                     type='submit'
                     value={"Crear Tarea"}
                     onSubmit={handleSubmit}
-                    className="w-full px-6 py-3 text-sm font-medium text-white bg-blue-500 border border-transparent rounded-[30px] hover:bg-[#006F7D] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    className="w-full px-6 py-3 text-sm font-medium text-white bg-blue-500 border border-transparent rounded-[30px] hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                   />
                   <button
                     onClick={handleCloseTask}

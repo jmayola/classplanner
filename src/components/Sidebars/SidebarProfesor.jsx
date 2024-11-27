@@ -33,10 +33,8 @@ const SidebarDocente = () => {
       </button>
 
       {/* Sidebar */}
-      <div className={`fixed inset-0 bg-[#F7F7FF] shadow-md z-50 transition-transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:relative md:w-64`}>
+      <div className={`fixed inset-0 bg-[#F7F7FF] shadow-md z-50 transition-transform h-screen ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:relative md:w-64`}>
         <div className="p-6">
-          {/* Close Button for Sidebar in Mobile View */}
-
           <div className="flex items-center space-x-4 w-screen flex-row">
             <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center">
               {userData.user_photo ? (
@@ -89,29 +87,27 @@ const SidebarDocente = () => {
           <ConfigModal onClose={toggleConfig} user={user} />
         )}
 
-        {/* Cerrar sesión */}
-        <footer className="p-4 border-t border-gray-300">
-          <Link to="/logout" className="flex items-center text-red-400 hover:underline">
-            <span>Cerrar Sesión</span>
-          </Link>
+        <footer className="fixed bottom-0 left-0 right-0">
+          <div className="border-t border-gray-300 my-4"></div>
+          <div className="px-10 flex justify-center mb-6">
+            <img
+              src="/ClassPlanner10.png"
+              alt="Class Planner Logo"
+              className="w-32 h-auto"
+            />
+          </div>
         </footer>
       </div>
 
-      {/* Overlay when sidebar is open on mobile */}
       {isSidebarOpen && (
         <>
-          {/* Overlay for mobile view */}
           <div
             onClick={toggleSidebar}
             className="fixed inset-0 bg-black opacity-50 z-40"
           />
-          
-          {/* Full-screen sidebar for larger screens */}
           <div 
             className={`fixed inset-y-0 left-[256px] w-full bg-[#F7F7FF] transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-x-[256px]' : 'translate-x-full'} md:hidden`}
           >
-            {/* Content of the sidebar can also be repeated here if needed */}
-            {/* You can include navigation links or any other components here */}
           </div>
         </>
       )}

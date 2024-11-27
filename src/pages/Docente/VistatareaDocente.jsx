@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import SidebarProfesor from "../../components/Sidebars/SidebarProfesor";
 import BannerClase from "../../components/BannerClase";
-import { FaUser, FaPaperPlane } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import Alerts from "../../../hooks/Alerts";
+import { IoCalendarNumberOutline, IoClipboardOutline, IoChatbubbleOutline, IoPaperPlane, IoPerson } from "react-icons/io5";
 function VistatareaDocente() {
   const { classes, user, tarea } = useLocation().state;
   const [userData, setUserData] = useState({
@@ -169,56 +169,41 @@ function VistatareaDocente() {
                   : ""
               }`}
             >
-              Trabajo de los estudiantes
+              Tareas asignadas
             </button>
           </div>
 
           {/* Content for each tab */}
           {activeTab === "instrucciones" ? (
-            <div>
-              <h2 className="text-xl font-semibold mb-4">Instrucciones</h2>
+             <div className="space-y-4">
+                <div>
+                  <h1 className="text-2xl font-semibold text-gray-800">{tarea.title}</h1>
+                  <div className="mt-4">
+                    <div className="flex items-center space-x-2">
+                      {/* Icono de calendario */}
+                      <IoCalendarNumberOutline size={24} color="#000" />
+                      <span className="text-m">{tarea.deliver_until}</span>
+                    </div>
+                    <div className="flex items-center space-x-2 mt-2">
+                      {/* Icono de clipboard */}
+                      <IoClipboardOutline size={24} color="#000" />
+                      <span className="text-m">10/10</span>
+                    </div>
+                  </div>
+                </div>
 
-              {/* Task Details */}
-              <div className="mb-6">
-                <p>
-                  <strong>Título de la tarea: </strong>
-                  {tarea.title}
-                </p>
-                <p>
-                  <strong>Descripcion de la tarea: </strong>
-                  {tarea.description}
-                </p>
-                <p>
-                  <strong>Vencimiento:</strong>
-                  {tarea.deliver_until}
-                </p>
-                <p>
-                  <strong>Puntos:</strong> 10
-                </p>
-              </div>
-
-              {/* Attached Files */}
-              {/* <div className="mb-6">
-                <h3 className="text-lg font-semibold">Archivos adjuntos</h3>
-                <ul className="list-disc list-inside">
-                  <li>
-                    <a href="/ruta/al/archivo1.pdf" className="text-blue-500">
-                      Guía de estudio.pdf
-                    </a>
-                  </li>
-                  <li>
-                    <a href="/ruta/al/archivo2.docx" className="text-blue-500">
-                      Formato de presentación.docx
-                    </a>
-                  </li>
-                </ul>
-              </div> */}
+                <div className='border-t border-gray-200 m-auto'/>
+              
 
               {/* Class Comments */}
               <div>
-                <h3 className="text-lg font-semibold mb-2 flex items-center gap-2">
-                  <FaUser className="text-gray-500" /> Comentario de la clase
-                </h3>
+                <div className="flex flex-row items-center">
+                <IoChatbubbleOutline color="#000" size={24} />
+                  <h3 className="ml-2 text-2xl font-semibold text-gray-800 gap-2">
+                     Comentarios
+                  </h3>
+                </div>
+                
 
                 {/* Display Comments */}
                 <div className="mb-4 space-y-2">
@@ -236,7 +221,7 @@ function VistatareaDocente() {
                               alt="image_profile"
                             />
                           ) : (
-                            <FaUser className="text-gray-600 text-2xl" />
+                            <IoPerson className="text-gray-600 text-2xl" />
                           )}
                         </div>
                         <div>
@@ -268,7 +253,7 @@ function VistatareaDocente() {
                     onClick={handleCommentSubmit}
                     className="text-blue-400 hover:text-blue-600 transition"
                   >
-                    <FaPaperPlane size={20} />
+                    <IoPaperPlane size={20} />
                   </button>
                 </div>
               </div>
