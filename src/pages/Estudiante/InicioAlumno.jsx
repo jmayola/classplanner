@@ -26,25 +26,11 @@ const InicioAlumno = () => {
         setUserData(user);
       } catch (error) {
         setLoading(false);
-        handleAxiosError(error, "No se pudieron cargar las clases.");
       }
     };
 
     fetchData();
   }, [user, classes, fetchClasses]);
-
-  const handleAxiosError = (error, customMessage) => {
-    let message = customMessage;
-    if (error.response) {
-      message += ` - Código: ${error.response.status}. ${error.response.data.message || ''}`;
-    } else if (error.request) {
-      message = 'No se recibió respuesta del servidor. Intente más tarde.';
-    } else {
-      message = `Error inesperado: ${error.message}`;
-    }
-    setError(message);
-    Alerts.fire({ title: <p>Error</p>, text: message, icon: 'error' });
-  };
 
   const handleNext = () => {
     setCurrentIndex((prevIndex) =>
@@ -94,8 +80,6 @@ const InicioAlumno = () => {
           {/* Mostrar mensaje de carga o error */}
           {loading ? (
             <p>Cargando clases...</p>
-          ) : error ? (
-            <p className="text-red-500">{error}</p>
           ) : classes.length === 0 ? (
             <p>No estas inscrito/a en ninguna clase</p>
           ) : (

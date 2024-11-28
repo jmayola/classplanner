@@ -65,46 +65,55 @@ const InicioDocente = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+  
     const uniqueCode = generateUniqueCode();
-    const data = {
+    const newClass = {
       class_name: className,
       class_curso: classCourse,
       class_color: Color,
       class_token: uniqueCode,
     };
-    
-    await axios
-      .post("http://localhost:3000/classes", data, { withCredentials: true })
-      .then((res) =>
-        res.status === 202
-          ? Alerts.fire({
-              title: 'Clase agregada',
-              text: `Código de clase: ${uniqueCode}`,
-              icon: 'success',
-              showCancelButton: true,
-              confirmButtonText: 'Copiar código',
-              cancelButtonText: 'Cerrar',
-            }).then((result) => {
-              if (result.isConfirmed) {
-                navigator.clipboard.writeText(uniqueCode);
-                Alerts.fire('Copiado!', 'El código de clase ha sido copiado al portapapeles.', 'success');
-              }
-            })
-          : Alerts.fire({
-              title: 'Error',
-              text: `No se pudo crear la clase`,
-              icon: 'error',
-            })
-      );
-
-    setClassName('');
-    setClassCourse('');
-    setColor('#ffffff');
-    setClassDate('');
-    setFormVisible(false);
+  
+    try {
+      const response = await axios.post("http://localhost:3000/classes", newClass, { withCredentials: true });
+  
+      if (response.status === 202) {
+        Alerts.fire({
+          title: 'Clase agregada',
+          text: `Código de clase: ${uniqueCode}`,
+          icon: 'success',
+          showCancelButton: true,
+          confirmButtonText: 'Copiar código',
+          cancelButtonText: 'Cerrar',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            navigator.clipboard.writeText(uniqueCode);
+            Alerts.fire('Copiado!', 'El código de clase ha sido copiado al portapapeles.', 'success');
+          }
+        });
+  
+        setClasses((prevClasses) => [...prevClasses, newClass]);
+  
+        setClassName('');
+        setClassCourse('');
+        setColor('#ffffff');
+        setFormVisible(false);
+      } else {
+        Alerts.fire({
+          title: 'Error',
+          text: `No se pudo crear la clase`,
+          icon: 'error',
+        });
+      }
+    } catch (err) {
+      Alerts.fire({
+        title: 'Error',
+        text: `Ocurrió un error al crear la clase`,
+        icon: 'error',
+      });
+    }
   };
-
+  
   const handleCloseForm = () => {
     setFormVisible(false);
   };
