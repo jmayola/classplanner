@@ -44,6 +44,7 @@ const VistaclaseDocente = () => {
         const data = res.data.filter((val) => val.id_class === classes.id_class);
         setTarea(data);
         setLoading(false); 
+
       })
       .catch((error) => {
         setLoading(false); 
@@ -60,7 +61,7 @@ const VistaclaseDocente = () => {
         console.error("Error al obtener los calendarios:", error);
       });
   };
-
+  
   const handleCopy = (classToken) => {
     navigator.clipboard.writeText(classToken)
       .then(() => {
@@ -298,7 +299,7 @@ const VistaclaseDocente = () => {
               </div>
             )}
           </div>
-          <AgregarClase id_class={Class.id_class} />
+          <AgregarClase id_class={classes.id_class} setTarea={setTarea} />
         </div>
       )}
     </>

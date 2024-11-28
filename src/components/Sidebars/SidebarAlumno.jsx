@@ -20,7 +20,7 @@ const SidebarAlumno = () => {
   };
 
   return (
-    <div className="w-64 bg-[#F7F7FF] shadow-md flex flex-col justify-between h-screen">
+    <div className="w-64 bg-[#F7F7FF] shadow-md flex flex-col justify-between min-h-screen">
       <div className="flex flex-col flex-grow">
         {/* User Info Section */}
         <div className="p-6">

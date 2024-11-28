@@ -65,7 +65,6 @@ const InicioDocente = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
     const uniqueCode = generateUniqueCode();
     const newClass = {
       class_name: className,
@@ -93,7 +92,7 @@ const InicioDocente = () => {
         });
   
         setClasses((prevClasses) => [...prevClasses, newClass]);
-  
+        
         setClassName('');
         setClassCourse('');
         setColor('#ffffff');
@@ -113,6 +112,7 @@ const InicioDocente = () => {
       });
     }
   };
+  
   
   const handleCloseForm = () => {
     setFormVisible(false);

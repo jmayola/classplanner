@@ -10,7 +10,7 @@ const SidebarDocente = () => {
   const [userData, setUserData] = useState(user);
   const [Classes, setClasses] = useState(classes);
   const [isConfigOpen, setIsConfigOpen] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // State to manage sidebar visibility
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); 
 
   useEffect(() => {
     setUserData(user);
@@ -22,7 +22,7 @@ const SidebarDocente = () => {
   };
 
   const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen); // Toggle sidebar visibility
+    setIsSidebarOpen(!isSidebarOpen); 
   };
 
   return (

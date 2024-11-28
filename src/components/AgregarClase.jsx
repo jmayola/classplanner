@@ -14,37 +14,47 @@ function AgregarClase({id_class}) {
     setIsFormVisible(false)
   }
   
-  const handleSubmit = (e) =>{
+  const handleSubmit = (e) => {
     e.preventDefault();
     let data = {
       id_class: id_class,
       title: Title,
       description: Desc,
       deliver_until: Deliver
-    }
-    axios.post("http://localhost:3000/tasks",data, {withCredentials:true})
-    .then((res) =>
-      res.status === 200 || res.status === 202
-        ? Alerts.fire({
-            title: 'Tarea agrega',
+    };
+  
+    axios.post("http://localhost:3000/tasks", data, { withCredentials: true })
+      .then((res) => {
+        if (res.status === 200 || res.status === 202) {
+          setTarea(prevTareas => [...prevTareas, res.data]);  // Asegúrate de que `res.data` tiene los datos correctos
+          getTareas(); 
+          Alerts.fire({
+            title: 'Tarea agregada',
             icon: 'success',
-          })
-        : Alerts.fire({
+          });
+        } else {
+          Alerts.fire({
             title: 'Error',
-            text: `No se pudo crear la clase`,
+            text: `No se pudo crear la tarea`,
             icon: 'error',
-          })
-    ).catch((err)=>{
-      Alerts.fire({
-        title: 'Error',
-        text: `No se pudo crear la tarea`,
-        icon: 'error',
+          });
+        }
       })
-    })
-    setDesc("")
-    setTitle("")
-    setDeliver("")
-  }
+      .catch((err) => {
+        Alerts.fire({
+          title: 'Error',
+          text: `No se pudo crear la tarea`,
+          icon: 'error',
+        });
+      });
+  
+    // Limpiar los campos
+    setDesc("");
+    setTitle("");
+    setDeliver("");
+  };
+  
+  
   return (
     <div>
         <button
@@ -97,7 +107,7 @@ function AgregarClase({id_class}) {
                       type="date"
                       id="date"
                       value={Deliver}
-                      min={new Date().toISOString().split("T")[0]} // Obtiene la fecha de hoy en formato YYYY-MM-DD
+                      min={new Date().toISOString().split("T")[0]} 
                       onChange={(e) => setDeliver(e.target.value)}
                       className="block w-full px-4 py-2 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-[30px] focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                     />
