@@ -30,6 +30,7 @@ const VistaclaseDocente = () => {
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
+  console.log("Tareas:", Tarea);
 
   useEffect(() => {
     setUserData(user);
@@ -41,16 +42,17 @@ const VistaclaseDocente = () => {
   const getTareas = () => {
     axios.get("http://localhost:3000/tasks", { withCredentials: true })
       .then((res) => {
+        console.log("esto es res.data: " ,res.data);  
         const data = res.data.filter((val) => val.id_class === classes.id_class);
         setTarea(data);
-        setLoading(false); 
-
+        setLoading(false);
       })
       .catch((error) => {
         setLoading(false); 
         console.error("Error al obtener las tareas", error);
       });
   };
+  
 
   const getCalendar = () => {  
     axios.get(`http://localhost:3000/calendar`, { withCredentials: true })
@@ -299,7 +301,7 @@ const VistaclaseDocente = () => {
               </div>
             )}
           </div>
-          <AgregarClase id_class={classes.id_class} setTarea={setTarea} />
+          <AgregarClase id_class={classes.id_class} setTarea={setTarea} />  
         </div>
       )}
     </>
