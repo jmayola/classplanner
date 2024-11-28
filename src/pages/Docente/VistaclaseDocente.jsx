@@ -8,10 +8,12 @@ import { Link, useLocation } from 'react-router-dom';
 import SidebarDocente from '../../components/Sidebars/SidebarProfesor';
 import BannerClase from '../../components/BannerClase';
 import LoadingScreen from '../../components/LoadingScreen'; 
+import Calendar from 'react-calendar'; 
+import 'react-calendar/dist/Calendar.css'; 
 
 const Alerts = withReactContent(Swal);
 
-const Vistaclase = () => {
+const VistaclaseDocente = () => {
   let { classes, user, id } = useLocation().state;
   const [activeTab, setActiveTab] = useState('Tareas');
   const [data, setData] = useState(null);
@@ -20,6 +22,7 @@ const Vistaclase = () => {
   const [Tarea, setTarea] = useState([]);
   const [loading, setLoading] = useState(true); 
   const [CalendarData, setCalendar] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(new Date()); 
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -52,9 +55,6 @@ const Vistaclase = () => {
       })
       .catch((error) => {
         console.error("Error al obtener los calendarios:", error);
-
-      })
-      .finally(() => {
       });
   };
 
@@ -74,6 +74,18 @@ const Vistaclase = () => {
           icon: 'error'
         });
       });
+  };
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+  };
+
+  const renderCalendarEvents = (date) => {
+    const filteredEvents = CalendarData.filter((evento) => {
+      const eventDate = new Date(evento.deliver_until);
+      return eventDate.toLocaleDateString() === date.toLocaleDateString();
+    });
+    return filteredEvents;
   };
 
   return (
@@ -219,7 +231,7 @@ const Vistaclase = () => {
             )}
             {activeTab === 'Calendario' && (
               <div className="flex p-10">
-                <div className="w-[20%] h-[120px] p-5 bg-white shadow-md rounded-lg mr-10">
+                <div className="w-[30%] h-[120px] p-5 bg-white shadow-md rounded-lg mr-10">
                   <div className="text-sm sm:text-base md:text-lg flex flex-col items-start px-1">
                     <h2 className='font-bold'>Código de la clase</h2>
                     <div className='flex flex-row mt-3 items-center justify-between'>
@@ -232,10 +244,30 @@ const Vistaclase = () => {
                     </div>
                   </div>
                 </div>
-                
-                <div className='w-[80%]'>
+
+                <div className="w-[70%]">
                   <h2 className="text-3xl font-bold mb-6">Calendario</h2>
-                  <p>No hay eventos de calendario disponibles por el momento.</p>
+                  <div className="flex">
+                    <div className="w-[50%]">
+                      <Calendar 
+                        onChange={handleDateChange}
+                        value={selectedDate} 
+                      />
+                    </div>
+                    <div className="w-[50%] pl-6">
+                      <h3 className="text-2xl font-bold mb-4">Eventos en esta fecha</h3>
+                      {renderCalendarEvents(selectedDate).length === 0 ? (
+                        <p>No hay eventos en esta fecha.</p>
+                      ) : (
+                        renderCalendarEvents(selectedDate).map((evento, index) => (
+                          <div key={index} className="bg-white p-4 shadow-md rounded-lg mb-4">
+                            <h4 className="text-xl font-semibold">{evento.title}</h4>
+                            <p className="text-gray-600">{evento.description}</p>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
@@ -248,3 +280,5 @@ const Vistaclase = () => {
 };
 
 export default VistaclaseDocente;
+
+
