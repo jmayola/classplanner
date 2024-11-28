@@ -10,6 +10,7 @@ import BannerClase from '../../components/BannerClase';
 import LoadingScreen from '../../components/LoadingScreen'; 
 import Calendar from 'react-calendar'; 
 import 'react-calendar/dist/Calendar.css'; 
+import CopyNotification from '../../components/CopyNotification';
 
 const Alerts = withReactContent(Swal);
 
@@ -23,6 +24,8 @@ const VistaclaseDocente = () => {
   const [loading, setLoading] = useState(true); 
   const [CalendarData, setCalendar] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date()); 
+  const [copied, setCopied] = useState(false);
+  const [message, setMessage] = useState('');
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -61,20 +64,17 @@ const VistaclaseDocente = () => {
   const handleCopy = (classToken) => {
     navigator.clipboard.writeText(classToken)
       .then(() => {
-        Alerts.fire({
-          title: '¡Copiado!',
-          text: `El código de clase ${classToken} ha sido copiado al portapapeles.`,
-          icon: 'success'
-        });
+        setMessage(`Copiado`);
+        setCopied(true);
+        setTimeout(() => {
+          setCopied(false);  
+        }, 3000);
       })
       .catch((err) => {
-        Alerts.fire({
-          title: 'Error',
-          text: 'Hubo un problema al copiar el código.',
-          icon: 'error'
-        });
+        console.error('Error al copiar:', err);
       });
   };
+  
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
@@ -142,11 +142,14 @@ const VistaclaseDocente = () => {
                     <h2 className='font-bold'>Código de la clase</h2>
                     <div className='flex flex-row mt-3 items-center justify-between'>
                       <p className='text-[#118de3] font-bold'>{classes.class_token}</p>
-                      <IoCopyOutline 
-                        onClick={() => handleCopy(classes.class_token)} 
-                        color='#333'
-                        className='ml-10'
-                      />
+                      <div className="flex items-center space-x-2">
+                        <IoCopyOutline 
+                          onClick={() => handleCopy(classes.class_token)} 
+                          color={copied ? '#118de3' : '#333'} 
+                          className={`ml-10 ${copied ? 'animate-ping' : ''}`}  
+                        />
+                        {copied && <CopyNotification message={message} onClose={() => setCopied(false)} />}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -192,11 +195,14 @@ const VistaclaseDocente = () => {
                     <h2 className='font-bold'>Código de la clase</h2>
                     <div className='flex flex-row mt-3 items-center justify-between'>
                       <p className='text-[#118de3] font-bold'>{classes.class_token}</p>
-                      <IoCopyOutline 
-                        onClick={() => handleCopy(classes.class_token)} 
-                        color='#333'
-                        className='ml-10'
-                      />
+                      <div className="flex items-center space-x-2">
+                        <IoCopyOutline 
+                          onClick={() => handleCopy(classes.class_token)} 
+                          color={copied ? '#118de3' : '#333'} 
+                          className={`ml-10 ${copied ? 'animate-ping' : ''}`}  
+                        />
+                        {copied && <CopyNotification message={message} onClose={() => setCopied(false)} />}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -210,17 +216,20 @@ const VistaclaseDocente = () => {
             {activeTab === 'Anuncios' && (
               <div className="flex p-10">
                 <div className="w-[20%] h-[120px] p-5 bg-white shadow-md rounded-lg mr-10">
-                  <div className="text-sm sm:text-base md:text-lg flex flex-col items-start px-1">
-                    <h2 className='font-bold'>Código de la clase</h2>
-                    <div className='flex flex-row mt-3 items-center justify-between'>
-                      <p className='text-[#118de3] font-bold'>{classes.class_token}</p>
-                      <IoCopyOutline 
-                        onClick={() => handleCopy(classes.class_token)} 
-                        color='#333'
-                        className='ml-10'
-                      />
-                    </div>
-                  </div>
+                 <div className="text-sm sm:text-base md:text-lg flex flex-col items-start px-1">
+                   <h2 className='font-bold'>Código de la clase</h2>
+                   <div className='flex flex-row mt-3 items-center justify-between'>
+                     <p className='text-[#118de3] font-bold'>{classes.class_token}</p>
+                     <div className="flex items-center space-x-2">
+                       <IoCopyOutline 
+                         onClick={() => handleCopy(classes.class_token)} 
+                         color={copied ? '#118de3' : '#333'} 
+                         className={`ml-10 ${copied ? 'animate-ping' : ''}`}  
+                       />
+                       {copied && <CopyNotification message={message} onClose={() => setCopied(false)} />}
+                     </div>
+                   </div>
+                 </div>
                 </div>
                 
                 <div className='w-[80%]'>
@@ -231,16 +240,19 @@ const VistaclaseDocente = () => {
             )}
             {activeTab === 'Calendario' && (
               <div className="flex p-10">
-                <div className="w-[30%] h-[120px] p-5 bg-white shadow-md rounded-lg mr-10">
+                <div className="w-[20%] h-[120px] p-5 bg-white shadow-md rounded-lg mr-10">
                   <div className="text-sm sm:text-base md:text-lg flex flex-col items-start px-1">
                     <h2 className='font-bold'>Código de la clase</h2>
                     <div className='flex flex-row mt-3 items-center justify-between'>
                       <p className='text-[#118de3] font-bold'>{classes.class_token}</p>
-                      <IoCopyOutline 
-                        onClick={() => handleCopy(classes.class_token)} 
-                        color='#333'
-                        className='ml-10'
-                      />
+                      <div className="flex items-center space-x-2">
+                        <IoCopyOutline 
+                          onClick={() => handleCopy(classes.class_token)} 
+                          color={copied ? '#118de3' : '#333'} 
+                          className={`ml-10 ${copied ? 'animate-ping' : ''}`}  
+                        />
+                        {copied && <CopyNotification message={message} onClose={() => setCopied(false)} />}
+                      </div>
                     </div>
                   </div>
                 </div>

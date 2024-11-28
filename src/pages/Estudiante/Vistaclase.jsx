@@ -9,6 +9,7 @@ import BannerClase from '../../components/BannerClase';
 import Calendar from 'react-calendar'; 
 import 'react-calendar/dist/Calendar.css'; 
 import LoadingScreen from '../../components/LoadingScreen';
+import CopyNotification from '../../components/CopyNotification';
 
 const Alerts = withReactContent(Swal);
 
@@ -22,6 +23,8 @@ const Vistaclase = () => {
   const [CalendarData, setCalendar] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [loading, SetLoading] = useState(false); 
+  const [copied, setCopied] = useState(false);
+  const [message, setMessage] = useState('');
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -65,6 +68,22 @@ const Vistaclase = () => {
     setSelectedDate(date);
   };
 
+  
+  const handleCopy = (classToken) => {
+    navigator.clipboard.writeText(classToken)
+      .then(() => {
+        setMessage(`Copiado`);
+        setCopied(true);
+        setTimeout(() => {
+          setCopied(false);  
+        }, 3000);
+      })
+      .catch((err) => {
+        console.error('Error al copiar:', err);
+      });
+  };
+  
+
   const renderCalendarEvents = (date) => {
     const filteredEvents = CalendarData.filter((evento) => {
       const eventDate = new Date(evento.deliver_until);
@@ -75,8 +94,8 @@ const Vistaclase = () => {
 
   return (
     <div className="flex h-screen bg-gray-100 relative -z-0 ">
-      { classes && user && <Sidebar classes={classes} user={user} />}
-
+      {classes && user && <Sidebar classes={classes} user={user} />}
+  
       <div className="flex flex-col w-full">
         {Class && (
           <BannerClase
@@ -88,9 +107,9 @@ const Vistaclase = () => {
             userLastname={userData.user_lastname}
           />
         )}
+  
         {loading && <LoadingScreen />}
-
-        {/* Tabs */}
+  
         <div className="flex justify-center bg-white shadow-md">
           <button
             onClick={() => handleTabClick('Tareas')}
@@ -117,35 +136,38 @@ const Vistaclase = () => {
             <IoCalendarNumberOutline /> <span>Calendario</span>
           </button>
         </div>
-
-        {activeTab === 'Tareas' && (
-            <div className="flex p-10">
-                <div className="w-[20%] h-[120px] p-5 bg-white shadow-md rounded-lg mr-10">
-                  <div className="text-sm sm:text-base md:text-lg flex flex-col items-start px-1">
-                    <h2 className='font-bold'>Código de la clase</h2>
-                    <div className='flex flex-row mt-3 items-center justify-between'>
-                      <p className='text-[#118de3] font-bold'>{classes.class_token}</p>
+  
+        <div className="overflow-y-auto p-10">
+          {activeTab === 'Tareas' && (
+            <div className="flex">
+              <div className="w-[20%] h-[120px] p-5 bg-white shadow-md rounded-lg mr-10">
+                <div className="text-sm sm:text-base md:text-lg flex flex-col items-start px-1">
+                  <h2 className='font-bold'>Código de la clase</h2>
+                  <div className='flex flex-row mt-3 items-center justify-between'>
+                    <p className='text-[#118de3] font-bold'>{classes.class_token}</p>
+                    <div className="flex items-center space-x-2">
                       <IoCopyOutline 
                         onClick={() => handleCopy(classes.class_token)} 
-                        color='#333'
-                        className='ml-10'
+                        color={copied ? '#118de3' : '#333'} 
+                        className={`ml-10 ${copied ? 'animate-ping' : ''}`}  
                       />
+                      {copied && <CopyNotification message={message} onClose={() => setCopied(false)} />}
                     </div>
                   </div>
                 </div>
-              
-                <div className="w-[80%]">
-                  <h2 className="text-3xl font-bold mb-6">Tareas</h2>
-                  <div className="grid grid-cols-1 gap-4">
-                    {Tarea.length === 0 ? (
-                      <div className="flex flex-col justify-center items-center py-10">
-                        <IoClipboardOutline className="text-6xl text-gray-400" />
-                        <p className="text-xl mt-4 text-gray-600">No hay tareas disponibles</p>
-                      </div>
-                    ) : (
-                      Tarea.map((tarea, index) => (
-                        <Link to={"/vistatarea"} state={{classes:Class, user:userData, tarea:tarea}} key={index}>
-                          <div className="bg-white p-4 shadow-md rounded-lg flex items-center hover:bg-[#fafafa]">
+              </div>
+              <div className="w-[80%]">
+                <h2 className="text-3xl font-bold mb-6">Tareas</h2>
+                <div className="grid grid-cols-1 gap-4">
+                  {Tarea.length === 0 ? (
+                    <div className="flex flex-col justify-center items-center py-10">
+                      <IoClipboardOutline className="text-6xl text-gray-400" />
+                      <p className="text-xl mt-4 text-gray-600">No hay tareas disponibles</p>
+                    </div>
+                  ) : (
+                    Tarea.map((tarea, index) => (
+                      <Link to={"/vistatarea"} state={{classes:Class, user:userData, tarea:tarea}} key={index}>
+                        <div className="bg-white p-4 shadow-md rounded-lg flex items-center hover:bg-[#fafafa]">
                           {tarea.profesorImg ? (
                             <img 
                               src={tarea.profesorImg} 
@@ -155,65 +177,71 @@ const Vistaclase = () => {
                           ) : (
                             <IoClipboardOutline size={40} color='#fff' className='mr-3 bg-blue-500 p-2 rounded-full'/>
                           )}
-                            <div>
-                              <h3 className="text-[16px]">{tarea.title}</h3>
-                              <p className="text-gray-600 text-[14px]">Fecha de entrega: {tarea.deliver_until}</p>
-                            </div>
+                          <div>
+                            <h3 className="text-[16px]">{tarea.title}</h3>
+                            <p className="text-gray-600 text-[14px]">Fecha de entrega: {tarea.deliver_until}</p>
                           </div>
-                        </Link>
-                      ))
-                    )}
+                        </div>
+                      </Link>
+                    ))
+                  )}
                 </div>
               </div>
             </div>
           )}
           {activeTab === 'Materiales' && (
-              <div className='flex p-10'>
-              <div className="w-[20%] h-[50%] p-5  bg-white shadow-md rounded-lg mr-10">
+            <div className='flex p-10'>
+              <div className="w-[20%] h-[120px] p-5 bg-white shadow-md rounded-lg mr-10">
                 <div className="text-sm sm:text-base md:text-lg flex flex-col items-start px-1">
                   <h2 className='font-bold'>Código de la clase</h2>
                   <div className='flex flex-row mt-3 items-center justify-between'>
                     <p className='text-[#118de3] font-bold'>{classes.class_token}</p>
-                    <IoCopyOutline 
-                      onClick={() => handleCopy(classes.class_token)} 
-                      color='#333'
-                      className='ml-10'
-                    />
+                    <div className="flex items-center space-x-2">
+                      <IoCopyOutline 
+                        onClick={() => handleCopy(classes.class_token)} 
+                        color={copied ? '#118de3' : '#333'} 
+                        className={`ml-10 ${copied ? 'animate-ping' : ''}`}  
+                      />
+                      {copied && <CopyNotification message={message} onClose={() => setCopied(false)} />}
+                    </div>
                   </div>
                 </div>
               </div>
               <div className='w-[80%]'>
-                  <h2 className="text-3xl font-bold mb-6">Materiales</h2>
-                  {data && data.materiales.length > 0 ? (
-                    <ul className="list-disc list-inside">
-                      {data.materiales.map((material, index) => (
-                        <li key={index}>
-                          {material.nombre}: 
-                          <a href={material.link} className="text-blue-500 hover:underline">Descargar</a>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <div className="flex flex-col justify-center items-center py-10">
-                      <IoBookOutline className="text-6xl text-gray-400" />
-                      <p className="text-xl mt-4 text-gray-600">No hay materiales disponibles</p>
-                    </div>
-                  )}
+                <h2 className="text-3xl font-bold mb-6">Materiales</h2>
+                {data && data.materiales.length > 0 ? (
+                  <ul className="list-disc list-inside">
+                    {data.materiales.map((material, index) => (
+                      <li key={index}>
+                        {material.nombre}: 
+                        <a href={material.link} className="text-blue-500 hover:underline">Descargar</a>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <div className="flex flex-col justify-center items-center py-10">
+                    <IoBookOutline className="text-6xl text-gray-400" />
+                    <p className="text-xl mt-4 text-gray-600">No hay materiales disponibles</p>
+                  </div>
+                )}
               </div>
             </div>
           )}
           {activeTab === 'Anuncios' && (
             <div className='flex p-10'>
-              <div className="w-[20%] h-[50%] p-5 bg-white shadow-md rounded-lg mr-10">
+              <div className="w-[20%] h-[120px] p-5 bg-white shadow-md rounded-lg mr-10">
                 <div className="text-sm sm:text-base md:text-lg flex flex-col items-start px-1">
                   <h2 className='font-bold'>Código de la clase</h2>
                   <div className='flex flex-row mt-3 items-center justify-between'>
                     <p className='text-[#118de3] font-bold'>{classes.class_token}</p>
-                    <IoCopyOutline 
-                      onClick={() => handleCopy(classes.class_token)} 
-                      color='#333'
-                      className='ml-10'
-                    />
+                    <div className="flex items-center space-x-2">
+                      <IoCopyOutline 
+                        onClick={() => handleCopy(classes.class_token)} 
+                        color={copied ? '#118de3' : '#333'} 
+                        className={`ml-10 ${copied ? 'animate-ping' : ''}`}  
+                      />
+                      {copied && <CopyNotification message={message} onClose={() => setCopied(false)} />}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -234,68 +262,87 @@ const Vistaclase = () => {
                   </div>
                 ) : (
                   <div className="flex flex-col justify-center items-center py-10">
-                    <IoMegaphoneOutline/>
+                    <IoMegaphoneOutline />
                     <p className="text-xl mt-4 text-gray-600">No hay anuncios disponibles</p>
                   </div>
                 )}
               </div>
             </div>
           )}
-            {activeTab === 'Calendario' && (
-              <div className="flex p-10">
-                <div className="w-[30%] h-[120px] p-5 bg-white shadow-md rounded-lg mr-10">
-                  <div className="text-sm sm:text-base md:text-lg flex flex-col items-start px-1">
-                    <h2 className='font-bold'>Código de la clase</h2>
-                    <div className='flex flex-row mt-3 items-center justify-between'>
-                      <p className='text-[#118de3] font-bold'>{classes.class_token}</p>
+          {activeTab === 'Calendario' && (
+            <div className='flex p-10'>
+              <div className="w-[20%] h-[120px] p-5 bg-white shadow-md rounded-lg mr-10">
+                <div className="text-sm sm:text-base md:text-lg flex flex-col items-start px-1">
+                  <h2 className='font-bold'>Código de la clase</h2>
+                  <div className='flex flex-row mt-3 items-center justify-between'>
+                    <p className='text-[#118de3] font-bold'>{classes.class_token}</p>
+                    <div className="flex items-center space-x-2">
                       <IoCopyOutline 
                         onClick={() => handleCopy(classes.class_token)} 
-                        color='#333'
-                        className='ml-10'
+                        color={copied ? '#118de3' : '#333'} 
+                        className={`ml-10 ${copied ? 'animate-ping' : ''}`}  
                       />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="w-[70%]">
-                  <h2 className="text-3xl font-bold mb-6">Calendario</h2>
-                  <div className="flex">
-                    <div className="w-[50%] p-4 bg-white rounded-lg shadow-lg">
-                      <Calendar 
-                        onChange={handleDateChange}
-                        value={selectedDate} 
-                        tileClassName="calendar-tile"
-                        tileContent={({ date, view }) => {
-                          const events = renderCalendarEvents(date);
-                          return events.length > 0 ? (
-                            <div className="bg-blue-500 text-white text-xs p-1 rounded-full text-center">
-                              {events.length}
-                            </div>
-                          ) : null;
-                        }}
-                      />
-                    </div>            
-                    <div className="w-[50%] pl-6">
-                      <h3 className="text-2xl font-bold mb-4">Eventos en esta fecha</h3>
-                      {renderCalendarEvents(selectedDate).length === 0 ? (
-                        <p>No hay eventos en esta fecha.</p>
-                      ) : (
-                        renderCalendarEvents(selectedDate).map((evento, index) => (
-                          <div key={index} className="bg-white p-4 shadow-md rounded-lg mb-4 hover:bg-blue-100">
-                            <h4 className="text-xl font-semibold">{evento.title}</h4>
-                            <p className="text-gray-600">{evento.description}</p>
-                          </div>
-                        ))
-                      )}
+                      {copied && <CopyNotification message={message} onClose={() => setCopied(false)} />}
                     </div>
                   </div>
                 </div>
               </div>
-            )}
+          
+              <div className="w-[70%]">
+                <h2 className="text-3xl font-bold mb-6">Calendario</h2>
+                <div className="flex">
+                  <div className="w-[50%] p-4 bg-white rounded-lg shadow-lg">
+                    <Calendar 
+                      onChange={handleDateChange}
+                      value={selectedDate} 
+                      tileClassName="calendar-tile"
+                      tileContent={({ date, view }) => {
+                        const events = renderCalendarEvents(date);
+                        return events.length > 0 ? (
+                          <div className="bg-blue-500 text-white text-xs p-1 rounded-full text-center">
+                            {events.length}
+                          </div>
+                        ) : null;
+                      }}
+                    />
+                  </div>            
+                    
+                  <div className="w-[50%] pl-6">
+                    <h3 className="text-2xl font-bold mb-4">Eventos en esta fecha</h3>
+                    {renderCalendarEvents(selectedDate).length === 0 ? (
+                      <p>No hay eventos en esta fecha.</p>
+                    ) : (
+                      renderCalendarEvents(selectedDate).map((evento, index) => (
+                        <div key={index} className="bg-white p-4 shadow-md rounded-lg mb-4 hover:bg-blue-100">
+                          <h4 className="text-xl font-semibold">{evento.title}</h4>
+                          <p className="text-gray-600">{evento.description}</p>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
+              </div>
+                  
+              {data && data.calendario && renderCalendarEvents(selectedDate).length === 0 ? (
+                <div className="flex flex-col justify-center items-center py-10">
+                  <IoCalendarNumberOutline size={40} color="#118de3" />
+                  <p className="text-xl mt-4 text-gray-600">No hay eventos disponibles</p>
+                </div>
+              ) : (
+                data && data.calendario && (
+                  <div className="flex flex-col items-center justify-center py-10">
+                    <IoCalendarNumberOutline size={40} color="#118de3" />
+                    <p className="text-xl mt-4 text-gray-600">{data.calendario}</p>
+                  </div>
+                )
+              )}
+            </div>
+          )}
 
         </div>
       </div>
+    </div>
   );
-};
+}  
 
 export default Vistaclase;
