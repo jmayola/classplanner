@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import SidebarAlumno from '../../components/Sidebars/SidebarAlumno';
 import { Link } from 'react-router-dom';
 import { FaChevronLeft, FaChevronRight, FaPlus, FaTimes, FaRegFrown } from 'react-icons/fa'; 
+import { IoAdd, IoChevronBack, IoChevronForward, IoCopyOutline } from 'react-icons/io5';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import axios from 'axios';
@@ -81,40 +82,90 @@ const InicioAlumno = () => {
           Bienvenido, {user.user_name} {user.user_lastname}!
         </h1>
         <p className="mt-4 text-gray-600">
-          Aquí puedes acceder a tus clases, revisar tu progreso y mucho más.
+          Acá podes acceder a tus clases, revisar tu progreso y mucho más.
         </p>
 
         {/* Sección de Clases */}
-        <div className="mt-8">
-          <h2 className="text-2xl font-semibold text-gray-800">Clases</h2>
-          <div className="mt-4 space-y-4">
-            {loading ? (
-              <p><span className="animate-spin"></span> Cargando clases...</p>
-            ) : error ? (
-              <p className="text-red-500">{error}</p>
-            ) : classes.length === 0 ? (
-              <div className="flex items-center space-x-2 text-gray-500">
-                <FaRegFrown />
-                <p>No tienes clases asignadas</p>
-              </div>
-            ) : (
-              classes.map((clase, index) => (
-                <Link to={"/vistaclase"} state={{ classes: clase, user: userData, id: clase.class_token }} key={index}>
-                  <div className={`p-4 shadow-md rounded-lg border-b-2`} style={{ borderBlockColor: clase.class_color }}>
-                    <p className="text-lg text-gray-700">{clase.class_name}</p>
+        <div className="mt-8 w-full relative">
+          <h2 className="text-2xl font-semibold">Clases</h2>
+  
+          {/* Mostrar mensaje de carga o error */}
+          {loading ? (
+            <p>Cargando clases...</p>
+          ) : error ? (
+            <p className="text-red-500">{error}</p>
+          ) : classes.length === 0 ? (
+            <p>No estas inscrito/a en ninguna clase</p>
+          ) : (
+            <div className="flex items-center justify-between mt-4">
+              <button
+                onClick={handlePrev}
+                className="p-2"
+              >
+                <IoChevronBack size={24}/>
+              </button>
+  
+              <div className="flex overflow-hidden w-full space-x-4 max-w-full px-4">
+                <div
+                  className="flex transition-transform duration-300 ease-in-out"
+                  style={{
+                    transform: `translateX(-${(currentIndex * (100 / itemsPerPage))}%)`,
+                    width: `min(100%, ${(classes.length / itemsPerPage) * 100}%)`,
+                  }}
+                >
+                  {classes.map((clase, index) => (
+                <Link to={"/vistaclase"} state={{classes:clase, user:userData, id:clase.class_token}}>
+                  <div className='justify-around mx-2'>
+                    <div
+                      key={index}
+                      className="relative border-b-2 shadow-md rounded-lg overflow-hidden hover:shadow-2xl transition-shadow duration-200 w-[200px] h-[200px]"
+                    >
+                      <div
+                        className="h-32"
+                        style={{ backgroundColor: clase.class_color }}
+                      ></div>
+
+                      {/* Contenido superpuesto */}
+                      <div className="relative -mt-16 p-4 bg-white rounded-b-lg">
+                        <h2 className="text-lg font-semibold text-gray-800 truncate">
+                          {clase.class_name}
+                        </h2>
+                        <p className="text-sm text-gray-600 truncate">{clase.class_curso}</p>
+                      </div>
+                      <div className='border-t border-gray-200 w-[90%] m-auto'/>
+                      <div>
+                        <p className="text-m text-[#222] px-4 py-3 truncate flex items-center justify-between">
+                          {clase.class_token}
+                          <IoCopyOutline
+                                onClick={() => handleCopy(clase.class_token)}
+                                color='#000'
+                              />
+                        </p> 
+                      </div>
+                    </div>
                   </div>
                 </Link>
-              ))
-            )}
-          </div>
+              ))}
+                </div>
+              </div>
+  
+              <button
+                onClick={handleNext}
+                className="p-2"
+              >
+                <IoChevronForward size={24}/>
+              </button>
+            </div>
+          )}
         </div>
       </div>
-
-      <div className="fixed bottom-8 right-8">
-        <button onClick={() => setShowInput(!showInput)} className="p-4 bg-blue-500 rounded-full text-white shadow-lg">
-          <FaPlus />
+          
+      <button
+          onClick={() => setShowInput(true)}
+          className="fixed bottom-8 right-8 bg-blue-600 text-white p-4 rounded-full shadow-md hover:bg-blue-700"
+        >
+          <IoAdd className="text-2xl" />
         </button>
-      </div>
 
       {showInput && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
@@ -123,7 +174,7 @@ const InicioAlumno = () => {
               onClick={() => setShowInput(false)}
               className="absolute top-4 right-4 w-4 h-4 bg-[#ca1c1c] rounded-full flex items-center justify-center cursor-pointer"
             >
-              <FaTimes color='#fff' size={10}/>
+              <IoAdd color='#fff' size={10}/>
             </div>
 
             <input

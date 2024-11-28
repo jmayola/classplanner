@@ -25,7 +25,7 @@ export default function ErrorPage() {
           {/* Enlace de retorno */}
           <Link 
             to={"/"} 
-            className="text-lg bg-[#1B264F] hover:bg-[#8EACCE] text-white px-5 py-3 rounded-full"
+            className="text-lg bg-black hover:bg-[#8EACCE] text-white px-5 py-3 rounded-full"
           >
             Volver al inicio
           </Link>
@@ -34,7 +34,7 @@ export default function ErrorPage() {
         {/* Imagen de error */}
         <div className="w-full md:w-1/2 flex justify-center p-4">
           <img 
-            src="/caricaturacomputadora.png" 
+            src="/error.png" 
             alt="Caricatura de error" 
             className="w-[400px] md:w-[500px] object-cover" 
           />
