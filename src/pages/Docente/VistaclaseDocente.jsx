@@ -248,19 +248,28 @@ const VistaclaseDocente = () => {
                 <div className="w-[70%]">
                   <h2 className="text-3xl font-bold mb-6">Calendario</h2>
                   <div className="flex">
-                    <div className="w-[50%]">
+                    <div className="w-[50%] p-4 bg-white rounded-lg shadow-lg">
                       <Calendar 
                         onChange={handleDateChange}
                         value={selectedDate} 
+                        tileClassName="calendar-tile"
+                        tileContent={({ date, view }) => {
+                          const events = renderCalendarEvents(date);
+                          return events.length > 0 ? (
+                            <div className="bg-blue-500 text-white text-xs p-1 rounded-full text-center">
+                              {events.length}
+                            </div>
+                          ) : null;
+                        }}
                       />
-                    </div>
+                    </div>            
                     <div className="w-[50%] pl-6">
                       <h3 className="text-2xl font-bold mb-4">Eventos en esta fecha</h3>
                       {renderCalendarEvents(selectedDate).length === 0 ? (
                         <p>No hay eventos en esta fecha.</p>
                       ) : (
                         renderCalendarEvents(selectedDate).map((evento, index) => (
-                          <div key={index} className="bg-white p-4 shadow-md rounded-lg mb-4">
+                          <div key={index} className="bg-white p-4 shadow-md rounded-lg mb-4 hover:bg-blue-100">
                             <h4 className="text-xl font-semibold">{evento.title}</h4>
                             <p className="text-gray-600">{evento.description}</p>
                           </div>
