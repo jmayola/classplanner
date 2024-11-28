@@ -1,14 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  FaPaperclip,
-  FaCommentDots,
-  FaPlus,
-  FaCheck,
-  FaChevronDown,
-  FaFileAlt,
-  FaTrash,
-  FaUser,
-} from "react-icons/fa";
+import { IoCalendarNumberOutline, IoAlertCircleOutline, IoCheckmarkDoneOutline, IoClipboardOutline, IoChatbubbleOutline, IoPaperPlane, IoPerson, IoDocumentTextOutline, IoAdd, IoAddOutline, IoChevronBack, IoAttach, IoAttachOutline, IoCheckmarkOutline, IoChevronDownOutline } from "react-icons/io5";
 import SidebarAlumno from "../../components/Sidebars/SidebarAlumno";
 import BannerClase from "../../components/BannerClase";
 import { useLocation } from "react-router-dom";
@@ -174,7 +165,7 @@ function VistaTarea() {
   };
 
   return (
-    <div className="flex min-h-screen overflow-hidden relative -z-0">
+    <div className="flex max-w-screen overflow-hidden relative -z-0">
       {isLoading && <Loading />}
 
       {/* Sidebar */}
@@ -192,28 +183,33 @@ function VistaTarea() {
         />
 
         {/* Contenido de la tarea */}
-        <div className="bg-white shadow-md relative rounded-lg p-6 space-y-6 overflow-y-auto ">
-          {/* Información de la Tarea */}
+        <div className="space-y-4 px-5 py-5">
           <div className="space-y-2">
-            <h2 className="text-3xl font-semibold text-gray-900">
+            <h2 className="text-2xl font-semibold text-gray-800">
               {tarea.title}
             </h2>
-            <p className="text-sm text-gray-500">
-              Descripcion:{" "}
-              {tarea.description}
-            </p>
-            <p className="text-sm text-gray-500">
-              Vencimiento:{" "}
-              {dueDate ? dueDate.toLocaleDateString() : "Sin Limite"}{" "}
-              {dueDate && dueDate.toLocaleTimeString()}
-            </p>
-            <p className="text-sm text-gray-500">Puntos: 10</p>
+            <div className="flex items-center space-x-2">
+              <IoCalendarNumberOutline size={24} color="#000" />
+              <span>{dueDate ? dueDate.toLocaleDateString() : "Sin Limite"}{" "}
+              {dueDate && dueDate.toLocaleTimeString()}</span>
+            </div>
+            <div className="flex items-center space-x-2 mt-2">
+              <IoClipboardOutline size={24} color="#000" />
+              <span className="text-m">10/10</span>
+            </div>
+            <div className="flex flex-col items-left space-x-2">
+              <div className="flex flex-row ">
+                <IoDocumentTextOutline size={24} color="#000" />
+                <span className="font-bold ml-2">Descripcion </span><br />
+              </div>
+              <p className="px-5">{tarea.description}</p>
+            </div>
           </div>
 
           {/* Comentarios de Clase */}
           <div className="border-t pt-4">
             <h3 className="text-xl font-semibold text-gray-800 mb-2 flex items-center">
-              <FaCommentDots className="mr-2" /> Comentarios de clase
+              <IoChatbubbleOutline className="mr-2" /> Comentarios de clase
             </h3>
             <div className="space-y-4 mb-4">
               {comments.length > 0 ? (
@@ -230,7 +226,7 @@ function VistaTarea() {
                           alt=""
                         />
                       ) : (
-                        <FaUser className="text-gray-600 text-2xl" />
+                        <IoPerson className="text-gray-600 text-2xl" />
                       )}
                     </div>
                     <div>
@@ -250,9 +246,9 @@ function VistaTarea() {
             {!showClassCommentInput ? (
               <button
                 onClick={() => setShowClassCommentInput(true)}
-                className="flex items-center px-6 py-3 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600"
+                className="flex items-center px-6 py-3 bg-[#0071ae] text-white rounded-[40px] shadow-md hover:bg-[#026093]"
               >
-                <FaPlus className="mr-2" />
+                <IoAddOutline className="mr-2" />
                 Agregar comentario
               </button>
             ) : (
@@ -285,9 +281,9 @@ function VistaTarea() {
           {/* Entrega de Trabajo */}
           <div className="border-t pt-4">
             <h3 className="text-xl font-semibold text-gray-800 mb-2 flex items-center">
-              <FaFileAlt className="mr-2" />
+              <IoDocumentTextOutline className="mr-2" />
               <span>Tu trabajo</span>
-              <FaChevronDown
+              <IoChevronDownOutline
                 onClick={() => setShowDetails(!showDetails)}
                 className={`ml-2 cursor-pointer ${
                   showDetails ? "rotate-180" : ""
@@ -298,8 +294,8 @@ function VistaTarea() {
               {!showDetails ? (
                 <div className="flex items-center text-gray-600 space-x-2">
                   {!submitted ? (
-                    <label className="px-4 py-2 border border-gray-300 text-gray-600 font-semibold rounded-lg hover:bg-gray-100 flex items-center cursor-pointer">
-                      <FaPaperclip className="mr-2" />
+                    <label className="px-4 py-2 border border-gray-300 text-gray-600 rounded-[40px] hover:bg-gray-100 flex items-center cursor-pointer">
+                      <IoAttachOutline size={24} className="mr-2" />
                       Agregar Trabajo
                       <input
                         type="file"
@@ -310,7 +306,7 @@ function VistaTarea() {
                     </label>
                   ) : (
                     <div className="flex items-center text-green-600 space-x-2">
-                      <FaCheck className="text-xl" />
+                      <IoCheckmarkOutline className="text-xl" />
                       <p>Trabajo entregado</p>
                     </div>
                   )}
@@ -320,11 +316,11 @@ function VistaTarea() {
                   {submitted ? (
                     <>
                     <div className="flex items-center text-green-600 space-x-2">
-                      <FaCheck className="text-xl" />
+                      <IoCheckmarkOutline className="text-xl" />
                       <p>Trabajo entregado</p>
                     </div>
                     <a href={"http://localhost:3000/"+attachment.name} className="px-4 py-2 border border-gray-300 text-gray-600 font-semibold rounded-lg hover:bg-gray-100 flex items-center cursor-pointer">
-                          <FaPaperclip className="mr-2" />
+                          <IoAttachOutline size={24} className="mr-2" />
                           <p>{attachment.name}</p>
                         </a>
                     </>
@@ -341,13 +337,13 @@ function VistaTarea() {
                         <button
                           onClick={handleWorkSubmit}
                           disabled={!workComment && !attachment}
-                          className="px-4 py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 flex items-center"
+                          className="px-4 py-2 bg-[#009c05] text-white rounded-[20px] hover:bg-[#017f05] flex items-center"
                         >
-                          <FaCheck className="mr-2" />
+                          <IoCheckmarkOutline size={24} className="mr-2" />
                           Entregar trabajo
                         </button>
-                        <label className="px-4 py-2 border border-gray-300 text-gray-600 font-semibold rounded-lg hover:bg-gray-100 flex items-center cursor-pointer">
-                          <FaPaperclip className="mr-2" />
+                        <label className="px-4 py-2 border border-gray-300 text-gray-600 rounded-[20px] hover:bg-gray-100 flex items-center cursor-pointer">
+                          <IoAttachOutline size={24} className="mr-2" />
                           {attachment ? "Modificar Trabajo" : "Agregar Trabajo"}
                           <input
                             type="file"
@@ -365,18 +361,18 @@ function VistaTarea() {
             </div>
           </div>
           {submitted ? null : (
-            <div className="border-t pt-4">
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">
-                Estado de la tarea
-              </h3>
-              <div
-                className={`text-lg font-semibold ${
-                  taskStatus === "Asignado" ? "text-green-600" : "text-red-600"
-                }`}
-              >
-                {taskStatus === "Asignado" ? "Asignado" : "Sin entregar"}
-              </div>
-            </div>
+           <div className="flex items-center space-x-2 mt-2">
+            {taskStatus === "Asignado" && <IoClipboardOutline size={24} color="#000" />}
+            {taskStatus === "Sin entregar" && (
+              <IoAlertCircleOutline size={24} color="red" />
+            )}
+            {taskStatus === "Entregado" && <IoCheckmarkOutline size={24} color="green" />}
+            {taskStatus === "Revisado" && (
+              <IoCheckmarkDoneOutline size={24} color="blue" />
+            )}
+            <span>{taskStatus}</span>
+          </div>
+         
           )}
         </div>
       </div>

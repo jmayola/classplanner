@@ -10,7 +10,7 @@ import BannerClase from '../../components/BannerClase';
 
 const Alerts = withReactContent(Swal);
 
-const Vistaclase = () => {
+const VistaclaseDocente = () => {
   let {classes, user, id} = useLocation().state;
   const [activeTab, setActiveTab] = useState('Tareas');
   const [data, setData] = useState(null);
@@ -268,4 +268,4 @@ const Vistaclase = () => {
   );
 };
 
-export default Vistaclase;
+export default VistaclaseDocente;
