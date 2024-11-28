@@ -35,7 +35,7 @@ const SidebarDocente = () => {
       {/* Sidebar */}
       <div className={`fixed inset-0 bg-[#F7F7FF] shadow-md z-50 transition-transform h-screen ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:relative md:w-64`}>
         <div className="p-6">
-          <div className="flex items-center space-x-4 w-screen flex-row">
+          <div className="flex items-center space-x-4 flex-row">
             <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center">
               {userData.user_photo ? (
                 <img src={`http://localhost:3000/${userData.user_photo}`} className="w-12 h-12 bg-gray-300 rounded-full" alt="image_profile" />

@@ -81,11 +81,16 @@ const VistaclaseDocente = () => {
   };
 
   const renderCalendarEvents = (date) => {
-    const filteredEvents = CalendarData.filter((evento) => {
-      const eventDate = new Date(evento.deliver_until);
-      return eventDate.toLocaleDateString() === date.toLocaleDateString();
-    });
+    try{
+      const filteredEvents = CalendarData.filter((evento) => {
+        const eventDate = new Date(evento.deliver_until);
+        return eventDate.toLocaleDateString() === date.toLocaleDateString();
+      });
     return filteredEvents;
+    }
+    catch(e){
+      return [];
+    }
   };
 
   return (
@@ -93,7 +98,7 @@ const VistaclaseDocente = () => {
       {loading ? (
         <LoadingScreen /> 
       ) : (
-        <div className="flex h-screen bg-gray-100 -z-0">
+        <div className="flex bg-gray-100 -z-0">
           {classes && user && <SidebarDocente classes={classes} user={user} />}
 
           <div className="flex flex-col w-full -z-0">
@@ -108,7 +113,7 @@ const VistaclaseDocente = () => {
               />
             )}
 
-            <div className="flex justify-center bg-white shadow-md">
+            <div className="flex max-sm:flex-wrap justify-center bg-white shadow-md">
               <button
                 onClick={() => handleTabClick('Tareas')}
                 className={`px-6 py-3 flex items-center space-x-2 ${activeTab === 'Tareas' ? 'border-b-4 border-blue-600 text-blue-600' : 'text-gray-700'}`}
@@ -136,8 +141,8 @@ const VistaclaseDocente = () => {
             </div>
 
             {activeTab === 'Tareas' && (
-              <div className="flex p-10">
-                <div className="w-[20%] h-[120px] p-5 bg-white shadow-md rounded-lg mr-10">
+              <div className="flex flex-wrap p-10">
+                <div className=" h-[120px] p-5 bg-white shadow-md rounded-lg mr-10">
                   <div className="text-sm sm:text-base md:text-lg flex flex-col items-start px-1">
                     <h2 className='font-bold'>Código de la clase</h2>
                     <div className='flex flex-row mt-3 items-center justify-between'>
