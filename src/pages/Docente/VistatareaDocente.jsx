@@ -184,11 +184,6 @@ function VistatareaDocente() {
                       <IoCalendarNumberOutline size={24} color="#000" />
                       <span className="text-m">{tarea.deliver_until}</span>
                     </div>
-                    <div className="flex items-center space-x-2 mt-2">
-                      {/* Icono de clipboard */}
-                      <IoClipboardOutline size={24} color="#000" />
-                      <span className="text-m">10/10</span>
-                    </div>
                   </div>
                 </div>
 

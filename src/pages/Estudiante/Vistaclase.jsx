@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import Sidebar from '../../components/Sidebars/SidebarAlumno';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import { IoClipboardOutline, IoMegaphoneOutline, IoBookOutline, IoCalendarNumberOutline, IoCopyOutline } from 'react-icons/io5';
+import { IoClipboardOutline, IoMegaphoneOutline, IoBookOutline, IoCalendarNumberOutline, IoCopyOutline, IoRibbonOutline } from 'react-icons/io5';
 import withReactContent from 'sweetalert2-react-content';
 import { Link, useLocation } from 'react-router-dom';
 import BannerClase from '../../components/BannerClase';
 import Calendar from 'react-calendar'; 
 import 'react-calendar/dist/Calendar.css'; 
 import LoadingScreen from '../../components/LoadingScreen';
+import GradesTableAlumno from '../../components/GradesTableAlumno';
 import CopyNotification from '../../components/CopyNotification';
 
 const Alerts = withReactContent(Swal);
@@ -123,10 +124,10 @@ const Vistaclase = () => {
             <IoClipboardOutline /> <span>Tareas</span>
           </button>
           <button
-            onClick={() => handleTabClick('Materiales')}
+            onClick={() => handleTabClick('Mis calificaciones')}
             className={`px-6 py-3 flex items-center space-x-2 ${activeTab === 'Materiales' ? 'border-b-4 border-blue-600 text-blue-600' : 'text-gray-700'}`}
           >
-            <IoBookOutline /> <span>Materiales</span>
+            <IoRibbonOutline /> <span>Mis calificaciones</span>
           </button>
           <button
             onClick={() => handleTabClick('Anuncios')}
@@ -194,7 +195,7 @@ const Vistaclase = () => {
               </div>
             </div>
           )}
-          {activeTab === 'Materiales' && (
+          {activeTab === 'Mis calificaciones' && (
             <div className='flex p-10'>
               <div className="w-[20%] h-[120px] p-5 bg-white shadow-md rounded-lg mr-10">
                 <div className="text-sm sm:text-base md:text-lg flex flex-col items-start px-1">
@@ -213,22 +214,17 @@ const Vistaclase = () => {
                 </div>
               </div>
               <div className='w-[80%]'>
-                <h2 className="text-3xl font-bold mb-6">Materiales</h2>
-                {data && data.materiales.length > 0 ? (
-                  <ul className="list-disc list-inside">
-                    {data.materiales.map((material, index) => (
-                      <li key={index}>
-                        {material.nombre}: 
-                        <a href={material.link} className="text-blue-500 hover:underline">Descargar</a>
-                      </li>
-                    ))}
-                  </ul>
+                <h2 className="text-3xl font-bold mb-6">Calificaciones</h2>
+                {/* {data && data.length > 0 ? ( 
+                  <GradesTableAlumno />
                 ) : (
                   <div className="flex flex-col justify-center items-center py-10">
-                    <IoBookOutline className="text-6xl text-gray-400" />
-                    <p className="text-xl mt-4 text-gray-600">No hay materiales disponibles</p>
+                    <IoRibbonOutline className="text-6xl text-gray-400" />
+                    <p className="text-xl mt-4 text-gray-600">No tenes ninguna calificación por el momento</p>
                   </div>
-                )}
+                )} */}
+
+                <GradesTableAlumno />
               </div>
             </div>
           )}
