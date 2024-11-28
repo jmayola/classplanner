@@ -127,7 +127,7 @@ const InicioDocente = () => {
   };
 
   return (
-    <div className="flex min-h-screen max-lg:h-[50vh] text-[#37352f]">
+    <div className="flex h-screen max-w-screen overflow-x-hidden">
       <SidebarProfesor user={userData}/>
   
       <div className="flex-grow p-6 bg-white">
@@ -154,12 +154,12 @@ const InicioDocente = () => {
                 <IoChevronBack size={24}/>
               </button>
   
-              <div className="flex overflow-hidden space-x-4 w-full px-4 max-lg:flex-col">
+              <div className="flex overflow-hidden w-full space-x-4 max-w-full px-4">
                 <div
                   className="flex transition-transform duration-300 ease-in-out"
                   style={{
                     transform: `translateX(-${(currentIndex * (100 / itemsPerPage))}%)`,
-                    width: `${(classes.length / itemsPerPage) * 100}%`,
+                    width: `min(100%, ${(classes.length / itemsPerPage) * 100}%)`,
                   }}
                 >
                   {classes.map((clase, index) => (

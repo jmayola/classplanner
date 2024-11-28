@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FaHome, FaUser, FaCog, FaBook } from 'react-icons/fa';
+import { IoHomeOutline, IoPerson , IoSettingsOutline, IoBookOutline, IoCloseOutline, IoMenuOutline, IoHome } from 'react-icons/io5';
 import ConfigModal from '../Configuration';
 import { useClasses } from '../../../contexts/Classes';
 
@@ -33,7 +33,7 @@ const SidebarAlumno = () => {
                   alt="image_profile"
                 />
               ) : (
-                <FaUser className="text-gray-600 text-2xl" />
+                <IoPerson className="text-gray-600 text-2xl" />
               )}
             </div>
             <div>
@@ -50,7 +50,7 @@ const SidebarAlumno = () => {
             to="/inicioalumno"
             className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
           >
-            <FaHome className="text-gray-600" />
+            <IoHomeOutline className="text-gray-600" />
             <span>Inicio</span>
           </Link>
 
@@ -58,7 +58,7 @@ const SidebarAlumno = () => {
             className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg cursor-pointer"
             onClick={toggleConfig}
           >
-            <FaCog className="text-gray-600" />
+            <IoSettingsOutline className="text-gray-600" />
             <span>Configuración</span>
           </div>
 
@@ -73,7 +73,7 @@ const SidebarAlumno = () => {
                     state={{ classes: clase, user: userData, id: clase.class_token }}
                     className="flex items-center space-x-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
                   >
-                    <FaBook className="text-gray-600" />
+                    <IoBookOutline className="text-gray-600" />
                     <span>{clase.class_name}</span>
                   </Link>
                 ))
