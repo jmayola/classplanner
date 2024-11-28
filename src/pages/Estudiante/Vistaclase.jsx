@@ -4,35 +4,75 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import { IoClipboardOutline, IoMegaphoneOutline, IoBookOutline, IoCalendarNumberOutline, IoCopyOutline } from 'react-icons/io5';
 import withReactContent from 'sweetalert2-react-content';
-import { Link, useLocation} from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import BannerClase from '../../components/BannerClase';
+import Calendar from 'react-calendar'; 
+import 'react-calendar/dist/Calendar.css'; 
+import LoadingScreen from '../../components/LoadingScreen';
 
 const Alerts = withReactContent(Swal);
 
 const Vistaclase = () => {
-  let {classes,user,id} = useLocation().state
+  let { classes, user, id } = useLocation().state;
   const [activeTab, setActiveTab] = useState('Tareas');
   const [data, setData] = useState(null);
   const [userData, setUserData] = useState({ name: '', lastname: '' });
-  const [Class, setClass] = useState([])
-  const [Tarea, setTarea] = useState([])
+  const [Class, setClass] = useState([]);
+  const [Tarea, setTarea] = useState([]);
+  const [CalendarData, setCalendar] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [loading, SetLoading] = useState(false); 
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
+
   useEffect(() => {
-    setUserData(user)
-    setClass(classes)
-    getTareas()
-  }, [classes,id,user]);
-  const getTareas = ()=>{
-    axios.get("http://localhost:3000/tasks",{withCredentials:true})
-    .then((res)=>{
-      const data = res.data.filter((val)=>val.id_class === classes.id_class)
-      setTarea(data)
-    })
-    .catch((err)=>Alerts("Error","No hay tareas","error"))
-  }
+    setUserData(user);
+    setClass(classes);
+    getTareas();
+    getCalendar();
+  }, [classes, id, user]);
+
+  const getTareas = () => {
+    SetLoading(true); 
+    axios.get("http://localhost:3000/tasks", { withCredentials: true })
+      .then((res) => {
+        const data = res.data.filter((val) => val.id_class === classes.id_class);
+        setTarea(data);
+        SetLoading(false); 
+      })
+      .catch((err) => {
+        Alerts("Error", "No hay tareas", "error");
+        SetLoading(false);
+      });
+  };
+
+  const getCalendar = () => {  
+    SetLoading(true);
+    axios.get(`http://localhost:3000/calendar`, { withCredentials: true })
+      .then((res) => {
+        setCalendar(res.data);
+        SetLoading(false); 
+      })
+      .catch((error) => {
+        console.error("Error al obtener los calendarios:", error);
+        SetLoading(false);
+      });
+  };
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+  };
+
+  const renderCalendarEvents = (date) => {
+    const filteredEvents = CalendarData.filter((evento) => {
+      const eventDate = new Date(evento.deliver_until);
+      return eventDate.toLocaleDateString() === date.toLocaleDateString();
+    });
+    return filteredEvents;
+  };
+
   return (
     <div className="flex h-screen bg-gray-100 relative -z-0 ">
       { classes && user && <Sidebar classes={classes} user={user} />}
@@ -48,6 +88,7 @@ const Vistaclase = () => {
             userLastname={userData.user_lastname}
           />
         )}
+        {loading && <LoadingScreen />}
 
         {/* Tabs */}
         <div className="flex justify-center bg-white shadow-md">
@@ -200,41 +241,57 @@ const Vistaclase = () => {
               </div>
             </div>
           )}
-          {activeTab === 'Calendario' && (
-            <div className="flex p-10">
-              {/* Contenedor del código de la clase */}
-              <div className="w-[20%] h-[50%] p-5 bg-white shadow-md rounded-lg mr-10">
-                <div className="text-sm sm:text-base md:text-lg flex flex-col items-start px-1">
-                  <h2 className='font-bold'>Código de la clase</h2>
-                  <div className='flex flex-row mt-3 items-center justify-between'>
-                    <p className='text-[#118de3] font-bold'>{classes.class_token}</p>
-                    <IoCopyOutline 
-                      onClick={() => handleCopy(classes.class_token)} 
-                      color='#333'
-                      className='ml-10'
-                    />
+            {activeTab === 'Calendario' && (
+              <div className="flex p-10">
+                <div className="w-[30%] h-[120px] p-5 bg-white shadow-md rounded-lg mr-10">
+                  <div className="text-sm sm:text-base md:text-lg flex flex-col items-start px-1">
+                    <h2 className='font-bold'>Código de la clase</h2>
+                    <div className='flex flex-row mt-3 items-center justify-between'>
+                      <p className='text-[#118de3] font-bold'>{classes.class_token}</p>
+                      <IoCopyOutline 
+                        onClick={() => handleCopy(classes.class_token)} 
+                        color='#333'
+                        className='ml-10'
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="w-[70%]">
+                  <h2 className="text-3xl font-bold mb-6">Calendario</h2>
+                  <div className="flex">
+                    <div className="w-[50%] p-4 bg-white rounded-lg shadow-lg">
+                      <Calendar 
+                        onChange={handleDateChange}
+                        value={selectedDate} 
+                        tileClassName="calendar-tile"
+                        tileContent={({ date, view }) => {
+                          const events = renderCalendarEvents(date);
+                          return events.length > 0 ? (
+                            <div className="bg-blue-500 text-white text-xs p-1 rounded-full text-center">
+                              {events.length}
+                            </div>
+                          ) : null;
+                        }}
+                      />
+                    </div>            
+                    <div className="w-[50%] pl-6">
+                      <h3 className="text-2xl font-bold mb-4">Eventos en esta fecha</h3>
+                      {renderCalendarEvents(selectedDate).length === 0 ? (
+                        <p>No hay eventos en esta fecha.</p>
+                      ) : (
+                        renderCalendarEvents(selectedDate).map((evento, index) => (
+                          <div key={index} className="bg-white p-4 shadow-md rounded-lg mb-4 hover:bg-blue-100">
+                            <h4 className="text-xl font-semibold">{evento.title}</h4>
+                            <p className="text-gray-600">{evento.description}</p>
+                          </div>
+                        ))
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
-              
-              {/* Contenedor del calendario */}
-              <div className="w-[80%]">
-                <h2 className="text-3xl font-bold mb-6">Calendario</h2>
-                {data && data.calendario.length > 0 ? (
-                  <ul className="list-disc list-inside">
-                    {data.calendario.map((fecha, index) => (
-                      <li key={index}>{fecha.descripcion}: {fecha.fecha}</li>
-                    ))}
-                  </ul>
-                ) : (
-                  <div className="flex flex-col justify-center items-center py-10">
-                    <IoCalendarNumberOutline className="text-6xl text-gray-400" />
-                    <p className="text-xl mt-4 text-gray-600">No hay eventos en el calendario</p>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
+            )}
 
         </div>
       </div>
