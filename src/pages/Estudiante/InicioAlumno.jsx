@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import SidebarAlumno from '../../components/Sidebars/SidebarAlumno';
 import { Link } from 'react-router-dom';
-import { FaChevronLeft, FaChevronRight, FaPlus, FaTimes, FaRegFrown } from 'react-icons/fa'; 
 import { IoAdd, IoChevronBack, IoChevronForward, IoCopyOutline } from 'react-icons/io5';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
@@ -62,6 +61,9 @@ const InicioAlumno = () => {
 
   return (
     <div className="flex min-h-screen bg-white text-[#37352f]">
+      <button>
+        
+      </button>
       {classes && user && <SidebarAlumno user={userData} />}
       <div className="flex-grow p-6">
         <h1 className="text-3xl font-semibold text-gray-900">

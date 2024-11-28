@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { IoCalendarNumberOutline, IoAlertCircleOutline, IoCheckmarkDoneOutline, IoClipboardOutline, IoChatbubbleOutline, IoPaperPlane, IoPerson, IoDocumentTextOutline, IoAdd, IoAddOutline, IoChevronBack, IoAttach, IoAttachOutline, IoCheckmarkOutline, IoChevronDownOutline } from "react-icons/io5";
+import { IoCalendarNumberOutline, IoAlertCircleOutline, IoCheckmarkDoneOutline, IoClipboardOutline, IoChatbubbleOutline, IoPaperPlane, IoPerson, IoDocumentTextOutline, IoAdd, IoAddOutline, IoChevronBack, IoAttach, IoAttachOutline, IoCheckmarkOutline, IoChevronDownOutline, IoRibbonOutline } from "react-icons/io5";
 import SidebarAlumno from "../../components/Sidebars/SidebarAlumno";
 import BannerClase from "../../components/BannerClase";
 import { useLocation } from "react-router-dom";
@@ -168,11 +168,9 @@ function VistaTarea() {
     <div className="flex max-w-screen overflow-hidden relative -z-0">
       {isLoading && <Loading />}
 
-      {/* Sidebar */}
       <SidebarAlumno classes={classes} user={userData} />
 
       <div className="flex-1 overflow-y-auto relative -z-10">
-        {/* Banner */}
         <BannerClase
           className={classes.class_name}
           classCurso={classes.class_curso}
@@ -182,7 +180,6 @@ function VistaTarea() {
           userLastname={userData.user_lastname}
         />
 
-        {/* Contenido de la tarea */}
         <div className="space-y-4 px-5 py-5">
           <div className="space-y-2">
             <h2 className="text-2xl font-semibold text-gray-800">
@@ -193,9 +190,9 @@ function VistaTarea() {
               <span>{dueDate ? dueDate.toLocaleDateString() : "Sin Limite"}{" "}
               {dueDate && dueDate.toLocaleTimeString()}</span>
             </div>
-            <div className="flex items-center space-x-2 mt-2">
-              <IoClipboardOutline size={24} color="#000" />
-              <span className="text-m">10/10</span>
+            <div className="flex flex-row ">
+                <IoRibbonOutline size={24} color="#000" />
+                <span className="ml-2">{tarea.calification || 'Sin calificar'}</span><br />
             </div>
             <div className="flex flex-col items-left space-x-2">
               <div className="flex flex-row ">
