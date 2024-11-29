@@ -30,7 +30,7 @@ const InicioAlumno = () => {
     };
 
     fetchData();
-  }, [user, classes, fetchClasses]);
+  }, []);
 
   const handleNext = () => {
     setCurrentIndex((prevIndex) =>
