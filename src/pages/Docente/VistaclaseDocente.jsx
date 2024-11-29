@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import { IoClipboardOutline, IoMegaphoneOutline, IoBookOutline, IoCalendarNumberOutline, IoCopyOutline,IoPersonOutline } from 'react-icons/io5';
+import { IoClipboardOutline, IoMegaphoneOutline, IoBookOutline, IoCalendarNumberOutline, IoCopyOutline,IoPersonOutline,IoRibbonOutline } from 'react-icons/io5';
 import AgregarClase from "../../components/AgregarClase";
 import withReactContent from 'sweetalert2-react-content';
 import { Link, useLocation } from 'react-router-dom';
@@ -12,6 +12,7 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css'; 
 import CopyNotification from '../../components/CopyNotification';
 import UserClass from '../../components/UserClass';
+import GradesTableAlumno from '../../components/GradesTableAlumno';
 
 const Alerts = withReactContent(Swal);
 
@@ -28,7 +29,7 @@ const VistaclaseDocente = () => {
   const [selectedDate, setSelectedDate] = useState(new Date()); 
   const [copied, setCopied] = useState(false);
   const [message, setMessage] = useState('');
-
+  const [califications,setCalifications] = useState([])
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
@@ -39,6 +40,7 @@ const VistaclaseDocente = () => {
     getTareas();
     getCalendar();
     getStudents()
+    getCalificaciones()
   }, [classes, user, id]);
 
   const getTareas = () => {
@@ -54,15 +56,31 @@ const VistaclaseDocente = () => {
       });
   };
   const getStudents = () => {
+    setLoading(true);
     axios.get(`http://localhost:3000/usersclass?id_class=${classes.id_class}`, { withCredentials: true })
       .then((res) => {
         setStudents(res.data)
+        setLoading(false); 
       })
       .catch((err) => {
         setStudents([])
+        setLoading(false); 
+
       });
   };
-
+  const getCalificaciones = () => {  
+    setLoading(true);
+    axios.get(`http://localhost:3000/califications?id_class=${classes.id_class}`, { withCredentials: true })
+      .then((res) => {
+        setCalifications(res.data); 
+        setLoading(false); 
+      })
+      .catch((error) => {
+        setCalifications([]); 
+        console.error("Error al obtener las calificaciones:", error);
+        setLoading(false);
+      });
+  };
   const getCalendar = () => {  
     axios.get(`http://localhost:3000/calendar`, { withCredentials: true })
       .then((res) => {
@@ -72,7 +90,6 @@ const VistaclaseDocente = () => {
         console.error("Error al obtener los calendarios:", error);
       });
   };
-  
   const handleCopy = (classToken) => {
     navigator.clipboard.writeText(classToken)
       .then(() => {
@@ -133,7 +150,7 @@ const VistaclaseDocente = () => {
                 <IoClipboardOutline /> <span>Tareas</span>
               </button>
               <button
-                onClick={() => handleTabClick('Materiales')}
+                onClick={() => handleTabClick('Calificaciones')}
                 className={`px-6 py-3 flex items-center space-x-2 ${activeTab === 'Materiales' ? 'border-b-4 border-blue-600 text-blue-600' : 'text-gray-700'}`}
               >
                 <IoBookOutline /> <span>Calificaciones</span>
@@ -204,7 +221,6 @@ const VistaclaseDocente = () => {
                 </div>
               </div>
             )}
-            
             {activeTab === 'Calificaciones' && (
               <div className="flex p-10">
                 <div className="w-[20%] h-[120px] p-5 bg-white shadow-md rounded-lg mr-10">
@@ -223,10 +239,15 @@ const VistaclaseDocente = () => {
                     </div>
                   </div>
                 </div>
-                
                 <div className='w-[80%]'>
-                  <h2 className="text-3xl font-bold mb-6">Materiales</h2>
-                  <p>No hay materiales disponibles por el momento.</p>
+                {califications.length > 0 ? (
+                  <GradesTableAlumno data={califications} tasks={Tarea} />
+                ) : (
+                  <div className="flex flex-col justify-center items-center py-10">
+                    <IoRibbonOutline className="text-6xl text-gray-400" />
+                    <p className="text-xl mt-4 text-gray-600">No tenes ninguna calificación por el momento</p>
+                  </div>
+                )}
                 </div>
               </div>
             )}

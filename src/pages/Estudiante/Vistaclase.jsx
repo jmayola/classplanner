@@ -81,7 +81,7 @@ const Vistaclase = () => {
   };
   const getCalificaciones = () => {  
     SetLoading(true);
-    axios.get(`http://localhost:3000/califications?id_class=${Class.id_class}`, { withCredentials: true })
+    axios.get(`http://localhost:3000/califications?id_class=${classes.id_class}`, { withCredentials: true })
       .then((res) => {
         setData(res.data); 
         SetLoading(false); 

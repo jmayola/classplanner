@@ -1,7 +1,10 @@
 import React from "react";
 
-const GradesTableAlumno = ({ data }) => {
-  const grades = data.filter(item => item.grade !== null).map(item => item.grade);
+const GradesTableAlumno = ({ data, tasks }) => {
+  console.log(data)
+  console.log(tasks)
+  const alumnos = data.filter(item => item.calification !== null).map(item => item.calification);
+  const grades = data.filter(item => item.calification !== null).map(item => item.calification);
   const average = grades.length > 0 ? (grades.reduce((a, b) => a + b, 0) / grades.length).toFixed(2) : "N/A";
 
   return (
@@ -11,9 +14,12 @@ const GradesTableAlumno = ({ data }) => {
       <table className="min-w-full border rounded-lg">
         <thead>
           <tr className="bg-gray-100">
-            <th className="px-4 py-2 text-left">Tarea</th>
-            <th className="px-4 py-2 text-left">Calificación</th>
-            <th className="px-4 py-2 text-left">Estado</th>
+            {
+              tasks.map((val,i)=>{
+                return <th key={i} className="px-4 py-2 text-left">{val.title}</th>
+              })
+            }
+            <th key={i} className="px-4 py-2 text-left">Promedio</th>
           </tr>
         </thead>
         <tbody>
