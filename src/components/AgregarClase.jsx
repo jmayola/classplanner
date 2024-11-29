@@ -8,7 +8,6 @@ function AgregarClase({ id_class, setTarea, tareas }) {
   const [Title, setTitle] = useState("")
   const [Desc, setDesc] = useState("")
   const [Deliver, setDeliver] = useState("")
-
   const handleAddTask = () => {
     setIsFormVisible(true)
   }
@@ -26,7 +25,7 @@ function AgregarClase({ id_class, setTarea, tareas }) {
       description: Desc,
       deliver_until: Deliver
     };
-  
+    console.log(data)
     axios.post("http://localhost:3000/tasks", data, { withCredentials: true })
       .then((res) => {
         if (res.status === 200 || res.status === 202) {
@@ -38,6 +37,7 @@ function AgregarClase({ id_class, setTarea, tareas }) {
             title: 'Tarea agregada',
             icon: 'success',
           });
+          window.location.reload()
         } else {
           Alerts.fire({
             title: 'Error',

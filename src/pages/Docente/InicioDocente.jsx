@@ -90,9 +90,8 @@ const InicioDocente = () => {
             Alerts.fire('Copiado!', 'El código de clase ha sido copiado al portapapeles.', 'success');
           }
         });
-  
+        fetchClasses()  
         setClasses((prevClasses) => [...prevClasses, newClass]);
-        
         setClassName('');
         setClassCourse('');
         setColor('#ffffff');

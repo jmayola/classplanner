@@ -8,7 +8,6 @@ const Header = () => {
 useEffect(() => {
     axios.get("http://localhost:3000/user",{withCredentials: true}).then((res)=>setUser(res.data)).catch((err)=>setUser(null))
 }, [])
-  console.log(User)
   const handleSessionClose = () =>{
     axios.delete("http://localhost:3000/user",{withCredentials:true}).then((res)=> res.status == 202 && location.reload()).catch((res)=>alert("no tienes una sesion iniciada."))
   }
