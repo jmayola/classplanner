@@ -152,12 +152,6 @@ const Vistaclase = () => {
             <IoClipboardOutline /> <span>Tareas</span>
           </button>
           <button
-            onClick={() => handleTabClick('Mis calificaciones')}
-            className={`px-6 py-3 flex items-center space-x-2 ${activeTab === 'Materiales' ? 'border-b-4 border-blue-600 text-blue-600' : 'text-gray-700'}`}
-          >
-            <IoRibbonOutline /> <span>Mis calificaciones</span>
-          </button>
-          <button
             onClick={() => handleTabClick('Anuncios')}
             className={`px-6 py-3 flex items-center space-x-2 ${activeTab === 'Anuncios' ? 'border-b-4 border-blue-600 text-blue-600' : 'text-gray-700'}`}
           >

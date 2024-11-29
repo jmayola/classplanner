@@ -41,7 +41,7 @@ function VistaTarea() {
       setDueDate(null);
       setTaskStatus("Asignado");
     }
-  }, [dueDate]);
+  }, []);
 
   useEffect(() => {
     getSubmission();
@@ -71,7 +71,7 @@ function VistaTarea() {
       .then((res) => {
         if (res.status == 202 || res.status == 200) {
           let response = res.data;
-          setAttachment({ name: response.submission_file });
+          setAttachment({ name: response.submission_file, calification: response.calification });
           setWorkComment(response.submission_comment);
           setSubmitted(true);
         } else {
@@ -192,7 +192,7 @@ function VistaTarea() {
             </div>
             <div className="flex flex-row ">
                 <IoRibbonOutline size={24} color="#000" />
-                <span className="ml-2">{tarea.calification || 'Sin calificar'}</span><br />
+                <span className="ml-2">{attachment != null ? attachment.calification : 'Sin calificar'}{attachment == "" && 'Sin calificar'}</span><br />
             </div>
             <div className="flex flex-col items-left space-x-2">
               <div className="flex flex-row ">
