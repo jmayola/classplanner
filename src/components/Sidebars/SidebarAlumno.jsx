@@ -89,9 +89,14 @@ const SidebarAlumno = () => {
         {/* Configuration Modal */}
         {isConfigOpen && <ConfigModal onClose={toggleConfig} user={user} />}
       </div>
-
+      
       {/* Divider for the Logout section */}
       <div className="border-t border-gray-300 my-4"></div>
+      <div className="mb-6">
+              <Link to="/logout" className="text-center flex px-5 py-2 text-[#ca1c1c] hover:text-[#f77070]">
+                <span className='text-center m-auto'>Cerrar Sesión</span>
+              </Link>
+            </div>
       {/* Logo at the bottom */}
       <div className="px-10 flex justify-center mb-6">
         <img

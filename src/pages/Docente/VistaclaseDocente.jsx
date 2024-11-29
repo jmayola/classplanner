@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import { IoClipboardOutline, IoMegaphoneOutline, IoBookOutline, IoCalendarNumberOutline, IoCopyOutline } from 'react-icons/io5';
+import { IoClipboardOutline, IoMegaphoneOutline, IoBookOutline, IoCalendarNumberOutline, IoCopyOutline,IoPersonOutline } from 'react-icons/io5';
 import AgregarClase from "../../components/AgregarClase";
 import withReactContent from 'sweetalert2-react-content';
 import { Link, useLocation } from 'react-router-dom';
@@ -11,6 +11,7 @@ import LoadingScreen from '../../components/LoadingScreen';
 import Calendar from 'react-calendar'; 
 import 'react-calendar/dist/Calendar.css'; 
 import CopyNotification from '../../components/CopyNotification';
+import UserClass from '../../components/UserClass';
 
 const Alerts = withReactContent(Swal);
 
@@ -21,6 +22,7 @@ const VistaclaseDocente = () => {
   const [userData, setUserData] = useState({ name: '', lastname: '' });
   const [Class, setClass] = useState([]);
   const [Tarea, setTarea] = useState([]);
+  const [Students,setStudents] = useState([])
   const [loading, setLoading] = useState(true); 
   const [CalendarData, setCalendar] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date()); 
@@ -30,19 +32,18 @@ const VistaclaseDocente = () => {
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
-  console.log("Tareas:", Tarea);
 
   useEffect(() => {
     setUserData(user);
     setClass(classes);
     getTareas();
     getCalendar();
+    getStudents()
   }, [classes, user, id]);
 
   const getTareas = () => {
     axios.get("http://localhost:3000/tasks", { withCredentials: true })
       .then((res) => {
-        console.log("esto es res.data: " ,res.data);  
         const data = res.data.filter((val) => val.id_class === classes.id_class);
         setTarea(data);
         setLoading(false);
@@ -52,7 +53,15 @@ const VistaclaseDocente = () => {
         console.error("Error al obtener las tareas", error);
       });
   };
-  
+  const getStudents = () => {
+    axios.get(`http://localhost:3000/usersclass?id_class=${classes.id_class}`, { withCredentials: true })
+      .then((res) => {
+        setStudents(res.data)
+      })
+      .catch((err) => {
+        setStudents([])
+      });
+  };
 
   const getCalendar = () => {  
     axios.get(`http://localhost:3000/calendar`, { withCredentials: true })
@@ -133,7 +142,7 @@ const VistaclaseDocente = () => {
                 onClick={() => handleTabClick('Anuncios')}
                 className={`px-6 py-3 flex items-center space-x-2 ${activeTab === 'Anuncios' ? 'border-b-4 border-blue-600 text-blue-600' : 'text-gray-700'}`}
               >
-                <IoMegaphoneOutline /> <span>Anuncios</span>
+                <IoPersonOutline /> <span>Alumnos</span>
               </button>
               <button
                 onClick={() => handleTabClick('Calendario')}
@@ -241,8 +250,15 @@ const VistaclaseDocente = () => {
                 </div>
                 
                 <div className='w-[80%]'>
-                  <h2 className="text-3xl font-bold mb-6">Anuncios</h2>
-                  <p>No hay anuncios disponibles por el momento.</p>
+                  <h2 className="text-3xl font-bold mb-6">Alumnos</h2>
+                  {Students && Students.length > 0 ? (
+                  <UserClass users={Students} />
+                ) : (
+                  <div className="flex flex-col justify-center items-center py-10">
+                    <IoMegaphoneOutline />
+                    <p className="text-xl mt-4 text-gray-600">No hay Alumnos unidos a la clase</p>
+                  </div>
+                )}
                 </div>
               </div>
             )}

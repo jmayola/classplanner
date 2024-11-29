@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Sidebar from '../../components/Sidebars/SidebarAlumno';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import { IoClipboardOutline, IoMegaphoneOutline, IoBookOutline, IoCalendarNumberOutline, IoCopyOutline, IoRibbonOutline } from 'react-icons/io5';
+import { IoClipboardOutline, IoMegaphoneOutline, IoBookOutline, IoCalendarNumberOutline, IoCopyOutline, IoRibbonOutline,IoPersonOutline } from 'react-icons/io5';
 import withReactContent from 'sweetalert2-react-content';
 import { Link, useLocation } from 'react-router-dom';
 import BannerClase from '../../components/BannerClase';
@@ -11,6 +11,7 @@ import 'react-calendar/dist/Calendar.css';
 import LoadingScreen from '../../components/LoadingScreen';
 import GradesTableAlumno from '../../components/GradesTableAlumno';
 import CopyNotification from '../../components/CopyNotification';
+import UserClass from '../../components/UserClass';
 
 const Alerts = withReactContent(Swal);
 
@@ -18,6 +19,7 @@ const Vistaclase = () => {
   let { classes, user, id } = useLocation().state;
   const [activeTab, setActiveTab] = useState('Tareas');
   const [data, setData] = useState(null);
+  const [Students,setStudents] = useState([])
   const [userData, setUserData] = useState({ name: '', lastname: '' });
   const [Class, setClass] = useState([]);
   const [Tarea, setTarea] = useState([]);
@@ -36,6 +38,7 @@ const Vistaclase = () => {
     setClass(classes);
     getTareas();
     getCalendar();
+    getStudents()
   }, [classes, id, user]);
 
   const getTareas = () => {
@@ -51,7 +54,18 @@ const Vistaclase = () => {
         SetLoading(false);
       });
   };
-
+  const getStudents = () => {
+    SetLoading(true); 
+    axios.get(`http://localhost:3000/usersclass?id_class=${classes.id_class}`, { withCredentials: true })
+      .then((res) => {
+        setStudents(res.data)
+        SetLoading(false); 
+      })
+      .catch((err) => {
+        setStudents([])
+        SetLoading(false);
+      });
+  };
   const getCalendar = () => {  
     SetLoading(true);
     axios.get(`http://localhost:3000/calendar`, { withCredentials: true })
@@ -133,7 +147,7 @@ const Vistaclase = () => {
             onClick={() => handleTabClick('Anuncios')}
             className={`px-6 py-3 flex items-center space-x-2 ${activeTab === 'Anuncios' ? 'border-b-4 border-blue-600 text-blue-600' : 'text-gray-700'}`}
           >
-            <IoMegaphoneOutline /> <span>Anuncios</span>
+            <IoPersonOutline /> <span>Compañeros</span>
           </button>
           <button
             onClick={() => handleTabClick('Calendario')}
@@ -247,24 +261,13 @@ const Vistaclase = () => {
                 </div>
               </div>
               <div className='w-[80%]'>
-                <h2 className="text-3xl font-bold mb-6">Anuncios</h2>
-                {data && data.anuncios.length > 0 ? (
-                  <div className="bg-white p-4 shadow-md rounded-lg flex flex-col space-y-4">
-                    {data.anuncios.map((anuncio, index) => (
-                      <div key={index} className='flex flex-row items-center space-x-2'>
-                        <img src={anuncio.img || "https://via.placeholder.com/50"} alt="Imagen de perfil" className="w-12 h-12 rounded-full" />
-                        <div className='flex flex-col text-left'>
-                          <p>{anuncio.usuario}</p>
-                          <p className="text-gray-700 text-[14px]">{anuncio.fecha}</p>
-                        </div>
-                        <p className="text-gray-600">{anuncio.mensaje}</p>
-                      </div>
-                    ))}
-                  </div>
+                <h2 className="text-3xl font-bold mb-6">Compañeros</h2>
+                {Students && Students.length > 0 ? (
+                  <UserClass users={Students} />
                 ) : (
                   <div className="flex flex-col justify-center items-center py-10">
                     <IoMegaphoneOutline />
-                    <p className="text-xl mt-4 text-gray-600">No hay anuncios disponibles</p>
+                    <p className="text-xl mt-4 text-gray-600">No hay Compañeros unidos a la clase</p>
                   </div>
                 )}
               </div>
