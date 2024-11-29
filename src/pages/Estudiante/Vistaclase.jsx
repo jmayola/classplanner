@@ -39,6 +39,7 @@ const Vistaclase = () => {
     getTareas();
     getCalendar();
     getStudents()
+    getCalificaciones();
   }, [classes, id, user]);
 
   const getTareas = () => {
@@ -78,6 +79,19 @@ const Vistaclase = () => {
         SetLoading(false);
       });
   };
+  const getCalificaciones = () => {  
+    SetLoading(true);
+    axios.get(`http://localhost:3000/califications?id_class=${Class.id_class}`, { withCredentials: true })
+      .then((res) => {
+        setData(res.data); 
+        SetLoading(false); 
+      })
+      .catch((error) => {
+        console.error("Error al obtener las calificaciones:", error);
+        SetLoading(false);
+      });
+  };
+  
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
@@ -210,12 +224,12 @@ const Vistaclase = () => {
             </div>
           )}
           {activeTab === 'Mis calificaciones' && (
-            <div className='flex p-10'>
+            <div className="flex p-10">
               <div className="w-[20%] h-[120px] p-5 bg-white shadow-md rounded-lg mr-10">
                 <div className="text-sm sm:text-base md:text-lg flex flex-col items-start px-1">
-                  <h2 className='font-bold'>Código de la clase</h2>
-                  <div className='flex flex-row mt-3 items-center justify-between'>
-                    <p className='text-[#118de3] font-bold'>{classes.class_token}</p>
+                  <h2 className="font-bold">Código de la clase</h2>
+                  <div className="flex flex-row mt-3 items-center justify-between">
+                    <p className="text-[#118de3] font-bold">{classes.class_token}</p>
                     <div className="flex items-center space-x-2">
                       <IoCopyOutline 
                         onClick={() => handleCopy(classes.class_token)} 
@@ -227,18 +241,16 @@ const Vistaclase = () => {
                   </div>
                 </div>
               </div>
-              <div className='w-[80%]'>
+              <div className="w-[80%]">
                 <h2 className="text-3xl font-bold mb-6">Calificaciones</h2>
-                {/* {data && data.length > 0 ? ( 
-                  <GradesTableAlumno />
+                {data && data.length > 0 ? (
+                  <GradesTableAlumno data={data} />
                 ) : (
                   <div className="flex flex-col justify-center items-center py-10">
                     <IoRibbonOutline className="text-6xl text-gray-400" />
                     <p className="text-xl mt-4 text-gray-600">No tenes ninguna calificación por el momento</p>
                   </div>
-                )} */}
-
-                <GradesTableAlumno />
+                )}
               </div>
             </div>
           )}
